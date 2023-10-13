@@ -41,11 +41,6 @@ public class AprilTagDetectionPipeline {
         telemetry.update();
     }
 
-        public void AprilTagOnTick() {
-        // Push telemetry to the Driver Station.
-        moveToAprilTag();
-        }
-
         public void AprilTagStop() {
             visionPortal.close();
         }
@@ -58,9 +53,13 @@ public class AprilTagDetectionPipeline {
         AprilTagLibrary myAprilTagLibrary;
 
         myAprilTagLibraryBuilder = new AprilTagLibrary.Builder()
+//                                                \/ Measured in decimeters
                 .addTag(1, "WOOF", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
                 .addTag(2, "OINK", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(3, "MOO",  0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion());
+                .addTag(3, "MOO",  0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
+                .addTag(9, "MEEP", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
+                .addTag(10,"BARK", 1.27D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
+        ;
 
         myAprilTagLibrary = myAprilTagLibraryBuilder.build();
         // Create the AprilTag processor.
@@ -138,23 +137,12 @@ public class AprilTagDetectionPipeline {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
     }
-    double normalizedTurnSpeed1;
-    double normalizedForwardSpeed1;
-    double normalizedStrafeSpeed1;
+    double straightSpeedMultiplier = 0.02;
+    double strafeSpeedMultiplier  = 0.02;
+    double turnSpeedMultiplier  = -0.008;
 
-    double normalizedTurnSpeed2;
-    double normalizedForwardSpeed2;
-    double normalizedStrafeSpeed2;
-
-    double normalizedTurnSpeed3;
-    double normalizedForwardSpeed3;
-    double normalizedStrafeSpeed3;
-
-    public List<Double> moveToAprilTag() {
+    public List<Double> moveToBackdrop() {
         // initializing variables;
-        double straightSpeedMultiplier = 0.02;
-        double strafeSpeedMultiplier  = 0.02;
-        double turnSpeedMultiplier  = -0.02;
 
         boolean seen1;
         boolean seen2;
@@ -181,7 +169,8 @@ public class AprilTagDetectionPipeline {
                 AprilTag3 = detection;
             }
         }
-        //makes the first april tag list
+
+        //makes the first april tag list (or dies trying)
         if (AprilTag1 != null) {
             double forwardSpeed1;
             double turnSpeed1;
@@ -189,38 +178,17 @@ public class AprilTagDetectionPipeline {
 
             //Calculating all the speed and stuff
             forwardSpeed1 = (AprilTag1.ftcPose.y - 150) * straightSpeedMultiplier;
-            strafeSpeed1  = (AprilTag1.ftcPose.x + 10.16) * strafeSpeedMultiplier;
-//            forwardSpeed = 0.05 * (AprilTag2.ftcPose.y - 30);
-//            strafeSpeed = 0.05 * (AprilTag2.ftcPose.z - 10);
+            strafeSpeed1  = (AprilTag1.ftcPose.x + 81) * strafeSpeedMultiplier;
 
-            double yaw = AprilTag1.ftcPose.yaw;
-            turnSpeed1 = (yaw) * turnSpeedMultiplier;
-            //Exclude 180 from the domain
-//            if (yaw == 180) {
-//                yaw += 1;
-//            }
-            //Really cool math that would have worked for turning
-//            turnSpeed = (Math.sin((Math.PI / 180) * yaw) * (Math.abs(yaw - 180)) / (yaw - 180));
+            turnSpeed1 = AprilTag1.ftcPose.yaw * turnSpeedMultiplier;
 
-            //Takes the max of all the speeds and sets that to 1
-            //Then takes the ratio of the other values with the max and now they are all reasonable values
-            double max = Math.max(Math.max(1, turnSpeed1), Math.max(forwardSpeed1, strafeSpeed1));
-            normalizedForwardSpeed1 = forwardSpeed1 / max;
-            normalizedStrafeSpeed1 = strafeSpeed1 / max;
-            normalizedTurnSpeed1  = turnSpeed1  / max;
-
-            driveList1.add(0, normalizedForwardSpeed1);
-            driveList1.add(1, normalizedStrafeSpeed1);
-            driveList1.add(2, normalizedTurnSpeed1);
+            driveList1.add(0, forwardSpeed1);
+            driveList1.add(1, strafeSpeed1);
+            driveList1.add(2, turnSpeed1);
             seen1 = true;
         } else {
-            // if nothing was seen then we use the last known values
-            driveList1.add(0, normalizedForwardSpeed1);
-            driveList1.add(1, normalizedStrafeSpeed1);
-            driveList1.add(2, normalizedTurnSpeed1);
             seen1 = false;
         }
-
 
         //makes the second april tag ---------------------------------------------------------------
         if (AprilTag2 != null) {
@@ -229,40 +197,18 @@ public class AprilTagDetectionPipeline {
             double strafeSpeed2;
 
             //Calculating all the speed and stuff
-            forwardSpeed2 = (AprilTag2.ftcPose.y - 150) * straightSpeedMultiplier;
-            strafeSpeed2  = (AprilTag2.ftcPose.x) * strafeSpeedMultiplier;
-//            forwardSpeed = 0.05 * (AprilTag2.ftcPose.y - 30);
-//            strafeSpeed = 0.05 * (AprilTag2.ftcPose.z - 10);
+            forwardSpeed2 = (AprilTag2.ftcPose.y - 138.3) * straightSpeedMultiplier;
+            strafeSpeed2  = (AprilTag2.ftcPose.x + 16.5) * strafeSpeedMultiplier;
 
-            double yaw = AprilTag2.ftcPose.yaw;
-            turnSpeed2 = (yaw) * turnSpeedMultiplier;
+            turnSpeed2 = AprilTag2.ftcPose.yaw * turnSpeedMultiplier;
 
-            //Exclude 180 from the domain
-//            if (yaw == 180) {
-//                yaw += 1;
-//            }
-            //Really cool math for turning
-//            turnSpeed = (Math.sin((Math.PI / 180) * yaw) * (Math.abs(yaw - 180)) / (yaw - 180));
-
-            //Takes the max of all the speeds and sets that to 1
-            //Then takes the ratio of the other values with the max and now they are all reasonable values
-            double max = Math.max(Math.max(1, turnSpeed2), Math.max(forwardSpeed2, strafeSpeed2));
-            normalizedForwardSpeed2 = forwardSpeed2 / max;
-            normalizedStrafeSpeed2 = strafeSpeed2 / max;
-            normalizedTurnSpeed2  = turnSpeed2  / max;
-
-            driveList2.add(0, normalizedForwardSpeed2);
-            driveList2.add(1, normalizedStrafeSpeed2);
-            driveList2.add(2, normalizedTurnSpeed2);
+            driveList2.add(0, forwardSpeed2);
+            driveList2.add(1, strafeSpeed2);
+            driveList2.add(2, turnSpeed2);
             seen2 = true;
         } else {
-            // if nothing was seen then we use the last known values
-            driveList2.add(0, normalizedForwardSpeed2);
-            driveList2.add(1, normalizedStrafeSpeed2);
-            driveList2.add(2, normalizedTurnSpeed2);
             seen2 = false;
         }
-
 
         //makes the third april tag ----------------------------------------------------------------
         if (AprilTag3 != null) {
@@ -271,37 +217,16 @@ public class AprilTagDetectionPipeline {
             double strafeSpeed3;
 
             //Calculating all the speed and stuff
-            forwardSpeed3 = (AprilTag3.ftcPose.y - 150) * straightSpeedMultiplier;
-            strafeSpeed3  = (AprilTag3.ftcPose.x - 10.16) * strafeSpeedMultiplier;
-//            forwardSpeed = 0.05 * (AprilTag3.ftcPose.y - 30);
-//            strafeSpeed = 0.05 * (AprilTag3.ftcPose.z - 10);
+            forwardSpeed3 = (AprilTag3.ftcPose.y - 138.3) * straightSpeedMultiplier;
+            strafeSpeed3  = (AprilTag3.ftcPose.x - 43.3) * strafeSpeedMultiplier;
 
-            double yaw = AprilTag3.ftcPose.yaw;
-            turnSpeed3 = (yaw) * turnSpeedMultiplier;
+            turnSpeed3 = AprilTag3.ftcPose.yaw * turnSpeedMultiplier;
 
-            //Exclude 180 from the domain
-//            if (yaw == 180) {
-//                yaw += 1;
-//            }
-            //Really cool math for turning
-//            turnSpeed = (Math.sin((Math.PI / 180) * yaw) * (Math.abs(yaw - 180)) / (yaw - 180));
-
-            //Takes the max of all the speeds and sets that to 1
-            //Then takes the ratio of the other values with the max and now they are all reasonable values
-            double max = Math.max(Math.max(1, turnSpeed3), Math.max(forwardSpeed3, strafeSpeed3));
-            normalizedForwardSpeed3 = forwardSpeed3 / max;
-            normalizedStrafeSpeed3 = strafeSpeed3 / max;
-            normalizedTurnSpeed3  = turnSpeed3  / max;
-
-            driveList3.add(0, normalizedForwardSpeed3);
-            driveList3.add(1, normalizedStrafeSpeed3);
-            driveList3.add(2, normalizedTurnSpeed3);
+            driveList3.add(0, forwardSpeed3);
+            driveList3.add(1, strafeSpeed3);
+            driveList3.add(2, turnSpeed3);
             seen3 = true;
         } else {
-            // if nothing was seen then we use the last known values
-            driveList3.add(0, normalizedForwardSpeed3);
-            driveList3.add(1, normalizedStrafeSpeed3);
-            driveList3.add(2, normalizedTurnSpeed3);
             seen3 = false;
         }
 
@@ -341,15 +266,116 @@ public class AprilTagDetectionPipeline {
             driveListFinal.add(0, (driveList1.get(0) + driveList2.get(0) + driveList3.get(0)) / 3);
             driveListFinal.add(1, (driveList1.get(1) + driveList2.get(1) + driveList3.get(1)) / 3);
             driveListFinal.add(2, (driveList1.get(2) + driveList2.get(2) + driveList3.get(2)) / 3);
-        } else if (!seen1 && !seen2 && !seen3) {
+        } else {
             //sees nothing
-//            driveListFinal.add(0, (driveList1.get(0) + driveList2.get(0) + driveList3.get(0)) / -3);
-//            driveListFinal.add(1, (driveList1.get(1) + driveList2.get(1) + driveList3.get(1)) / -3);
-//            driveListFinal.add(2, (driveList1.get(2) + driveList2.get(2) + driveList3.get(2)) / -3);
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);
         }
+
+        //if is in tolerance
+        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1) + driveListFinal.get(2)) < 2) {
+            driveListFinal.add(0, 0.0);
+            driveListFinal.add(1, 0.0);
+            driveListFinal.add(2, 0.0);
+        }
+        return driveListFinal;
+    }
+
+
+    //Truss April tag
+
+
+    public List<Double> moveToTruss() {
+        // initializing variables;
+        boolean seen1;
+        boolean seen2;
+
+        AprilTagDetection AprilTag9 = null;
+        AprilTagDetection AprilTag10 = null;
+
+        List<Double> driveList1 = new ArrayList<Double>();
+        List<Double> driveList2 = new ArrayList<Double>();
+        List<Double> driveListFinal = new ArrayList<Double>();
+
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+
+
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.id == 9) {
+                AprilTag9 = detection;
+            } else if (detection.id == 10) {
+                AprilTag10 = detection;
+            }
+        }
+        //makes the first april tag list
+        if (AprilTag9 != null) {
+            double forwardSpeed1;
+            double turnSpeed1;
+            double strafeSpeed1;
+
+            //Calculating all the speed and stuff
+            forwardSpeed1 = (AprilTag9.ftcPose.y - 130.7) * straightSpeedMultiplier;
+            strafeSpeed1 = (AprilTag9.ftcPose.x + 89.4) * strafeSpeedMultiplier;
+
+            turnSpeed1 = AprilTag9.ftcPose.yaw * turnSpeedMultiplier;
+
+            driveList1.add(0, forwardSpeed1);
+            driveList1.add(1, strafeSpeed1);
+            driveList1.add(2, turnSpeed1);
+            seen1 = true;
+        } else {
+            seen1 = false;
+        }
+
+        //makes the second april tag list
+        if (AprilTag10 != null) {
+            double forwardSpeed2;
+            double turnSpeed2;
+            double strafeSpeed2;
+
+            //Calculating all the speed and stuff
+            forwardSpeed2 = (AprilTag10.ftcPose.y - 127.2) * straightSpeedMultiplier;
+            strafeSpeed2 = (AprilTag10.ftcPose.x + 33.9) * strafeSpeedMultiplier;
+
+            turnSpeed2 = AprilTag10.ftcPose.yaw * turnSpeedMultiplier;
+
+            driveList2.add(0, forwardSpeed2);
+            driveList2.add(1, strafeSpeed2);
+            driveList2.add(2, turnSpeed2);
+            seen2 = true;
+        } else {
+            seen2 = false;
+        }
+
+        //calculating average
+        if (seen1 && !seen2){
+            //only sees 1
+            driveListFinal.add(0, driveList1.get(0));
+            driveListFinal.add(1, driveList1.get(1));
+            driveListFinal.add(2, driveList1.get(2));
+        } else if (!seen1 && seen2) {
+            //only sees 2
+            driveListFinal.add(0, driveList2.get(0));
+            driveListFinal.add(1, driveList2.get(1));
+            driveListFinal.add(2, driveList2.get(2));
+        } else if (seen1 && seen2) {
+            //sees 1 and 2
+            driveListFinal.add(0, (driveList1.get(0) + driveList2.get(0)) / 2);
+            driveListFinal.add(1, (driveList1.get(1) + driveList2.get(1)) / 2);
+            driveListFinal.add(2, (driveList1.get(2) + driveList2.get(2)) / 2);
+        } else {
+            //sees nothing
+            driveListFinal.add(0,0.0);
+            driveListFinal.add(1,0.0);
+            driveListFinal.add(2,0.0);
+        }
+        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1) + driveListFinal.get(2)) < 2) {
+            driveListFinal.add(0, 0.0);
+            driveListFinal.add(1, 0.0);
+            driveListFinal.add(2, 0.0);
+        }
+
         return driveListFinal;
     }
 }

@@ -18,7 +18,7 @@ public class Intake
 
     }
     public void setIntakePower(double intakePower) {
-        intakeMotor.setPower(intakePower);
+//        intakeMotor.setPower(intakePower);
     }
     public void stopDrive() {
         intakeMotor.setPower(0);

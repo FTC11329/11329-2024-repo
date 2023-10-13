@@ -17,7 +17,8 @@ public class Drivetrain
     private double speed = 0.3;
     public DriveSpeedEnum driveSpeed = DriveSpeedEnum.Slow;
 
-    public Drivetrain(HardwareMap hardwareMap) {
+    public Drivetrain(HardwareMap hardwareMap, Telemetry telemetry) {
+        this.telemetry = telemetry;
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "frontLeft");
         leftBackDrive   = hardwareMap.get(DcMotor.class, "backLeft" );
         rightBackDrive  = hardwareMap.get(DcMotor.class, "backRight");
@@ -30,17 +31,28 @@ public class Drivetrain
     }
     public void drive(double forward, double strafe, double turn) {
         if (driveSpeed == DriveSpeedEnum.Fast){
-            speed = 0.75;
+            speed = 0.85;
         } else if (driveSpeed == DriveSpeedEnum.Slow) {
-            speed = 0.3;
-        } else if (driveSpeed == DriveSpeedEnum.Auto) {
             speed = 0.5;
+        } else if (driveSpeed == DriveSpeedEnum.Auto) {
+            speed = 0.8;
         }
 
-        leftFrontDrive .setPower((forward + turn + strafe) * speed);
-        leftBackDrive  .setPower((forward + turn - strafe) * speed);
-        rightBackDrive .setPower((forward - turn + strafe) * speed);
-        rightFrontDrive.setPower((forward - turn - strafe) * speed);
+        double denominator = Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(turn), 1);
+        double frontLeftPower  = (forward + strafe + turn) / denominator;
+        double backLeftPower   = (forward - strafe + turn) / denominator;
+        double frontRightPower = (forward - strafe - turn) / denominator;
+        double backRightPower  = (forward + strafe - turn) / denominator;
+
+        leftFrontDrive .setPower(frontLeftPower * speed);
+        leftBackDrive  .setPower(backLeftPower  * speed);
+        rightBackDrive .setPower(frontRightPower* speed);
+        rightFrontDrive.setPower(backRightPower * speed);
+        telemetry.addData("LF", frontLeftPower * speed);
+        telemetry.addData("RF", frontRightPower* speed);
+        telemetry.addData("LB", backLeftPower  * speed);
+        telemetry.addData("RB", backRightPower * speed);
+
     }
     public void stopDrive() {
         leftFrontDrive .setPower(0);
