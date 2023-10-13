@@ -29,7 +29,7 @@ public class Drivetrain
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive .setDirection(DcMotor.Direction.FORWARD);
     }
-    public void drive(double forward, double strafe, double turn) {
+    public void drive(double forward, double strafe, double turn, boolean button) {
         if (driveSpeed == DriveSpeedEnum.Fast){
             speed = 0.85;
         } else if (driveSpeed == DriveSpeedEnum.Slow) {
@@ -44,10 +44,13 @@ public class Drivetrain
         double frontRightPower = (forward - strafe - turn) / denominator;
         double backRightPower  = (forward + strafe - turn) / denominator;
 
-        leftFrontDrive .setPower(frontLeftPower * speed);
-        leftBackDrive  .setPower(backLeftPower  * speed);
-        rightBackDrive .setPower(frontRightPower* speed);
-        rightFrontDrive.setPower(backRightPower * speed);
+        if (button) {
+            leftFrontDrive .setPower(frontLeftPower * speed);
+            leftBackDrive  .setPower(backLeftPower  * speed);
+            rightBackDrive .setPower(frontRightPower* speed);
+            rightFrontDrive.setPower(backRightPower * speed);
+
+        }
         telemetry.addData("LF", frontLeftPower * speed);
         telemetry.addData("RF", frontRightPower* speed);
         telemetry.addData("LB", backLeftPower  * speed);
@@ -55,10 +58,7 @@ public class Drivetrain
 
     }
     public void stopDrive() {
-        leftFrontDrive .setPower(0);
-        leftBackDrive  .setPower(0);
-        rightBackDrive .setPower(0);
-        rightFrontDrive.setPower(0);
+        drive(0,0,0, true);
         telemetry.addLine("stopped");
     }
 

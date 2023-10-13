@@ -57,11 +57,11 @@ public class Teleop extends OpMode
         if (auto1) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.moveToBackdrop();
-            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
+            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
         } else if (auto2) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.moveToTruss();
-            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
+            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
         } else {
             if (gamepad1.right_bumper) {
                 drivetrain.driveSpeed = DriveSpeedEnum.Fast;
@@ -88,7 +88,7 @@ public class Teleop extends OpMode
                     drivetrain.rightBackDrive.setPower(0);
                 }
                 */
-            drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
         }
         intakePower = gamepad1.left_trigger - gamepad1.right_trigger;
         intake.setIntakePower(intakePower);

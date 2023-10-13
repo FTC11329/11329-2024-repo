@@ -236,41 +236,57 @@ public class AprilTagDetectionPipeline {
             driveListFinal.add(0, driveList1.get(0));
             driveListFinal.add(1, driveList1.get(1));
             driveListFinal.add(2, driveList1.get(2));
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (!seen1 && seen2 && !seen3) {
             //only sees 2
             driveListFinal.add(0, driveList2.get(0));
             driveListFinal.add(1, driveList2.get(1));
             driveListFinal.add(2, driveList2.get(2));
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (!seen1 && !seen2 && seen3) {
             //only sees 3
             driveListFinal.add(0, driveList3.get(0));
             driveListFinal.add(1, driveList3.get(1));
             driveListFinal.add(2, driveList3.get(2));
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (seen1 && seen2 && !seen3) {
             //sees 1 and 2
             driveListFinal.add(0, (driveList1.get(0) + driveList2.get(0)) / 2);
             driveListFinal.add(1, (driveList1.get(1) + driveList2.get(1)) / 2);
             driveListFinal.add(2, (driveList1.get(2) + driveList2.get(2)) / 2);
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (!seen1 && seen2 && seen3) {
             //sees 2 and 3
             driveListFinal.add(0, (driveList2.get(0) + driveList3.get(0)) / 2);
             driveListFinal.add(1, (driveList2.get(1) + driveList3.get(1)) / 2);
             driveListFinal.add(2, (driveList2.get(2) + driveList3.get(2)) / 2);
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (seen1 && !seen2 && seen3) {
             //sees 1 and 3
             driveListFinal.add(0, (driveList1.get(0) + driveList3.get(0)) / 2);
             driveListFinal.add(1, (driveList1.get(1) + driveList3.get(1)) / 2);
             driveListFinal.add(2, (driveList1.get(2) + driveList3.get(2)) / 2);
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (seen1 && seen2 && seen3) {
             //sees everything
             driveListFinal.add(0, (driveList1.get(0) + driveList2.get(0) + driveList3.get(0)) / 3);
             driveListFinal.add(1, (driveList1.get(1) + driveList2.get(1) + driveList3.get(1)) / 3);
             driveListFinal.add(2, (driveList1.get(2) + driveList2.get(2) + driveList3.get(2)) / 3);
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else {
             //sees nothing
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);
+            //outputs 0 if we see nothing for auto
+            driveListFinal.add(3, 0.0);
         }
 
         //if is in tolerance
@@ -278,6 +294,8 @@ public class AprilTagDetectionPipeline {
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);
+            //outputs 3 if we are in position for auto
+            driveListFinal.add(3, 3.0);
         }
         return driveListFinal;
     }
@@ -354,26 +372,37 @@ public class AprilTagDetectionPipeline {
             driveListFinal.add(0, driveList1.get(0));
             driveListFinal.add(1, driveList1.get(1));
             driveListFinal.add(2, driveList1.get(2));
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (!seen1 && seen2) {
             //only sees 2
             driveListFinal.add(0, driveList2.get(0));
             driveListFinal.add(1, driveList2.get(1));
             driveListFinal.add(2, driveList2.get(2));
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else if (seen1 && seen2) {
             //sees 1 and 2
             driveListFinal.add(0, (driveList1.get(0) + driveList2.get(0)) / 2);
             driveListFinal.add(1, (driveList1.get(1) + driveList2.get(1)) / 2);
             driveListFinal.add(2, (driveList1.get(2) + driveList2.get(2)) / 2);
+            //outputs 1 if we see anything for auto
+            driveListFinal.add(3, 1.0);
         } else {
             //sees nothing
             driveListFinal.add(0,0.0);
             driveListFinal.add(1,0.0);
             driveListFinal.add(2,0.0);
+            //outputs 0 if we see nothing for auto
+            driveListFinal.add(3, 0.0);
         }
-        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1) + driveListFinal.get(2)) < 2) {
+        //in tolerance
+        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1)) < 2) {
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);
+            //outputs 3 if we are in position for auto
+            driveListFinal.add(3, 3.0);
         }
 
         return driveListFinal;
