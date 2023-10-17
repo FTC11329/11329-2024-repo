@@ -90,7 +90,7 @@ public class AprilTagDetectionPipeline {
         //builder.setCameraResolution(new Size(640, 480));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        builder.enableCameraMonitoring(true);
+//        builder.enableCameraMonitoring(true);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
         builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
@@ -291,11 +291,11 @@ public class AprilTagDetectionPipeline {
 
         //if is in tolerance
         if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1) + driveListFinal.get(2)) < 2) {
-            driveListFinal.add(0, 0.0);
-            driveListFinal.add(1, 0.0);
-            driveListFinal.add(2, 0.0);
+//            driveListFinal.add(0, 0.0);
+//            driveListFinal.add(1, 0.0);
+//            driveListFinal.add(2, 0.0);
             //outputs 3 if we are in position for auto
-            driveListFinal.add(3, 3.0);
+//            driveListFinal.add(3, 3.0);
         }
         return driveListFinal;
     }
@@ -397,11 +397,11 @@ public class AprilTagDetectionPipeline {
             driveListFinal.add(3, 0.0);
         }
         //in tolerance
-        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1)) < 2) {
+        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1)) < 0.1) {
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);
-            //outputs 3 if we are in position for auto
+              //outputs 3 if we are in position for auto
             driveListFinal.add(3, 3.0);
         }
 

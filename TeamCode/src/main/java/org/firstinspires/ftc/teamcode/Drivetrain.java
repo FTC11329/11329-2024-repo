@@ -36,6 +36,8 @@ public class Drivetrain
             speed = 0.5;
         } else if (driveSpeed == DriveSpeedEnum.Auto) {
             speed = 0.8;
+        } else if (driveSpeed == DriveSpeedEnum.TrueAuto) {
+            speed = 1;
         }
 
         double denominator = Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(turn), 1);
