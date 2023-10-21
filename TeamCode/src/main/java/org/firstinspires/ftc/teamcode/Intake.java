@@ -15,11 +15,12 @@ public class Intake
 
     public Intake(HardwareMap hardwareMap) {
         intakeMotor = hardwareMap.get(DcMotor.class, "intakeMotor");
+    }
 
-    }
     public void setIntakePower(double intakePower) {
-//        intakeMotor.setPower(intakePower);
+        intakeMotor.setPower(intakePower);
     }
+
     public void stopDrive() {
         intakeMotor.setPower(0);
         telemetry.addLine("stopped");

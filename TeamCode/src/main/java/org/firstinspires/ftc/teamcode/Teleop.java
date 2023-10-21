@@ -22,9 +22,9 @@ import java.lang.Math;
 @TeleOp(name="Allen Test Drive", group="Allen op mode")
 public class Teleop extends OpMode
 {
+    Intake intake;
     WebcamName webcam1;
     Drivetrain drivetrain;
-    Intake intake;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     private boolean auto1 = false;
@@ -66,7 +66,7 @@ public class Teleop extends OpMode
                 drivetrain.driveSpeed = DriveSpeedEnum.Slow;
             }
             //Testing wheels
-/*
+            /*
                 if (gamepad1.x){
                     drivetrain.rightFrontDrive.setPower(0.25);
                 } else {
@@ -93,7 +93,7 @@ public class Teleop extends OpMode
 */
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
         }
-        intakePower = gamepad1.left_trigger - gamepad1.right_trigger;
+        intakePower = gamepad1.right_trigger - gamepad1.left_trigger;
         intake.setIntakePower(intakePower);
         aprilTagDetectionPipeline.telemetryAprilTag();
         telemetry.addData("Drive List", driveList);
@@ -101,6 +101,7 @@ public class Teleop extends OpMode
 
     @Override
     public void stop() {
+        intake.stopDrive();
         drivetrain.stopDrive();
         aprilTagDetectionPipeline.AprilTagStop();
     }

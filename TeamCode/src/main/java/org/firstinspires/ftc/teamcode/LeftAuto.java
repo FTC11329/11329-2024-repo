@@ -34,6 +34,8 @@ public class LeftAuto extends LinearOpMode {
         telemetry.update();
         drivetrain.driveSpeed = DriveSpeedEnum.Auto;
 
+        boolean oneTimeVariable = true;
+
         waitForStart();
 
         int stage = 0;
@@ -47,7 +49,7 @@ public class LeftAuto extends LinearOpMode {
 
             //in starting position, rotating right until it sees a tag
             if (aprilTagDetectionPipeline.moveToTruss().get(3) == 0 && stage == 0) {
-                drivetrain.drive(0, 0, 0.25, go);
+                drivetrain.drive(0, 0, 0.15, go);
                 if (aprilTagDetectionPipeline.moveToTruss().get(3) == 1) {
                     stage = 1;
                 }
@@ -82,8 +84,23 @@ public class LeftAuto extends LinearOpMode {
             if (aprilTagDetectionPipeline.moveToBackdrop().get(3) != 3 && stage == 4) {
                 List<Double> driveList = aprilTagDetectionPipeline.moveToBackdrop();
                 drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
-                if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 3)
+                if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 3) {
                     stage = 5;
+                }
+            }
+            //outtake pixel
+            if (stage == 5) {
+                double startTime = 0.0;
+                if (oneTimeVariable) {
+                    startTime = runtime.seconds();
+                    oneTimeVariable = false;
+                }
+
+                intake.setIntakePower(-0.25);
+
+                if (runtime.seconds() - startTime > 1) {
+                    intake.setIntakePower(0);
+                    stage = 6;
                 }
             }
         }

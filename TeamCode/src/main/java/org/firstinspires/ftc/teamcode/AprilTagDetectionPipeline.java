@@ -139,7 +139,7 @@ public class AprilTagDetectionPipeline {
     }
     double straightSpeedMultiplier = 0.02;
     double strafeSpeedMultiplier  = 0.02;
-    double turnSpeedMultiplier  = -0.008;
+    double turnSpeedMultiplier  = -0.006;
 
     public List<Double> moveToBackdrop() {
         // initializing variables;
