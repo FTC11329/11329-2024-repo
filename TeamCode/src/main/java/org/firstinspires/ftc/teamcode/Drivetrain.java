@@ -21,13 +21,19 @@ public class Drivetrain
         this.telemetry = telemetry;
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "frontLeft");
         leftBackDrive   = hardwareMap.get(DcMotor.class, "backLeft" );
-        rightBackDrive  = hardwareMap.get(DcMotor.class, "backRight");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "frontRight");
+        rightBackDrive  = hardwareMap.get(DcMotor.class, "backRight");
 
         leftFrontDrive .setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive  .setDirection(DcMotor.Direction.REVERSE);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive .setDirection(DcMotor.Direction.FORWARD);
+
+        leftFrontDrive .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftBackDrive  .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightBackDrive .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
     }
     public void drive(double forward, double strafe, double turn, boolean button) {
         if (driveSpeed == DriveSpeedEnum.Fast){
@@ -49,8 +55,8 @@ public class Drivetrain
         if (button) {
             leftFrontDrive .setPower(frontLeftPower * speed);
             leftBackDrive  .setPower(backLeftPower  * speed);
-            rightBackDrive .setPower(frontRightPower* speed);
-            rightFrontDrive.setPower(backRightPower * speed);
+            rightBackDrive .setPower(backRightPower * speed);
+            rightFrontDrive.setPower(frontRightPower* speed);
 
         }
         telemetry.addData("LF", frontLeftPower * speed);

@@ -37,11 +37,13 @@ public class LeftAuto extends LinearOpMode {
         waitForStart();
 
         int stage = 0;
+
         while (opModeIsActive()) {
-            telemetry.addData("Path", "Leg 1: %4.1f S Elapsed", runtime.seconds());
+            aprilTagDetectionPipeline.telemetryAprilTag();
             telemetry.addData("stage = ", stage);
+            telemetry.addData("Drive list", aprilTagDetectionPipeline.moveToTruss());
             telemetry.update();
-            drivetrain.drive(0.8,0,0,gamepad1.a);
+
             //in starting position, rotating right until it sees a tag
             if (aprilTagDetectionPipeline.moveToTruss().get(3) == 0 && stage == 0) {
                 drivetrain.drive(0, 0, 0.25, gamepad1.a);
@@ -49,12 +51,12 @@ public class LeftAuto extends LinearOpMode {
                     stage = 1;
                 }
             }
-/*
+
             //moving to truss
             if (aprilTagDetectionPipeline.moveToTruss().get(3) != 3 && stage == 1) {
                 List<Double> driveList = aprilTagDetectionPipeline.moveToTruss();
                 drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), gamepad1.a);
-                if (aprilTagDetectionPipeline.moveToTruss().get(3) == 1) {
+                if (aprilTagDetectionPipeline.moveToTruss().get(3) == 3) {
                     stage = 2;
                 }
             }
@@ -63,7 +65,7 @@ public class LeftAuto extends LinearOpMode {
             if (aprilTagDetectionPipeline.moveToTruss().get(3) == 3) {
                 drivetrain.drive(0, 0, -0.5, gamepad1.a);
             }
-
+/*
             //turning slow
             if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 0) {
                 drivetrain.drive(0, 0, -0.15, gamepad1.a);

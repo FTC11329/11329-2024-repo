@@ -131,7 +131,7 @@ public class AprilTagDetectionPipeline {
             }
         }
 
-        // Add "key" information to telemetry
+        // Add legend to telemetry
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
@@ -396,8 +396,8 @@ public class AprilTagDetectionPipeline {
             //outputs 0 if we see nothing for auto
             driveListFinal.add(3, 0.0);
         }
-        //in tolerance
-        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1)) < 0.1) {
+        //in tolerance and sees something
+        if (Math.abs(driveListFinal.get(0) + driveListFinal.get(1)) < 0.1 && driveListFinal.get(3) == 1.0) {
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);

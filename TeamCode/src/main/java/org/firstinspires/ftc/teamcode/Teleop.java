@@ -13,6 +13,8 @@ import org.firstinspires.ftc.robotcontroller.external.samples.RobotAutoDriveToLi
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Drivetrain;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.lang.Math;
 
@@ -21,15 +23,12 @@ import java.lang.Math;
 public class Teleop extends OpMode
 {
     WebcamName webcam1;
-
-    private ElapsedTime runtime = new ElapsedTime();
-
     Drivetrain drivetrain;
     Intake intake;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    private boolean auto1;
-    private boolean auto2;
+    private boolean auto1 = false;
+    private boolean auto2 = false;
 
     double intakePower;
     @Override
@@ -44,16 +43,13 @@ public class Teleop extends OpMode
     }
 
     @Override
-    public void start() {
-        runtime.reset();
-    }
+    public void start() {}
 
     @Override
     public void loop() {
         auto1 = gamepad1.a;
         auto2 = gamepad1.b;
         List<Double> driveList;
-
         if (auto1) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.moveToBackdrop();
@@ -63,13 +59,14 @@ public class Teleop extends OpMode
             driveList = aprilTagDetectionPipeline.moveToTruss();
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
         } else {
+            driveList = new ArrayList<Double>();
             if (gamepad1.right_bumper) {
                 drivetrain.driveSpeed = DriveSpeedEnum.Fast;
             } else {
                 drivetrain.driveSpeed = DriveSpeedEnum.Slow;
             }
             //Testing wheels
-                /*
+/*
                 if (gamepad1.x){
                     drivetrain.rightFrontDrive.setPower(0.25);
                 } else {
@@ -87,14 +84,19 @@ public class Teleop extends OpMode
                 } else {
                     drivetrain.rightBackDrive.setPower(0);
                 }
-                */
+
+                if (gamepad1.a){
+                    drivetrain.leftBackDrive.setPower(0.25);
+                } else {
+                    drivetrain.leftBackDrive.setPower(0);
+                }
+*/
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
         }
         intakePower = gamepad1.left_trigger - gamepad1.right_trigger;
         intake.setIntakePower(intakePower);
         aprilTagDetectionPipeline.telemetryAprilTag();
-        driveList = aprilTagDetectionPipeline.moveToTruss();
-        telemetry.addData("driveList", driveList);
+        telemetry.addData("Drive List", driveList);
     }
 
     @Override
