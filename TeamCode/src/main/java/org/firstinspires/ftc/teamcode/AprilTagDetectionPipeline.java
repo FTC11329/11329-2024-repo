@@ -401,7 +401,7 @@ public class AprilTagDetectionPipeline {
             driveListFinal.add(0, 0.0);
             driveListFinal.add(1, 0.0);
             driveListFinal.add(2, 0.0);
-              //outputs 3 if we are in position for auto
+            //outputs 3 if we are in position for auto
             driveListFinal.add(3, 3.0);
         }
 
