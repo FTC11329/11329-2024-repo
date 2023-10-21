@@ -55,8 +55,12 @@ public class Drivetrain
         if (button) {
             leftFrontDrive .setPower(frontLeftPower * speed);
             leftBackDrive  .setPower(backLeftPower  * speed);
-            rightBackDrive .setPower(backRightPower * speed);
-            rightFrontDrive.setPower(frontRightPower* speed);
+            //for avalanunch
+//            rightBackDrive .setPower(backRightPower * speed);
+//            rightFrontDrive.setPower(frontRightPower* speed);
+            //for glacier
+            rightBackDrive .setPower(frontRightPower * speed);
+            rightFrontDrive.setPower(backRightPower* speed);
 
         }
         telemetry.addData("LF", frontLeftPower * speed);

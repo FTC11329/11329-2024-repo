@@ -38,7 +38,7 @@ public class LeftAuto extends LinearOpMode {
 
         waitForStart();
 
-        int stage = 0;
+        int stage = -1;
 
         while (opModeIsActive()) {
             aprilTagDetectionPipeline.telemetryAprilTag();
@@ -46,7 +46,22 @@ public class LeftAuto extends LinearOpMode {
             telemetry.addData("Drive list", aprilTagDetectionPipeline.moveToTruss());
             telemetry.update();
             boolean go = gamepad1.a;
+            //going forward
+            if (stage == -1) {
+                double startTime = 0.0;
+                if (oneTimeVariable) {
+                    startTime = runtime.seconds();
+                    oneTimeVariable = false;
+                }
 
+                drivetrain.drive(0.5, 0,0, true);
+
+                if (runtime.seconds() - startTime > 5) {
+                    drivetrain.drive(0, 0,0, true);
+                    stage = 0;
+                    oneTimeVariable = true;
+                }
+            }
             //in starting position, rotating right until it sees a tag
             if (aprilTagDetectionPipeline.moveToTruss().get(3) == 0 && stage == 0) {
                 drivetrain.drive(0, 0, 0.15, go);
