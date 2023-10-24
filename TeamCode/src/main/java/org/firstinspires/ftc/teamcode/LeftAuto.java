@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 //@TeleOp(name = "Left Auto", group = "Competition")
@@ -41,9 +42,13 @@ public class LeftAuto extends LinearOpMode {
         int stage = -1;
 
         while (opModeIsActive()) {
+            List<Double> backDropTag = new ArrayList<>();
+            List<Double> stackTag = new ArrayList<>();
+
+
             aprilTagDetectionPipeline.telemetryAprilTag();
             telemetry.addData("stage = ", stage);
-            telemetry.addData("Drive list", aprilTagDetectionPipeline.moveToTruss());
+            telemetry.addData("Drive list", stackTag);
             telemetry.update();
             boolean go = gamepad1.a;
             //going forward
@@ -63,43 +68,43 @@ public class LeftAuto extends LinearOpMode {
                 }
             }
             //in starting position, rotating right until it sees a tag
-            if (aprilTagDetectionPipeline.moveToTruss().get(3) == 0 && stage == 0) {
+            if (stackTag.get(3) == 0 && stage == 0) {
                 drivetrain.drive(0, 0, 0.15, go);
-                if (aprilTagDetectionPipeline.moveToTruss().get(3) == 1) {
+                if (stackTag.get(3) == 1) {
                     stage = 1;
                 }
             }
 
             //moving to truss
-            if (aprilTagDetectionPipeline.moveToTruss().get(3) != 3 && stage == 1) {
-                List<Double> driveList = aprilTagDetectionPipeline.moveToTruss();
+            if (stackTag.get(3) != 3 && stage == 1) {
+                List<Double> driveList = stackTag;
                 drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
-                if (aprilTagDetectionPipeline.moveToTruss().get(3) == 3) {
+                if (stackTag.get(3) == 3) {
                     stage = 2;
                 }
             }
 
             //moving under truss
-            if (aprilTagDetectionPipeline.moveToTruss().get(3) == 3 && stage == 2) {
-                List<Double> driveList = aprilTagDetectionPipeline.moveToTruss();
+            if (stackTag.get(3) == 3 && stage == 2) {
+                List<Double> driveList = stackTag;
                 drivetrain.drive(-0.5, 0, driveList.get(2) * 1.5, go);
-                if (aprilTagDetectionPipeline.moveToTruss().get(3) != 3) {
+                if (stackTag.get(3) != 3) {
                     stage = 3;
                 }
             }
 
             //turning around slowly
-            if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 0 && stage == 3) {
+            if (backDropTag.get(3) == 0 && stage == 3) {
                 drivetrain.drive(0, 0, -0.15, go);
-                if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 1) {
+                if (backDropTag.get(3) == 1) {
                     stage = 4;
                 }
             }
             //moving to back drop
-            if (aprilTagDetectionPipeline.moveToBackdrop().get(3) != 3 && stage == 4) {
-                List<Double> driveList = aprilTagDetectionPipeline.moveToBackdrop();
+            if (backDropTag.get(3) != 3 && stage == 4) {
+                List<Double> driveList = backDropTag;
                 drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
-                if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 3) {
+                if (backDropTag.get(3) == 3) {
                     stage = 5;
                 }
             }
@@ -127,44 +132,44 @@ public class LeftAuto extends LinearOpMode {
 /*
             drivetrain.drive(0.8,0,0,go);
             //in starting position, rotating right until it sees a tag
-            if (aprilTagDetectionPipeline.moveToTruss().get(3) == 0 && stage == 0) {
+            if (stackTag.get(3) == 0 && stage == 0) {
                 drivetrain.drive(0, 0, 0.25, go);
                 /*
-                if (aprilTagDetectionPipeline.moveToTruss().get(3) == 1) {
+                if (stackTag.get(3) == 1) {
                     stage = 1;
                 }
 
             }
 
                     //moving to truss
-                    if (aprilTagDetectionPipeline.moveToTruss().get(3) != 3 && stage == 1) {
-                    List<Double> driveList = aprilTagDetectionPipeline.moveToTruss();
+                    if (stackTag.get(3) != 3 && stage == 1) {
+                    List<Double> driveList = stackTag;
         drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
-        if (aprilTagDetectionPipeline.moveToTruss().get(3) == 3) {
+        if (stackTag.get(3) == 3) {
         stage = 2;
         }
         }
 
         //turning fast
-        if (aprilTagDetectionPipeline.moveToTruss().get(3) == 3 && stage == 2) {
+        if (stackTag.get(3) == 3 && stage == 2) {
         drivetrain.drive(0, 0, -0.5, go);
-        if (aprilTagDetectionPipeline.moveToTruss().get(3) != 3) {
+        if (stackTag.get(3) != 3) {
         stage = 3;
         }
         }
 
         //turning slow
-        if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 0 && stage == 3) {
+        if (backDropTag.get(3) == 0 && stage == 3) {
         drivetrain.drive(0, 0, -0.15, go);
-        if (aprilTagDetectionPipeline.moveToBackdrop().get(3) != 0) {
+        if (backDropTag.get(3) != 0) {
         stage = 4;
         }
         }
 
-        if (aprilTagDetectionPipeline.moveToTruss().get(3) != 3 && stage == 4) {
-        List<Double> driveList = aprilTagDetectionPipeline.moveToBackdrop();
+        if (stackTag.get(3) != 3 && stage == 4) {
+        List<Double> driveList = backDropTag;
         drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
-        if (aprilTagDetectionPipeline.moveToBackdrop().get(3) == 3) {
+        if (backDropTag.get(3) == 3) {
         stage = 5;
         }
         }

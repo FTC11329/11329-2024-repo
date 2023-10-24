@@ -52,11 +52,11 @@ public class Teleop extends OpMode
         List<Double> driveList;
         if (auto1) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
-            driveList = aprilTagDetectionPipeline.moveToBackdrop();
+            driveList = aprilTagDetectionPipeline.autoAprilTag(2,12,0);
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
         } else if (auto2) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
-            driveList = aprilTagDetectionPipeline.moveToTruss();
+            driveList = aprilTagDetectionPipeline.autoAprilTag(2,12,0);
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
         } else {
             driveList = new ArrayList<Double>();

@@ -1,10 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
+
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
@@ -15,18 +21,16 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.lang.Math;
-
+import java.util.concurrent.TimeUnit;
 
 
 public class AprilTagDetectionPipeline {
     private static final boolean USE_WEBCAM = true;
-    /**
-     * {@link #aprilTag} is the variable to store our instance of the AprilTag processor.
-     */
+
+    private ElapsedTime runtime = new ElapsedTime();
+
     private AprilTagProcessor aprilTag;
-    /**
-     * {@link #visionPortal} is the variable to store our instance of the vision portal.
-     */
+
     private VisionPortal visionPortal;
 
     Telemetry telemetry;
@@ -39,6 +43,7 @@ public class AprilTagDetectionPipeline {
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
+//        setManualExposure(6, 250);
     }
 
         public void AprilTagStop() {
@@ -68,7 +73,7 @@ public class AprilTagDetectionPipeline {
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-                .setTagLibrary(myAprilTagLibrary)
+//                .setTagLibrary(myAprilTagLibrary)
                 //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
 
                 // == CAMERA CALIBRATION ==
@@ -137,6 +142,8 @@ public class AprilTagDetectionPipeline {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
 
     }
+    //im not ready to delete this yet but it might be coming
+    /*
     double straightSpeedMultiplier = 0.02;
     double strafeSpeedMultiplier  = 0.02;
     double turnSpeedMultiplier  = -0.006;
@@ -406,5 +413,106 @@ public class AprilTagDetectionPipeline {
         }
 
         return driveListFinal;
+    }
+ */
+
+    //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
+    //  applied to the drive motors to correct the error.
+    //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
+    final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+    final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+    final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+
+    final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+
+    boolean targetFound     = false;    // Set to true when an AprilTag target is detected
+    double  drive           = 0;        // Desired forward power/speed (-1 to +1)
+    double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
+    double  turn            = 0;        // Desired turning power/speed (-1 to +1)
+
+    private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
+    List<Double> driveList = new ArrayList<>();
+
+    public List<Double> autoAprilTag(int DESIRED_TAG_ID, double DESIRED_DISTANCE, double DESIRED_LATERAL_DISTANCE) {
+        targetFound = false;
+        desiredTag = null;
+
+        // Step through the list of detected tags and look for a matching tag
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        for (AprilTagDetection detection : currentDetections) {
+            // Look to see if we have size info on this tag.
+            if (detection.metadata != null) {
+                //  Check to see if we want to track towards this tag.
+                if ((DESIRED_TAG_ID < 0) || (detection.id == DESIRED_TAG_ID)) {
+                    // Yes, we want to use this tag.
+                    targetFound = true;
+                    desiredTag = detection;
+                    break;  // don't look any further.
+                } else {
+                    // This tag is in the library, but we do not want to track it right now.
+                    telemetry.addData("Skipping", "Tag ID %d is not desired", detection.id);
+                }
+            } else {
+                // This tag is NOT in the library, so we don't have enough information to track to it.
+                telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
+            }
+        }
+        // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
+        double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+        double headingError = desiredTag.ftcPose.bearing;
+        double yawError = desiredTag.ftcPose.yaw - DESIRED_LATERAL_DISTANCE;
+
+        // Use the speed and turn "gains" to calculate how we want the robot to move.
+        drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+        turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
+        strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+
+        driveList.add(0, drive);
+        driveList.add(1, strafe);
+        driveList.add(2, turn);
+        if (targetFound) {
+            driveList.add(3, 1.0);
+        } else {
+            driveList.add(3, 0.0);
+        }
+
+        if (driveList.get(0) + driveList.get(1) < 1 && driveList.get(3) == 1.0) {
+            driveList.add(0, 0.0);
+            driveList.add(1, 0.0);
+            driveList.add(2, 0.0);
+            driveList.add(3, 3.0);
+        }
+
+        return driveList;
+    }
+    private void setManualExposure(int exposureMS, int gain) {
+        // Wait for the camera to be open, then use the controls
+        double startTime = runtime.milliseconds();
+        if (visionPortal == null) {
+            return;
+        }
+        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            telemetry.addData("Camera", "Waiting");
+            telemetry.update();
+            while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+                while (runtime.milliseconds() - startTime < 20) {}
+            }
+            telemetry.addData("Camera", "Ready");
+            telemetry.update();
+        }
+        // Make sure camera is streaming before we try to set the exposure controls
+        // Set camera controls unless we are stopping.
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            while (runtime.milliseconds() - startTime > 50) {}
+        }
+        exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+        while (runtime.milliseconds() - startTime > 20) {}
+        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+        gainControl.setGain(gain);
+        while (runtime.milliseconds() - startTime > 20) {}
     }
 }
