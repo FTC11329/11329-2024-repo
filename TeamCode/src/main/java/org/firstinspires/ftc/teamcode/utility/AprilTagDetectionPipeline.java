@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.utility;
 
 
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -309,7 +309,6 @@ public class AprilTagDetectionPipeline {
 
 
     //Truss April tag
-
 
     public List<Double> moveToTruss() {
         // initializing variables;

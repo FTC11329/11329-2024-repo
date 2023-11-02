@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +44,7 @@ public class LeftAuto extends LinearOpMode {
         int stage = -1;
 
         while (opModeIsActive()) {
-            List<Double> backDropTag = new ArrayList<>();
+            List<Double> backDropTag = aprilTagDetectionPipeline.autoAprilTag(2, 12,0);
             List<Double> stackTag = new ArrayList<>();
 
 

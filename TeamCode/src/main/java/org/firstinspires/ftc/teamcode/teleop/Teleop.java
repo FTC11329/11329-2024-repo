@@ -1,22 +1,16 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.RobotAutoDriveToLine_Linear;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Drivetrain;
+import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
+import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Math;
 
 
 @TeleOp(name="Allen Test Drive", group="Allen op mode")
@@ -52,7 +46,7 @@ public class Teleop extends OpMode
         List<Double> driveList;
         if (auto1) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
-            driveList = aprilTagDetectionPipeline.autoAprilTag(2,12,0);
+            driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
         } else if (auto2) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
