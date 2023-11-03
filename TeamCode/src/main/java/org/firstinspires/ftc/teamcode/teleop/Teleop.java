@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Plane;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -16,8 +19,12 @@ import java.util.List;
 @TeleOp(name="Allen Test Drive", group="Allen op mode")
 public class Teleop extends OpMode
 {
-    Intake intake;
     WebcamName webcam1;
+
+    Claw claw;
+    Plane plane;
+    Slides slides;
+    Intake intake;
     Drivetrain drivetrain;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -25,14 +32,22 @@ public class Teleop extends OpMode
     private boolean auto2 = false;
 
     double intakePower;
+    double slidePower;
+
     @Override
     public void init() {
         intakePower = 0;
+
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
         telemetry.addData("Status", "Initialized");
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+
+        claw = new Claw(hardwareMap);
+        plane = new Plane(hardwareMap);
+        slides = new Slides(hardwareMap);
         intake = new Intake(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
+
         aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
     }
 
@@ -43,15 +58,16 @@ public class Teleop extends OpMode
     public void loop() {
         auto1 = gamepad1.a;
         auto2 = gamepad1.b;
+        slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
         List<Double> driveList;
         if (auto1) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
-            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
+            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
         } else if (auto2) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.autoAprilTag(2,12,0);
-            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), true);
+            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
         } else {
             driveList = new ArrayList<Double>();
             if (gamepad1.right_bumper) {
@@ -85,17 +101,39 @@ public class Teleop extends OpMode
                     drivetrain.leftBackDrive.setPower(0);
                 }
 */
-            drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, true);
+            drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            slides.manualPosition(slidePower);
+
+            intakePower = gamepad1.right_stick_y;
+            intake.setIntakePower(intakePower);
+            //pre-sets
+            if (gamepad1.x) {
+                claw.setPower(0.5);
+            } else if (gamepad1.y) {
+                claw.setPower(-0.5);
+            } else {
+                claw.setPower(0);
+            }
         }
-        intakePower = gamepad1.right_trigger - gamepad1.left_trigger;
-        intake.setIntakePower(intakePower);
         aprilTagDetectionPipeline.telemetryAprilTag();
         telemetry.addData("Drive List", driveList);
+        if (gamepad1.dpad_right) {
+            preset(1000);
+        }
+        if (gamepad1.dpad_up) {
+            plane.setPos(0.4);
+        }
+    }
+    //just shortening code that will be repeated a lot
+    public void preset(int slidesPos) {
+        slides.setPosition(slidesPos);
     }
 
     @Override
     public void stop() {
-        intake.stopDrive();
+        claw.stopClaw();
+        slides.stopSlides();
+        intake.stopIntake();
         drivetrain.stopDrive();
         aprilTagDetectionPipeline.AprilTagStop();
     }

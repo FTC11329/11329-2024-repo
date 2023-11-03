@@ -52,7 +52,6 @@ public class LeftAuto extends LinearOpMode {
             telemetry.addData("stage = ", stage);
             telemetry.addData("Drive list", stackTag);
             telemetry.update();
-            boolean go = gamepad1.a;
             //going forward
             if (stage == -1) {
                 double startTime = 0.0;
@@ -61,17 +60,17 @@ public class LeftAuto extends LinearOpMode {
                     oneTimeVariable = false;
                 }
 
-                drivetrain.drive(0.5, 0,0, true);
+                drivetrain.drive(0.5, 0,0);
 
                 if (runtime.seconds() - startTime > 5) {
-                    drivetrain.drive(0, 0,0, true);
+                    drivetrain.drive(0, 0,0);
                     stage = 0;
                     oneTimeVariable = true;
                 }
             }
             //in starting position, rotating right until it sees a tag
             if (stackTag.get(3) == 0 && stage == 0) {
-                drivetrain.drive(0, 0, 0.15, go);
+                drivetrain.drive(0, 0, 0.15);
                 if (stackTag.get(3) == 1) {
                     stage = 1;
                 }
@@ -80,7 +79,7 @@ public class LeftAuto extends LinearOpMode {
             //moving to truss
             if (stackTag.get(3) != 3 && stage == 1) {
                 List<Double> driveList = stackTag;
-                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
+                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
                 if (stackTag.get(3) == 3) {
                     stage = 2;
                 }
@@ -89,7 +88,7 @@ public class LeftAuto extends LinearOpMode {
             //moving under truss
             if (stackTag.get(3) == 3 && stage == 2) {
                 List<Double> driveList = stackTag;
-                drivetrain.drive(-0.5, 0, driveList.get(2) * 1.5, go);
+                drivetrain.drive(-0.5, 0, driveList.get(2) * 1.5);
                 if (stackTag.get(3) != 3) {
                     stage = 3;
                 }
@@ -97,7 +96,7 @@ public class LeftAuto extends LinearOpMode {
 
             //turning around slowly
             if (backDropTag.get(3) == 0 && stage == 3) {
-                drivetrain.drive(0, 0, -0.15, go);
+                drivetrain.drive(0, 0, -0.15);
                 if (backDropTag.get(3) == 1) {
                     stage = 4;
                 }
@@ -105,7 +104,7 @@ public class LeftAuto extends LinearOpMode {
             //moving to back drop
             if (backDropTag.get(3) != 3 && stage == 4) {
                 List<Double> driveList = backDropTag;
-                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
+                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
                 if (backDropTag.get(3) == 3) {
                     stage = 5;
                 }
@@ -132,10 +131,10 @@ public class LeftAuto extends LinearOpMode {
 
 
 /*
-            drivetrain.drive(0.8,0,0,go);
+            drivetrain.drive(0.8,0,0);
             //in starting position, rotating right until it sees a tag
             if (stackTag.get(3) == 0 && stage == 0) {
-                drivetrain.drive(0, 0, 0.25, go);
+                drivetrain.drive(0, 0, 0.25);
                 /*
                 if (stackTag.get(3) == 1) {
                     stage = 1;
@@ -146,7 +145,7 @@ public class LeftAuto extends LinearOpMode {
                     //moving to truss
                     if (stackTag.get(3) != 3 && stage == 1) {
                     List<Double> driveList = stackTag;
-        drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
+        drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
         if (stackTag.get(3) == 3) {
         stage = 2;
         }
@@ -154,7 +153,7 @@ public class LeftAuto extends LinearOpMode {
 
         //turning fast
         if (stackTag.get(3) == 3 && stage == 2) {
-        drivetrain.drive(0, 0, -0.5, go);
+        drivetrain.drive(0, 0, -0.5);
         if (stackTag.get(3) != 3) {
         stage = 3;
         }
@@ -162,7 +161,7 @@ public class LeftAuto extends LinearOpMode {
 
         //turning slow
         if (backDropTag.get(3) == 0 && stage == 3) {
-        drivetrain.drive(0, 0, -0.15, go);
+        drivetrain.drive(0, 0, -0.15);
         if (backDropTag.get(3) != 0) {
         stage = 4;
         }
@@ -170,7 +169,7 @@ public class LeftAuto extends LinearOpMode {
 
         if (stackTag.get(3) != 3 && stage == 4) {
         List<Double> driveList = backDropTag;
-        drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), go);
+        drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
         if (backDropTag.get(3) == 3) {
         stage = 5;
         }

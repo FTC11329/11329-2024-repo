@@ -35,7 +35,7 @@ public class Drivetrain
         rightBackDrive .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     }
-    public void drive(double forward, double strafe, double turn, boolean button) {
+    public void drive(double forward, double strafe, double turn) {
         if (driveSpeed == DriveSpeedEnum.Fast){
             speed = 0.85;
         } else if (driveSpeed == DriveSpeedEnum.Slow) {
@@ -52,25 +52,17 @@ public class Drivetrain
         double frontRightPower = (forward - strafe - turn) / denominator;
         double backRightPower  = (forward + strafe - turn) / denominator;
 
-        if (button) {
-            leftFrontDrive .setPower(frontLeftPower * speed);
-            leftBackDrive  .setPower(backLeftPower  * speed);
-            //for avalanunch
-//            rightBackDrive .setPower(backRightPower * speed);
-//            rightFrontDrive.setPower(frontRightPower* speed);
-            //for glacier
-            rightBackDrive .setPower(frontRightPower * speed);
-            rightFrontDrive.setPower(backRightPower* speed);
-
-        }
-        telemetry.addData("LF", frontLeftPower * speed);
-        telemetry.addData("RF", frontRightPower* speed);
-        telemetry.addData("LB", backLeftPower  * speed);
-        telemetry.addData("RB", backRightPower * speed);
-
+        leftFrontDrive .setPower(frontLeftPower * speed);
+        leftBackDrive  .setPower(backLeftPower  * speed);
+        //for avalanunch
+//      rightBackDrive .setPower(backRightPower * speed);
+//      rightFrontDrive.setPower(frontRightPower* speed);
+        //for glacier
+        rightBackDrive .setPower(frontRightPower * speed);
+        rightFrontDrive.setPower(backRightPower* speed);
     }
     public void stopDrive() {
-        drive(0,0,0, true);
+        drive(0,0,0);
         telemetry.addLine("stopped");
     }
 

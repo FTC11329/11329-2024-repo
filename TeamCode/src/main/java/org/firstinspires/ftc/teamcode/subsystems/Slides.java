@@ -1,10 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Slides {
     DcMotor slideMotorLeft;
@@ -23,14 +21,31 @@ public class Slides {
         slideMotorLeft .setMode(DcMotor.RunMode.RUN_TO_POSITION);
         slideMotorRight.setDirection(DcMotorSimple.Direction.FORWARD);
         slideMotorLeft .setDirection(DcMotorSimple.Direction.FORWARD);
+        slideMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotorLeft .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
+
     //sets both motors to go to targetPos
-    public void toPosition(int targetPos) {
-        slideMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotorLeft .setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotorRight.setPower(1);
-        slideMotorRight.setPower(1);
+    public void setPosition(int targetPos) {
         slideMotorRight.setTargetPosition(targetPos);
         slideMotorLeft .setTargetPosition(targetPos);
+    }
+
+    //set manual movement
+    public void manualPosition(double manualPower) {
+        int newPos;
+        int manualChange = (int) (manualPower * 85);
+        newPos = slideMotorLeft.getTargetPosition() + manualChange;
+
+        slideMotorRight.setTargetPosition(newPos);
+        slideMotorLeft .setTargetPosition(newPos);
+    }
+
+    public void stopSlides() {
+        slideMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slideMotorLeft .setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        slideMotorRight.setPower(0);
+        slideMotorLeft .setPower(0);
     }
 }
