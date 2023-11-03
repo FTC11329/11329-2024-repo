@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
@@ -64,10 +65,12 @@ public class Teleop extends OpMode
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
+
         } else if (auto2) {
             drivetrain.driveSpeed = DriveSpeedEnum.Auto;
             driveList = aprilTagDetectionPipeline.autoAprilTag(2,12,0);
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
+
         } else {
             driveList = new ArrayList<Double>();
             if (gamepad1.right_bumper) {
@@ -108,20 +111,22 @@ public class Teleop extends OpMode
             intake.setIntakePower(intakePower);
             //pre-sets
             if (gamepad1.x) {
-                claw.setPower(0.5);
+                claw.setPower(Constants.Claw.intake);
             } else if (gamepad1.y) {
-                claw.setPower(-0.5);
+                claw.setPower(Constants.Claw.outake);
             } else {
-                claw.setPower(0);
+                claw.setPower(Constants.Claw.stop);
             }
         }
         aprilTagDetectionPipeline.telemetryAprilTag();
         telemetry.addData("Drive List", driveList);
         if (gamepad1.dpad_right) {
-            preset(1000);
+            preset(Constants.Slides.medSlides);
         }
         if (gamepad1.dpad_up) {
-            plane.setPos(0.4);
+            plane.setPos(Constants.Plane.release);
+        } else {
+            plane.setPos(Constants.Plane.hold);
         }
     }
     //just shortening code that will be repeated a lot
