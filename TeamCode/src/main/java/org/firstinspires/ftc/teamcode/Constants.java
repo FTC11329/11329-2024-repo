@@ -26,12 +26,17 @@ public class Constants {
     }
 
     @Config
+    public static class Drivetrain {
+        public static String leftFrontHardwareMapName = "frontLeft";
+        public static String leftRearHardwareMapName = "backLeft";
+        public static String rightFrontHardwareMapName =  "frontRight";
+        public static String rightRearHardwareMapName = "backRight";
+    }
+
+    @Config
     public static class Roadrunner {
         public static final double TICKS_PER_REV = 1;
         public static final double MAX_RPM = 1;
-
-        public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
-                getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
         /*
          * These are physical constants that can be determined from your robot (including the track

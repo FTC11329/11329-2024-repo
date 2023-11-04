@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class Plane {
     public Servo planeServo;
 
-    public Plane(HardwareMap hardwareMap){
+    public Plane(HardwareMap hardwareMap) {
         planeServo = hardwareMap.get(Servo.class, "planeServo");
         planeServo.setPosition(0);
     }

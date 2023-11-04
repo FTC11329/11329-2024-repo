@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.roadrunner.util.LynxModuleUtil;
 
 public class HardwareUtils {
-    HardwareUtils(HardwareMap hardwareMap) {
+   public static void configureHardwareMap(HardwareMap hardwareMap) {
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
         for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {

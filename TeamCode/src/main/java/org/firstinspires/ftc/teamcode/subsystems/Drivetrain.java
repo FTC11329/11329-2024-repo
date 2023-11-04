@@ -1,5 +1,17 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import static org.firstinspires.ftc.teamcode.Constants.Drivetrain.leftFrontHardwareMapName;
+import static org.firstinspires.ftc.teamcode.Constants.Drivetrain.leftRearHardwareMapName;
+import static org.firstinspires.ftc.teamcode.Constants.Drivetrain.rightFrontHardwareMapName;
+import static org.firstinspires.ftc.teamcode.Constants.Drivetrain.rightRearHardwareMapName;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kA;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kStatic;
+import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kV;
 import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethods.encoderTicksToInches;
 
 import androidx.annotation.NonNull;
@@ -19,7 +31,6 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -28,44 +39,42 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
-import org.firstinspires.ftc.teamcode.roadrunner.util.LynxModuleUtil;
+import org.firstinspires.ftc.teamcode.utility.HardwareUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.*;
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
 public class Drivetrain extends MecanumDrive {
+    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
+    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
-
     public static double LATERAL_MULTIPLIER = 1;
-
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
+    private final TrajectorySequenceRunner trajectorySequenceRunner;
+    private final TrajectoryFollower follower;
 
-    private TrajectorySequenceRunner trajectorySequenceRunner;
+    private final DcMotorEx leftFront;
+    private final DcMotorEx leftRear;
+    private final DcMotorEx rightRear;
+    private final DcMotorEx rightFront;
+    private final List<DcMotorEx> motors;
 
-    private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
-    private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
+    private final VoltageSensor batteryVoltageSensor;
 
-    private TrajectoryFollower follower;
-
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
-    private List<DcMotorEx> motors;
-
-    private VoltageSensor batteryVoltageSensor;
-
-    private List<Integer> lastEncPositions = new ArrayList<>();
-    private List<Integer> lastEncVels = new ArrayList<>();
+    private final List<Integer> lastEncoderPositions = new ArrayList<>();
+    private final List<Integer> lastEncoderVelcities = new ArrayList<>();
 
     private Telemetry telemetry;
 
@@ -75,18 +84,14 @@ public class Drivetrain extends MecanumDrive {
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
-        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
+        HardwareUtils.configureHardwareMap(hardwareMap);
 
         batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
 
-        for (LynxModule module : hardwareMap.getAll(LynxModule.class)) {
-            module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
-        }
-
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotorEx.class, leftFrontHardwareMapName);
+        leftRear = hardwareMap.get(DcMotorEx.class, leftRearHardwareMapName);
+        rightRear = hardwareMap.get(DcMotorEx.class, rightRearHardwareMapName);
+        rightFront = hardwareMap.get(DcMotorEx.class, rightFrontHardwareMapName);
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -100,16 +105,26 @@ public class Drivetrain extends MecanumDrive {
 
         // TODO: reverse any motors using DcMotor.setDirection()
 
-        List<Integer> lastTrackingEncPositions = new ArrayList<>();
-        List<Integer> lastTrackingEncVels = new ArrayList<>();
+        List<Integer> lastTrackingEncoderPositions = new ArrayList<>();
+        List<Integer> lastTrackingEncoderVelocities = new ArrayList<>();
 
-        // TODO: if desired, use setLocalizer() to change the localization method
-        // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+        setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncoderPositions, lastTrackingEncoderVelocities));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
-                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
+                lastEncoderPositions, lastEncoderVelcities, lastTrackingEncoderPositions, lastTrackingEncoderVelocities
         );
+    }
+
+    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
+        return new MinVelocityConstraint(Arrays.asList(
+                new AngularVelocityConstraint(maxAngularVel),
+                new MecanumVelocityConstraint(maxVel, trackWidth)
+        ));
+    }
+
+    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
+        return new ProfileAccelerationConstraint(maxAccel);
     }
 
     public void drive(double forward, double strafe, double turn, DriveSpeedEnum driveSpeed) {
@@ -247,12 +262,12 @@ public class Drivetrain extends MecanumDrive {
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
-        lastEncPositions.clear();
+        lastEncoderPositions.clear();
 
         List<Double> wheelPositions = new ArrayList<>();
         for (DcMotorEx motor : motors) {
             int position = motor.getCurrentPosition();
-            lastEncPositions.add(position);
+            lastEncoderPositions.add(position);
             wheelPositions.add(encoderTicksToInches(position));
         }
         return wheelPositions;
@@ -260,12 +275,12 @@ public class Drivetrain extends MecanumDrive {
 
     @Override
     public List<Double> getWheelVelocities() {
-        lastEncVels.clear();
+        lastEncoderVelcities.clear();
 
         List<Double> wheelVelocities = new ArrayList<>();
         for (DcMotorEx motor : motors) {
             int vel = (int) motor.getVelocity();
-            lastEncVels.add(vel);
+            lastEncoderVelcities.add(vel);
             wheelVelocities.add(encoderTicksToInches(vel));
         }
         return wheelVelocities;
@@ -279,26 +294,15 @@ public class Drivetrain extends MecanumDrive {
         rightFront.setPower(v3);
     }
 
-
-    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
-        return new MinVelocityConstraint(Arrays.asList(
-                new AngularVelocityConstraint(maxAngularVel),
-                new MecanumVelocityConstraint(maxVel, trackWidth)
-        ));
-    }
-
-    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
-        return new ProfileAccelerationConstraint(maxAccel);
-    }
-
     //  This is an artifact that we don't use due to 3 wheel odometry
     @Override
     protected double getRawExternalHeading() {
         return 0;
     }
 
+    // TODO: Refactor this out
     public void stopDrive() {
-        drive(0,0,0, DriveSpeedEnum.Slow);
+        drive(0, 0, 0, DriveSpeedEnum.Slow);
         telemetry.addLine("Drivetrain Stopped");
     }
 }

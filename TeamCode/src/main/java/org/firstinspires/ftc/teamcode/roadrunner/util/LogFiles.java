@@ -8,7 +8,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerImpl;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManagerNotifier;
@@ -50,10 +49,6 @@ public final class LogFiles {
 
         public double ticksPerRev = Constants.Roadrunner.TICKS_PER_REV;
         public double maxRpm = Constants.Roadrunner.MAX_RPM;
-        public double motorP = Constants.Roadrunner.MOTOR_VELO_PID.p;
-        public double motorI = Constants.Roadrunner.MOTOR_VELO_PID.i;
-        public double motorD = Constants.Roadrunner.MOTOR_VELO_PID.d;
-        public double motorF = Constants.Roadrunner.MOTOR_VELO_PID.f;
         public double wheelRadius = Constants.Roadrunner.WHEEL_RADIUS;
         public double gearRatio = Constants.Roadrunner.GEAR_RATIO;
         public double trackWidth = Constants.Roadrunner.TRACK_WIDTH;

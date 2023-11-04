@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,7 +11,9 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 //@TeleOp(name = "Left Auto", group = "Competition")
@@ -26,7 +29,8 @@ public class LeftAuto extends LinearOpMode {
 
     DriveSpeedEnum driveSpeed;
     @Override
-    public void runOpMode() {
+    public void runOpMode()
+    {
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
         telemetry.addData("Status", "Initialized");

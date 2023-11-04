@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-
 public class Claw {
     public CRServo clawServo;
-    public Claw(HardwareMap hardwareMap){
+
+    public Claw(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(CRServo.class, "clawServo");
     }
 
