@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@TeleOp(name="Allen Test Drive", group="Allen op mode")
+@TeleOp(name="Tele-op", group="Allen op mode")
 public class Teleop extends OpMode
 {
     WebcamName webcam1;

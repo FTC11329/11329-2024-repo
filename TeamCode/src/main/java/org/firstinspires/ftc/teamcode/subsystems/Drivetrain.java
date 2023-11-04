@@ -33,6 +33,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
@@ -103,7 +104,8 @@ public class Drivetrain extends MecanumDrive {
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // TODO: reverse any motors using DcMotor.setDirection()
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         List<Integer> lastTrackingEncoderPositions = new ArrayList<>();
         List<Integer> lastTrackingEncoderVelocities = new ArrayList<>();
@@ -128,7 +130,7 @@ public class Drivetrain extends MecanumDrive {
     }
 
     public void drive(double forward, double strafe, double turn, DriveSpeedEnum driveSpeed) {
-        double speed;
+        double speed = 0;
         if (driveSpeed == DriveSpeedEnum.Fast) {
             speed = 0.85;
         } else if (driveSpeed == DriveSpeedEnum.Slow) {
@@ -139,7 +141,7 @@ public class Drivetrain extends MecanumDrive {
             speed = 1;
         }
 
-        setWeightedDrivePower(new Pose2d(forward, strafe, turn));
+        setWeightedDrivePower(new Pose2d(strafe * speed, forward * speed, turn * speed));
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
