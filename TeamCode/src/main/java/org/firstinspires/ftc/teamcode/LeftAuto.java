@@ -24,6 +24,7 @@ public class LeftAuto extends LinearOpMode {
     Drivetrain drivetrain;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
+    DriveSpeedEnum driveSpeed;
     @Override
     public void runOpMode() {
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -35,7 +36,7 @@ public class LeftAuto extends LinearOpMode {
 
         telemetry.addData("Status", "Ready to run");
         telemetry.update();
-        drivetrain.driveSpeed = DriveSpeedEnum.Auto;
+        driveSpeed = DriveSpeedEnum.Auto;
 
         boolean oneTimeVariable = true;
 
@@ -60,17 +61,17 @@ public class LeftAuto extends LinearOpMode {
                     oneTimeVariable = false;
                 }
 
-                drivetrain.drive(0.5, 0,0);
+                drivetrain.drive(0.5, 0,0, driveSpeed);
 
                 if (runtime.seconds() - startTime > 5) {
-                    drivetrain.drive(0, 0,0);
+                    drivetrain.drive(0, 0,0, driveSpeed);
                     stage = 0;
                     oneTimeVariable = true;
                 }
             }
             //in starting position, rotating right until it sees a tag
             if (stackTag.get(3) == 0 && stage == 0) {
-                drivetrain.drive(0, 0, 0.15);
+                drivetrain.drive(0, 0, 0.15, driveSpeed);
                 if (stackTag.get(3) == 1) {
                     stage = 1;
                 }
@@ -79,7 +80,7 @@ public class LeftAuto extends LinearOpMode {
             //moving to truss
             if (stackTag.get(3) != 3 && stage == 1) {
                 List<Double> driveList = stackTag;
-                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
+                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), driveSpeed);
                 if (stackTag.get(3) == 3) {
                     stage = 2;
                 }
@@ -88,7 +89,7 @@ public class LeftAuto extends LinearOpMode {
             //moving under truss
             if (stackTag.get(3) == 3 && stage == 2) {
                 List<Double> driveList = stackTag;
-                drivetrain.drive(-0.5, 0, driveList.get(2) * 1.5);
+                drivetrain.drive(-0.5, 0, driveList.get(2) * 1.5, driveSpeed);
                 if (stackTag.get(3) != 3) {
                     stage = 3;
                 }
@@ -96,7 +97,7 @@ public class LeftAuto extends LinearOpMode {
 
             //turning around slowly
             if (backDropTag.get(3) == 0 && stage == 3) {
-                drivetrain.drive(0, 0, -0.15);
+                drivetrain.drive(0, 0, -0.15, driveSpeed);
                 if (backDropTag.get(3) == 1) {
                     stage = 4;
                 }
@@ -104,7 +105,7 @@ public class LeftAuto extends LinearOpMode {
             //moving to back drop
             if (backDropTag.get(3) != 3 && stage == 4) {
                 List<Double> driveList = backDropTag;
-                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2));
+                drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), driveSpeed);
                 if (backDropTag.get(3) == 3) {
                     stage = 5;
                 }
