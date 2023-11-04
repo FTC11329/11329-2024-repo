@@ -104,8 +104,8 @@ public class Drivetrain extends MecanumDrive {
 
         setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         List<Integer> lastTrackingEncoderPositions = new ArrayList<>();
         List<Integer> lastTrackingEncoderVelocities = new ArrayList<>();
@@ -141,7 +141,7 @@ public class Drivetrain extends MecanumDrive {
             speed = 1;
         }
 
-        setWeightedDrivePower(new Pose2d(strafe * speed, forward * speed, turn * speed));
+        setWeightedDrivePower(new Pose2d(forward * speed, strafe * speed, turn * speed));
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
