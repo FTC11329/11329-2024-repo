@@ -21,6 +21,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.lang.Math;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 
@@ -486,6 +487,17 @@ public class AprilTagDetectionPipeline {
 
         return driveList;
     }
+
+    public Optional<AprilTagDetection> findAprilTag(int id) {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        for (AprilTagDetection detection : currentDetections) {
+            if (detection.id == id && detection.metadata != null) {
+                return Optional.of(detection);
+            }
+        }
+        return Optional.empty();
+    }
+
     private void setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
         double startTime = runtime.milliseconds();
@@ -496,7 +508,7 @@ public class AprilTagDetectionPipeline {
             telemetry.addData("Camera", "Waiting");
             telemetry.update();
             while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-                while (runtime.milliseconds() - startTime < 20) {}
+                while (runtime.milliseconds() - startTime < 20);
             }
             telemetry.addData("Camera", "Ready");
             telemetry.update();
@@ -506,12 +518,12 @@ public class AprilTagDetectionPipeline {
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            while (runtime.milliseconds() - startTime > 50) {}
+            while (runtime.milliseconds() - startTime > 50);
         }
         exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
-        while (runtime.milliseconds() - startTime > 20) {}
+        while (runtime.milliseconds() - startTime > 20);
         GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
         gainControl.setGain(gain);
-        while (runtime.milliseconds() - startTime > 20) {}
+        while (runtime.milliseconds() - startTime > 20);
     }
 }
