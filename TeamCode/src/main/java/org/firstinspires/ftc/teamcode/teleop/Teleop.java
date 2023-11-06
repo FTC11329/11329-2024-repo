@@ -109,7 +109,7 @@ public class Teleop extends OpMode
             outtake.manualSlides(slidePower);
             intakePower = gamepad1.right_stick_y;
             intake.setIntakePower(intakePower);
-            outtake.arm.periodic();
+            outtake.periodic();
             //pre-sets
             if (gamepad1.x) {
                 claw.setPower(Constants.Claw.intake);

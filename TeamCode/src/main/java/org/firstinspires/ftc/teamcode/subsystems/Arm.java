@@ -26,10 +26,13 @@ public class Arm {
         armServoL.setPosition(1.0 - currentPos);
         armServoR.setPosition(currentPos);
     }
-    public void periodic(){
+    public void periodic(double slidesPos){
         if(targeting){
-            armServoL.setPosition(1.0 - targetPos);
-            armServoR.setPosition(targetPos);
+            if(!(currentPos < Constants.Arm.groundPinchMax && currentPos > Constants.Arm.groundPinchMin && slidesPos <Constants.Slides.groundPinchMax && slidesPos > Constants.Slides.groundPinchMin)){
+                armServoL.setPosition(1.0 - targetPos);
+                armServoR.setPosition(targetPos);
+            }
+
         }
     }
     public void setPosition(double ArmPos, double slidesPos) {
