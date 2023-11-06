@@ -27,6 +27,13 @@ public class Constants {
     @Config
     public static class Slides {
         public static int medSlides = 1000;
+        public static double groundPinchMax = 0;//TODO: Set value
+        public static double groundPinchMin = 0;//TODO: Set value
+    }
+    @Config
+    public static class Arm{
+        public static double groundPinchMax = 0;//TODO: Set value
+        public static double groundPinchMin = 0;//TODO: Set value
     }
 
     @Config

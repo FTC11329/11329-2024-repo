@@ -4,8 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
@@ -24,7 +26,7 @@ public class Teleop extends OpMode
 
     Claw claw;
     Plane plane;
-    Slides slides;
+    Outtake outtake;
     Intake intake;
     Drivetrain drivetrain;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
@@ -44,7 +46,7 @@ public class Teleop extends OpMode
 
         claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
-        slides = new Slides(hardwareMap);
+        outtake = new Outtake(hardwareMap);
         intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
@@ -104,10 +106,10 @@ public class Teleop extends OpMode
                 }
 */
             drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
-            slides.manualPosition(slidePower);
-
+            outtake.manualSlides(slidePower);
             intakePower = gamepad1.right_stick_y;
             intake.setIntakePower(intakePower);
+            outtake.arm.periodic();
             //pre-sets
             if (gamepad1.x) {
                 claw.setPower(Constants.Claw.intake);
@@ -120,7 +122,7 @@ public class Teleop extends OpMode
         aprilTagDetectionPipeline.telemetryAprilTag();
         telemetry.addData("Drive List", driveList);
         if (gamepad1.dpad_right) {
-            preset(Constants.Slides.medSlides);
+            outtake.presetSlides(Constants.Slides.medSlides);
         }
         if (gamepad1.dpad_up) {
             plane.setPos(Constants.Plane.release);
@@ -129,14 +131,12 @@ public class Teleop extends OpMode
         }
     }
     //just shortening code that will be repeated a lot
-    public void preset(int slidesPos) {
-        slides.setPosition(slidesPos);
-    }
+
 
     @Override
     public void stop() {
         claw.stopClaw();
-        slides.stopSlides();
+        outtake.stop();
         intake.stopIntake();
         drivetrain.stopDrive();
         aprilTagDetectionPipeline.AprilTagStop();

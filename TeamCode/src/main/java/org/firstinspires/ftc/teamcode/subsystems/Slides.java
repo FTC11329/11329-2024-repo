@@ -30,6 +30,9 @@ public class Slides {
         slideMotorRight.setTargetPosition(targetPos);
         slideMotorLeft.setTargetPosition(targetPos);
     }
+    public double getPosition(){
+        return slideMotorLeft.getCurrentPosition();
+    }
 
     //set manual movement
     public void manualPosition(double manualPower) {
