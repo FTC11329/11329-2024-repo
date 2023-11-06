@@ -62,9 +62,9 @@ public class TestMotors extends LinearOpMode {
         sleep(500);
 
         while (opModeIsActive()) {
-            double forward = gamepad1.left_stick_y;
-            double strafe = gamepad1.left_stick_x;
-            double rotate = gamepad1.right_stick_x;
+            double forward = gamepad1.left_stick_y * POWER;
+            double strafe = gamepad1.left_stick_x * POWER;
+            double rotate = gamepad1.right_stick_x * POWER;
             leftFront.setPower(forward - strafe + rotate);
             leftRear.setPower(forward + strafe + rotate);
 
