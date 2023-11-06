@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//@TeleOp(name = "Left Auto", group = "Competition")
 @Autonomous(name = "Left Auto", group = "Competition")
 public class LeftAuto extends LinearOpMode {
 
