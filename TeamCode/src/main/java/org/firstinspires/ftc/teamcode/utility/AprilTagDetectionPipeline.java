@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.utility;
 
 
+import android.annotation.SuppressLint;
+
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.List;
-
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
@@ -16,11 +15,11 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import java.lang.Math;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -47,9 +46,9 @@ public class AprilTagDetectionPipeline {
 //        setManualExposure(6, 250);
     }
 
-        public void AprilTagStop() {
-            visionPortal.close();
-        }
+    public void AprilTagStop() {
+        visionPortal.close();
+    }
 
     /**
      * Initialize the AprilTag processor.
@@ -62,9 +61,9 @@ public class AprilTagDetectionPipeline {
 //                                                \/ Measured in decimeters
                 .addTag(1, "WOOF", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
                 .addTag(2, "OINK", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(3, "MOO",  0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
+                .addTag(3, "MOO", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
                 .addTag(9, "MEEP", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(10,"BARK", 1.27D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
+                .addTag(10, "BARK", 1.27D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
         ;
 
         myAprilTagLibrary = myAprilTagLibraryBuilder.build();
@@ -121,6 +120,7 @@ public class AprilTagDetectionPipeline {
     /**
      * Function to add telemetry about AprilTag detections.
      */
+    @SuppressLint("DefaultLocale")
     public void telemetryAprilTag() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
@@ -419,18 +419,18 @@ public class AprilTagDetectionPipeline {
     //  Set the GAIN constants to control the relationship between the measured position error, and how much power is
     //  applied to the drive motors to correct the error.
     //  Drive = Error * Gain    Make these values smaller for smoother control, or larger for a more aggressive response.
-    final double SPEED_GAIN  =  0.02  ;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double STRAFE_GAIN =  0.015 ;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
-    final double TURN_GAIN   =  0.01  ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    final double SPEED_GAIN = 0.02;   //  Forward Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+    final double STRAFE_GAIN = 0.015;   //  Strafe Speed Control "Gain".  eg: Ramp up to 25% power at a 25 degree Yaw error.   (0.25 / 25.0)
+    final double TURN_GAIN = 0.01;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
     final double MAX_AUTO_SPEED = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_STRAFE= 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
-    final double MAX_AUTO_TURN  = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
+    final double MAX_AUTO_STRAFE = 0.5;   //  Clip the approach speed to this max value (adjust for your robot)
+    final double MAX_AUTO_TURN = 0.3;   //  Clip the turn speed to this max value (adjust for your robot)
 
-    boolean targetFound     = false;    // Set to true when an AprilTag target is detected
-    double  drive           = 0;        // Desired forward power/speed (-1 to +1)
-    double  strafe          = 0;        // Desired strafe power/speed (-1 to +1)
-    double  turn            = 0;        // Desired turning power/speed (-1 to +1)
+    boolean targetFound = false;    // Set to true when an AprilTag target is detected
+    double drive = 0;        // Desired forward power/speed (-1 to +1)
+    double strafe = 0;        // Desired strafe power/speed (-1 to +1)
+    double turn = 0;        // Desired turning power/speed (-1 to +1)
 
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
     List<Double> driveList = new ArrayList<>();
@@ -508,7 +508,7 @@ public class AprilTagDetectionPipeline {
             telemetry.addData("Camera", "Waiting");
             telemetry.update();
             while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-                while (runtime.milliseconds() - startTime < 20);
+                while (runtime.milliseconds() - startTime < 20) ;
             }
             telemetry.addData("Camera", "Ready");
             telemetry.update();
@@ -518,12 +518,12 @@ public class AprilTagDetectionPipeline {
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            while (runtime.milliseconds() - startTime > 50);
+            while (runtime.milliseconds() - startTime > 50) ;
         }
-        exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
-        while (runtime.milliseconds() - startTime > 20);
+        exposureControl.setExposure((long) exposureMS, TimeUnit.MILLISECONDS);
+        while (runtime.milliseconds() - startTime > 20) ;
         GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
         gainControl.setGain(gain);
-        while (runtime.milliseconds() - startTime > 20);
+        while (runtime.milliseconds() - startTime > 20) ;
     }
 }
