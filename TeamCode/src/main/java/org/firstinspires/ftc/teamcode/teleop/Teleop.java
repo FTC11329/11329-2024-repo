@@ -44,10 +44,10 @@ public class Teleop extends OpMode
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         telemetry.addData("Status", "Initialized");
 
-        claw = new Claw(hardwareMap);
-        plane = new Plane(hardwareMap);
-        outtake = new Outtake(hardwareMap);
-        intake = new Intake(hardwareMap);
+//        claw = new Claw(hardwareMap);
+//        plane = new Plane(hardwareMap);
+//        outtake = new Outtake(hardwareMap);
+//        intake = new Intake(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
 
@@ -105,7 +105,8 @@ public class Teleop extends OpMode
                     drivetrain.leftBackDrive.setPower(0);
                 }
 */
-            drivetrain.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
+            drivetrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
+            /*
             outtake.manualSlides(slidePower);
             intakePower = gamepad1.right_stick_y;
             intake.setIntakePower(intakePower);
@@ -118,9 +119,6 @@ public class Teleop extends OpMode
             } else {
                 claw.setPower(Constants.Claw.stop);
             }
-        }
-        aprilTagDetectionPipeline.telemetryAprilTag();
-        telemetry.addData("Drive List", driveList);
         if (gamepad1.dpad_right) {
             outtake.presetSlides(Constants.Slides.medSlides);
         }
@@ -129,15 +127,19 @@ public class Teleop extends OpMode
         } else {
             plane.setPos(Constants.Plane.hold);
         }
+             */
+        }
+        aprilTagDetectionPipeline.telemetryAprilTag();
+        telemetry.addData("Drive List", driveList);
     }
     //just shortening code that will be repeated a lot
 
 
     @Override
     public void stop() {
-        claw.stopClaw();
-        outtake.stop();
-        intake.stopIntake();
+//        claw.stopClaw();
+//        outtake.stop();
+//        intake.stopIntake();
         drivetrain.stopDrive();
         aprilTagDetectionPipeline.AprilTagStop();
     }
