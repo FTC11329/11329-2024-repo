@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.utility;
 
 import android.annotation.SuppressLint;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -54,26 +55,12 @@ public class AprilTagDetectionPipeline {
      * Initialize the AprilTag processor.
      */
     private void initAprilTag(WebcamName webcam) {
-        AprilTagLibrary.Builder myAprilTagLibraryBuilder;
-        AprilTagLibrary myAprilTagLibrary;
-
-        myAprilTagLibraryBuilder = new AprilTagLibrary.Builder()
-//                                                \/ Measured in decimeters
-                .addTag(1, "WOOF", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(2, "OINK", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(3, "MOO", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(9, "MEEP", 0.5D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-                .addTag(10, "BARK", 1.27D, new VectorF(0.0F, 0.0F, 0.0F), DistanceUnit.METER, Quaternion.identityQuaternion())
-        ;
-
-        myAprilTagLibrary = myAprilTagLibraryBuilder.build();
         // Create the AprilTag processor.
         aprilTag = new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-//                .setTagLibrary(myAprilTagLibrary)
                 //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
 
                 // == CAMERA CALIBRATION ==
@@ -438,6 +425,7 @@ public class AprilTagDetectionPipeline {
     public List<Double> autoAprilTag(int DESIRED_TAG_ID, double DESIRED_DISTANCE, double DESIRED_LATERAL_DISTANCE) {
         targetFound = false;
         desiredTag = null;
+        driveList = new ArrayList<>();;
 
         // Step through the list of detected tags and look for a matching tag
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -459,32 +447,39 @@ public class AprilTagDetectionPipeline {
                 telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
             }
         }
-        // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically.
-        double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
-        double headingError = desiredTag.ftcPose.bearing;
-        double yawError = desiredTag.ftcPose.yaw - DESIRED_LATERAL_DISTANCE;
+        // Determine heading, range and Yaw (tag image rotation) error so we can use them to control the robot automatically
+        if (desiredTag != null) {
+            double rangeError = (desiredTag.ftcPose.range - DESIRED_DISTANCE);
+            double yawError = desiredTag.ftcPose.yaw - DESIRED_LATERAL_DISTANCE;
+            double headingError = desiredTag.ftcPose.bearing;
 
-        // Use the speed and turn "gains" to calculate how we want the robot to move.
-        drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
-        turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
-        strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+            // Use the speed and turn "gains" to calculate how we want the robot to move.
+            drive = Range.clip(rangeError * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+            strafe = Range.clip(-yawError * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
+            turn = Range.clip(headingError * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
 
-        driveList.add(0, drive);
-        driveList.add(1, strafe);
-        driveList.add(2, turn);
-        if (targetFound) {
-            driveList.add(3, 1.0);
+            driveList.add(0, drive);
+            driveList.add(1, strafe);
+            driveList.add(2, turn);
+
+            if (targetFound) {
+                driveList.add(3, 1.0);
+            } else {
+                driveList.add(3, 0.0);
+            }
+//            if (rangeError + headingError - yawError < 1 && driveList.get(3) == 1.0) {
+//                driveList.clear();
+//                driveList.add(0, 0.0);
+//                driveList.add(1, 0.0);
+//                driveList.add(2, 0.0);
+//                driveList.add(3, 3.0);
+//            }
         } else {
-            driveList.add(3, 0.0);
-        }
-
-        if (driveList.get(0) + driveList.get(1) < 1 && driveList.get(3) == 1.0) {
             driveList.add(0, 0.0);
             driveList.add(1, 0.0);
             driveList.add(2, 0.0);
-            driveList.add(3, 3.0);
+            driveList.add(3, 0.0);
         }
-
         return driveList;
     }
 

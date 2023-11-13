@@ -109,7 +109,7 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
     private DcMotor rightBackDrive   = null;  //  Used to control the right back drive wheel
 
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
-    private static final int DESIRED_TAG_ID = 10;     // Choose the tag you want to approach or set to -1 for ANY tag.
+    private static final int DESIRED_TAG_ID = 1;     // Choose the tag you want to approach or set to -1 for ANY tag.
     private VisionPortal visionPortal;               // Used to manage the video source.
     private AprilTagProcessor aprilTag;              // Used for managing the AprilTag detection process.
     private AprilTagDetection desiredTag = null;     // Used to hold the data for a detected AprilTag
@@ -128,9 +128,9 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
         // to 'get' must match the names assigned during the robot configuration.
         // step (using the FTC Robot Controller app on the phone).
         leftFrontDrive  = hardwareMap.get(DcMotor.class, "frontLeft");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontRight");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "backRight");
         leftBackDrive  = hardwareMap.get(DcMotor.class, "backLeft");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "backRight");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "frontRight");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
         // When run, this OpMode should start both motors driving forward. So adjust these two lines based on your first test drive.
@@ -227,10 +227,10 @@ public class RobotAutoDriveToAprilTagOmni extends LinearOpMode
      */
     public void moveRobot(double x, double y, double yaw) {
         // Calculate wheel powers.
-        double leftFrontPower    =  x -y -yaw;
-        double rightFrontPower   =  x +y +yaw;
-        double leftBackPower     =  x +y -yaw;
-        double rightBackPower    =  x -y +yaw;
+        double leftFrontPower    =  x - y - yaw;
+        double rightFrontPower   =  x + y + yaw;
+        double leftBackPower     =  x + y - yaw;
+        double rightBackPower    =  x - y + yaw;
 
         // Normalize wheel powers to be less than 1.0
         double max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));

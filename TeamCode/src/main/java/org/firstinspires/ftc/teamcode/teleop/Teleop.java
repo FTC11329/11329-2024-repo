@@ -62,7 +62,7 @@ public class Teleop extends OpMode
         auto1 = gamepad1.a;
         auto2 = gamepad1.b;
         slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
-        List<Double> driveList;
+        List<Double> driveList = new ArrayList<>();
         if (auto1) {
             driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
             drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), DriveSpeedEnum.Auto);
@@ -73,7 +73,6 @@ public class Teleop extends OpMode
 
         } else {
             DriveSpeedEnum driveSpeed;
-            driveList = new ArrayList<Double>();
             if (gamepad1.right_bumper) {
                 driveSpeed = DriveSpeedEnum.Fast;
             } else {
@@ -105,6 +104,7 @@ public class Teleop extends OpMode
                     drivetrain.leftBackDrive.setPower(0);
                 }
 */
+            driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
             drivetrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
             /*
             outtake.manualSlides(slidePower);
