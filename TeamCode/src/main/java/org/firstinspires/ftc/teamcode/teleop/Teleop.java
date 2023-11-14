@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -38,6 +39,8 @@ public class Teleop extends OpMode {
 
     double intakePower;
     double slidePower;
+
+    ElapsedTime timeSinceLastDetection = new ElapsedTime();
 
     @Override
     public void init() {
@@ -79,7 +82,13 @@ public class Teleop extends OpMode {
                 Pose2d power = aprilTagIntoPower.toPower(distance);
 
                 drivetrain.setWeightedDrivePower(power);
+
+                timeSinceLastDetection.reset();
+            } else if (timeSinceLastDetection.seconds() > 0.3) {
+                drivetrain.setWeightedDrivePower(new Pose2d());
             }
+
+            telemetry.addData("Time since last detection (ms)", timeSinceLastDetection.milliseconds());
         } else {
             DriveSpeedEnum driveSpeed;
             if (gamepad1.right_bumper) {
