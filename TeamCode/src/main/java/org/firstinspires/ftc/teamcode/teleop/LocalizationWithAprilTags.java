@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
 
 @TeleOp(name = "Allen Test Drive", group = "Allen op mode")
@@ -22,8 +22,8 @@ public class LocalizationWithAprilTags extends OpMode {
     @Override
     public void loop() {
         drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, DriveSpeedEnum.Fast);
-        if (aprilTagDetectionPipeline.findAprilTag(1).isPresent()) {
-            AprilTagPoseFtc tagPose = aprilTagDetectionPipeline.findAprilTag(1).get().ftcPose;
+        if (aprilTagDetectionPipeline.getDesiredTag(1).isPresent()) {
+            AprilTagPoseFtc tagPose = aprilTagDetectionPipeline.getDesiredTag(1).get().ftcPose;
 
 
             telemetry.addData("x", tagPose.x);

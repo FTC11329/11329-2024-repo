@@ -136,7 +136,7 @@ public class Drivetrain extends MecanumDrive {
         } else if (driveSpeed == DriveSpeedEnum.Slow) {
             speed = 0.5;
         } else if (driveSpeed == DriveSpeedEnum.Auto) {
-            speed = 0.8;
+            speed = 1;
         } else if (driveSpeed == DriveSpeedEnum.TrueAuto) {
             speed = 1;
         }

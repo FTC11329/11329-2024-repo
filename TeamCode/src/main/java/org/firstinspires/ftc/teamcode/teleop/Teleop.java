@@ -1,38 +1,40 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.subsystems.Arm;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.Plane;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.firstinspires.ftc.teamcode.utility.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.Plane;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
+import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 
-@TeleOp(name="Tele-op", group="Allen op mode")
-public class Teleop extends OpMode
-{
+@TeleOp(name = "Tele-op", group = "Allen op mode")
+public class Teleop extends OpMode {
     WebcamName webcam1;
 
     Claw claw;
     Plane plane;
-    Outtake outtake;
     Intake intake;
+    Outtake outtake;
     Drivetrain drivetrain;
+
+    AprilTagDetector aprilTagDetector;
+    AprilTagIntoPower aprilTagIntoPower;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    private boolean auto1 = false;
-    private boolean auto2 = false;
+    private boolean autoAlignToBackdrop = false;
+    private final boolean auto2 = false;
 
     double intakePower;
     double slidePower;
@@ -46,31 +48,38 @@ public class Teleop extends OpMode
 
 //        claw = new Claw(hardwareMap);
 //        plane = new Plane(hardwareMap);
-//        outtake = new Outtake(hardwareMap);
 //        intake = new Intake(hardwareMap);
+//        outtake = new Outtake(hardwareMap);
+
         drivetrain = new Drivetrain(hardwareMap, telemetry);
+
+        aprilTagDetector = new AprilTagDetector();
+        aprilTagIntoPower = new AprilTagIntoPower();
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
 
         aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
     }
 
     @Override
-    public void start() {}
+    public void start() {
+    }
 
     @Override
     public void loop() {
-        auto1 = gamepad1.a;
-        auto2 = gamepad1.b;
+        autoAlignToBackdrop = gamepad1.a;
+
+        Optional<Pose2d> drivePose = Optional.empty();
+
         slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
-        List<Double> driveList = new ArrayList<>();
-        if (auto1) {
-            driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
-            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), DriveSpeedEnum.Auto);
 
-        } else if (auto2) {
-            driveList = aprilTagDetectionPipeline.autoAprilTag(2,12,0);
-            drivetrain.drive(driveList.get(0), driveList.get(1), driveList.get(2), DriveSpeedEnum.Auto);
+        if (autoAlignToBackdrop) {
+            Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(1);
+            if (optionalAprilTagDetection.isPresent()) {
+                Pose2d distance = aprilTagDetector.distanceFromAprilTag(optionalAprilTagDetection.get());
+                Pose2d power = aprilTagIntoPower.toPower(distance);
 
+                drivetrain.setWeightedDrivePower(power);
+            }
         } else {
             DriveSpeedEnum driveSpeed;
             if (gamepad1.right_bumper) {
@@ -104,8 +113,9 @@ public class Teleop extends OpMode
                     drivetrain.leftBackDrive.setPower(0);
                 }
 */
-            driveList = aprilTagDetectionPipeline.autoAprilTag(1,12,0);
             drivetrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
+
+            //for avalanche
             /*
             outtake.manualSlides(slidePower);
             intakePower = gamepad1.right_stick_y;
@@ -130,7 +140,7 @@ public class Teleop extends OpMode
              */
         }
         aprilTagDetectionPipeline.telemetryAprilTag();
-        telemetry.addData("Drive List", driveList);
+
     }
     //just shortening code that will be repeated a lot
 
