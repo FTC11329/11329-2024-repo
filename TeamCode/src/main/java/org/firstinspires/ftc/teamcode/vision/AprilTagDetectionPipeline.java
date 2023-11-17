@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
+import org.firstinspires.ftc.teamcode.utility.RunAfterTime;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
@@ -44,7 +45,8 @@ public class AprilTagDetectionPipeline {
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
-//        setManualExposure(6, 250);
+
+        setManualExposure(6, 250);
     }
 
     public void AprilTagStop() {
@@ -131,10 +133,8 @@ public class AprilTagDetectionPipeline {
 
     }
 
-
     //rip 400 lines
     //I wrote them, they were trash.
-
 
     public Optional<AprilTagDetection> getDesiredTag(int id) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -148,30 +148,25 @@ public class AprilTagDetectionPipeline {
 
     private void setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
-        double startTime = runtime.milliseconds();
+
         if (visionPortal == null) {
             return;
         }
-        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            telemetry.addData("Camera", "Waiting");
-            telemetry.update();
-            while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-                while (runtime.milliseconds() - startTime < 20) ;
-            }
-            telemetry.addData("Camera", "Ready");
-            telemetry.update();
-        }
+
         // Make sure camera is streaming before we try to set the exposure controls
-        // Set camera controls unless we are stopping.
+        while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            RunAfterTime.runAfterTime(20, () -> {});
+        }
+        // Set camera controls
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
             exposureControl.setMode(ExposureControl.Mode.Manual);
-            while (runtime.milliseconds() - startTime > 50) ;
+            RunAfterTime.runAfterTime(50, () -> {});
         }
-        exposureControl.setExposure((long) exposureMS, TimeUnit.MILLISECONDS);
-        while (runtime.milliseconds() - startTime > 20) ;
+        exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
+        RunAfterTime.runAfterTime(20, () -> {});
         GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
         gainControl.setGain(gain);
-        while (runtime.milliseconds() - startTime > 20) ;
+        RunAfterTime.runAfterTime(20, () -> {});
     }
 }

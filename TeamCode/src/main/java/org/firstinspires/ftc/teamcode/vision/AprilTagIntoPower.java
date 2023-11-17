@@ -20,7 +20,7 @@ public class AprilTagIntoPower {
     double turn = 0;        // Desired turning power/speed (-1 to +1)
 
     public Pose2d toPower(Pose2d distanceFromTag) {
-        drive = Range.clip(distanceFromTag.getX() * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
+        drive = Range.clip((distanceFromTag.getX() - 10) * SPEED_GAIN, -MAX_AUTO_SPEED, MAX_AUTO_SPEED);
         strafe = Range.clip(distanceFromTag.getY() * STRAFE_GAIN, -MAX_AUTO_STRAFE, MAX_AUTO_STRAFE);
         turn = Range.clip(distanceFromTag.getHeading() * TURN_GAIN, -MAX_AUTO_TURN, MAX_AUTO_TURN);
 
