@@ -27,8 +27,6 @@ import java.util.concurrent.TimeUnit;
 
 
 public class AprilTagDetectionPipeline {
-    private static final boolean USE_WEBCAM = true;
-
     private ElapsedTime runtime = new ElapsedTime();
 
     private AprilTagProcessor aprilTag;
@@ -42,8 +40,7 @@ public class AprilTagDetectionPipeline {
         initAprilTag(webcam);
 
         // Wait for the DS start button to be touched.
-        telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
-        telemetry.addData(">", "Touch Play to start OpMode");
+        telemetry.addLine("Ready to start");
         telemetry.update();
 
         setManualExposure(6, 250);
@@ -84,7 +81,7 @@ public class AprilTagDetectionPipeline {
         //builder.setCameraResolution(new Size(640, 480));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-//        builder.enableCameraMonitoring(true);
+        //builder.enableCameraMonitoring(true);
 
         // Set the stream format; MJPEG uses less bandwidth than default YUY2.
         builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
@@ -103,12 +100,8 @@ public class AprilTagDetectionPipeline {
         // Disable or re-enable the aprilTag processor at any time.
         //visionPortal.setProcessorEnabled(aprilTag, true);
 
-    }   // end method initAprilTag()
+    }
 
-
-    /**
-     * Function to add telemetry about AprilTag detections.
-     */
     @SuppressLint("DefaultLocale")
     public void telemetryAprilTag() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
@@ -133,9 +126,6 @@ public class AprilTagDetectionPipeline {
 
     }
 
-    //rip 400 lines
-    //I wrote them, they were trash.
-
     public Optional<AprilTagDetection> getDesiredTag(int id) {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentDetections) {
@@ -145,7 +135,7 @@ public class AprilTagDetectionPipeline {
         }
         return Optional.empty();
     }
-
+    //Idk what this function actually does but it makes the robot run smooth so ya.
     private void setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
 

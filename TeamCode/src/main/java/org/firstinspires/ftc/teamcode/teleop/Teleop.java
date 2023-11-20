@@ -35,13 +35,8 @@ public class Teleop extends OpMode {
     AprilTagIntoPower aprilTagIntoPower;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    private boolean autoAlignToBackdrop = false;
-    private final boolean auto2 = false;
-
     double intakePower;
     double slidePower;
-
-    ElapsedTime timeSinceLastDetection = new ElapsedTime();
 
     @Override
     public void init() {
@@ -70,20 +65,27 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
-        autoAlignToBackdrop = gamepad1.a;
+        boolean autoAlignToBackdrop = gamepad1.a;
 
         Optional<Pose2d> drivePose = Optional.empty();
 
         slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
 
         if (autoAlignToBackdrop) {
+            //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(5);
+
             if (optionalAprilTagDetection.isPresent()) {
+                //creates a variable with the pose of the april tag in the form (distance(x and y), yaw, bearing)
                 Pose2d distance = aprilTagDetector.distanceFromAprilTag(optionalAprilTagDetection.get());
+
+                //creates a pose of what powers the motors should be set to in the form (forward, strafe, turn)
                 Pose2d power = aprilTagIntoPower.toPower(distance);
                 telemetry.addData("distance from tag", distance);
+                //sets that pose to the motors
                 drivetrain.setWeightedDrivePower(power);
             } else {
+                //if we don't see a tag, then set the drive powers to 0)
                 drivetrain.drive(0,0,0,DriveSpeedEnum.Auto);
             }
         } else {
@@ -148,8 +150,6 @@ public class Teleop extends OpMode {
         aprilTagDetectionPipeline.telemetryAprilTag();
 
     }
-    //just shortening code that will be repeated a lot
-
     @Override
     public void stop() {
         // claw.stopClaw();
