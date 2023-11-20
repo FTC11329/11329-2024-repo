@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.vision;
 
+import static org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower.DISTANCE;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -19,6 +21,17 @@ public class AprilTagDetector {
         double headingError = tag.ftcPose.bearing;
 
         return new Pose2d(-rangeError, yawError, -headingError);
+    }
+
+    final double inchTolerance = 1;
+    final double degreesTolerance = 3;
+
+    public boolean inTolerance(AprilTagDetection tag) {
+        if (Math.abs(tag.ftcPose.range + DISTANCE) < inchTolerance && Math.abs(tag.ftcPose.bearing) < degreesTolerance) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

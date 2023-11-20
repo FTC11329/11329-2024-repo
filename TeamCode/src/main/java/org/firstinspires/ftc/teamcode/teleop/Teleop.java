@@ -73,7 +73,7 @@ public class Teleop extends OpMode {
 
         if (autoAlignToBackdrop) {
             //creates a variable of an april tag detection
-            Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(5);
+            Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
             if (optionalAprilTagDetection.isPresent()) {
                 //creates a variable with the pose of the april tag in the form (distance(x and y), yaw, bearing)
@@ -81,12 +81,11 @@ public class Teleop extends OpMode {
 
                 //creates a pose of what powers the motors should be set to in the form (forward, strafe, turn)
                 Pose2d power = aprilTagIntoPower.toPower(distance);
-                telemetry.addData("distance from tag", distance);
                 //sets that pose to the motors
                 drivetrain.setWeightedDrivePower(power);
             } else {
                 //if we don't see a tag, then set the drive powers to 0)
-                drivetrain.drive(0,0,0,DriveSpeedEnum.Auto);
+                drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
             }
         } else {
             DriveSpeedEnum driveSpeed;

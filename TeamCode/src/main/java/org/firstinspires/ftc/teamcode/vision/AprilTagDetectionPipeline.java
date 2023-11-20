@@ -145,7 +145,7 @@ public class AprilTagDetectionPipeline {
 
         // Make sure camera is streaming before we try to set the exposure controls
         while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            RunAfterTime.runAfterTime(20, () -> {});
+            RunAfterTime.runAfterTime(10, () -> {});
         }
         // Set camera controls
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
