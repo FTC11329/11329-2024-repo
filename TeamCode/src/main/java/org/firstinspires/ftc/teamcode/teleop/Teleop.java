@@ -65,13 +65,11 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
-        boolean autoAlignToBackdrop = gamepad1.a;
-
-        Optional<Pose2d> drivePose = Optional.empty();
+        boolean autoAlignToTag = gamepad1.a;
 
         slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
 
-        if (autoAlignToBackdrop) {
+        if (autoAlignToTag) {
             //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
@@ -83,10 +81,28 @@ public class Teleop extends OpMode {
                 Pose2d power = aprilTagIntoPower.toPower(distance);
                 //sets that pose to the motors
                 drivetrain.setWeightedDrivePower(power);
+                telemetry.addData("power", Math.abs(power.getX()) + Math.abs(power.getY()) + Math.abs(power.getHeading()));
             } else {
                 //if we don't see a tag, then set the drive powers to 0)
                 drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
             }
+        } else if (gamepad1.b) {
+            //creates a variable of an april tag detection
+            Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
+
+            if (optionalAprilTagDetection.isPresent()) {
+                //creates a variable with the pose of the april tag in the form (x, y, and yaw)
+                Pose2d distance = aprilTagDetector.distanceFromAprilTagExact(optionalAprilTagDetection.get());
+
+                //creates a pose of what powers the motors should be set to in the form (forward, strafe, turn)
+                Pose2d power = aprilTagIntoPower.toPowerExact(distance);
+                //sets that pose to the motors
+                drivetrain.setWeightedDrivePower(power);
+            } else {
+                //if we don't see a tag, then set the drive powers to 0)
+                drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
+            }
+
         } else {
             DriveSpeedEnum driveSpeed;
             if (gamepad1.right_bumper) {

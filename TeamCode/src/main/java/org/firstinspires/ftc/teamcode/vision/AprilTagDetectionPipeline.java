@@ -118,12 +118,10 @@ public class AprilTagDetectionPipeline {
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
             }
         }
-
         // Add legend to telemetry
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
-
     }
 
     public Optional<AprilTagDetection> getDesiredTag(int id) {
@@ -135,7 +133,8 @@ public class AprilTagDetectionPipeline {
         }
         return Optional.empty();
     }
-    //Idk what this function actually does but it makes the robot run smooth so ya.
+
+    //Idk what this function actually does but it makes the robot run smooth so ya it stays.
     private void setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
 

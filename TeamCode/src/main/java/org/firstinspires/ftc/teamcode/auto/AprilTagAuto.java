@@ -42,19 +42,19 @@ public class AprilTagAuto extends LinearOpMode {
         //start
 
         //goes forward for 1 second
-        drivetrain.drive(.5,0,0, DriveSpeedEnum.Auto);
-        RunAfterTime.runAfterTime(1000,() -> {
+        drivetrain.drive(-.5,0,0, DriveSpeedEnum.Auto);
+        RunAfterTime.runAfterTime(400,() -> {
             drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
         });
 
         //turns until it sees the tag
-        while (!aprilTagDetectionPipeline.getDesiredTag(10).isPresent()){
+        while (!aprilTagDetectionPipeline.getDesiredTag(10).isPresent() && opModeIsActive()){
             drivetrain.drive(0,0,0.3, DriveSpeedEnum.Auto);
         }
 
         //moves to tag
-        //while tag with id 10 is in tolerance
-        while (!aprilTagDetector.inTolerance(aprilTagDetectionPipeline.getDesiredTag(10).get())) {
+        //while tag with id 10 is not in tolerance
+        while (!aprilTagIntoPower.inTolerance(aprilTagDetector.distanceFromAprilTag(aprilTagDetectionPipeline.getDesiredTag(10).get())) && opModeIsActive()) {
             //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
@@ -68,5 +68,22 @@ public class AprilTagAuto extends LinearOpMode {
                 drivetrain.setWeightedDrivePower(power);
             }
         }
+
+        //moves exactly to tag
+        while (!aprilTagIntoPower.inToleranceExact(aprilTagDetector.distanceFromAprilTag(aprilTagDetectionPipeline.getDesiredTag(10).get())) && opModeIsActive()) {
+            //creates a variable of an april tag detection
+            Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
+
+            if (optionalAprilTagDetection.isPresent()) {
+                //creates a variable with the pose of the april tag in the form (distance(x and y), yaw, bearing)
+                Pose2d distance = aprilTagDetector.distanceFromAprilTagExact(optionalAprilTagDetection.get());
+
+                //creates a pose of what powers the motors should be set to in the form (forward, strafe, turn)
+                Pose2d power = aprilTagIntoPower.toPowerExact(distance);
+                //sets that pose to the motors
+                drivetrain.setWeightedDrivePower(power);
+            }
+        }
+
     }
 }
