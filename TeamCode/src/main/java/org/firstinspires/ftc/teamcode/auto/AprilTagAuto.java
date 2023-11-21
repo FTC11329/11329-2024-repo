@@ -21,17 +21,17 @@ import java.util.Optional;
 public class AprilTagAuto extends LinearOpMode {
     WebcamName webcam1;
 
+    Drivetrain drivetrain;
     AprilTagDetector aprilTagDetector;
     AprilTagIntoPower aprilTagIntoPower;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry);
-
     @Override
     public void runOpMode() {
         //init
-
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        drivetrain = new Drivetrain(hardwareMap, telemetry);
         aprilTagDetector = new AprilTagDetector();
         aprilTagIntoPower = new AprilTagIntoPower();
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
