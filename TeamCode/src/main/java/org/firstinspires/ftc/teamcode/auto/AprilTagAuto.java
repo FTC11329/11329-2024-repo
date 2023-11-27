@@ -26,6 +26,16 @@ public class AprilTagAuto extends LinearOpMode {
     AprilTagIntoPower aprilTagIntoPower;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
+    private boolean exactTolerance(int id) {
+        try {
+            return aprilTagIntoPower.inToleranceExact(
+                    aprilTagDetector.distanceFromAprilTag(
+                            aprilTagDetectionPipeline.getDesiredTag(id).get()));
+        } catch (Exception e){
+            return false;
+        }
+    }
+
     @Override
     public void runOpMode() {
         //init
@@ -70,7 +80,7 @@ public class AprilTagAuto extends LinearOpMode {
         }
 
         //moves exactly to tag
-        while (!aprilTagIntoPower.inToleranceExact(aprilTagDetector.distanceFromAprilTag(aprilTagDetectionPipeline.getDesiredTag(10).get())) && opModeIsActive()) {
+        while (!exactTolerance(10) && opModeIsActive()) {
             //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
@@ -85,5 +95,6 @@ public class AprilTagAuto extends LinearOpMode {
             }
         }
 
+        //moves to the 2nd tape
     }
 }

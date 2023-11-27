@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
+import org.firstinspires.ftc.teamcode.utility.AprilTagToRoadRunner;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
@@ -37,6 +38,9 @@ public class Teleop extends OpMode {
 
     double intakePower;
     double slidePower;
+
+    Pose2d runnerPose = new Pose2d(0,0,0);
+
 
     @Override
     public void init() {
@@ -79,9 +83,9 @@ public class Teleop extends OpMode {
 
                 //creates a pose of what powers the motors should be set to in the form (forward, strafe, turn)
                 Pose2d power = aprilTagIntoPower.toPower(distance);
+
                 //sets that pose to the motors
                 drivetrain.setWeightedDrivePower(power);
-                telemetry.addData("power", Math.abs(power.getX()) + Math.abs(power.getY()) + Math.abs(power.getHeading()));
             } else {
                 //if we don't see a tag, then set the drive powers to 0)
                 drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
@@ -96,6 +100,7 @@ public class Teleop extends OpMode {
 
                 //creates a pose of what powers the motors should be set to in the form (forward, strafe, turn)
                 Pose2d power = aprilTagIntoPower.toPowerExact(distance);
+
                 //sets that pose to the motors
                 drivetrain.setWeightedDrivePower(power);
             } else {
@@ -160,10 +165,12 @@ public class Teleop extends OpMode {
             plane.setPos(Constants.Plane.hold);
         }
              */
-
         }
+        if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
+            runnerPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
+        }
+        telemetry.addData("actual tag pos", runnerPose);
         aprilTagDetectionPipeline.telemetryAprilTag();
-
     }
     @Override
     public void stop() {
