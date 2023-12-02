@@ -6,8 +6,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public class AprilTagToRoadRunner {
     public static Pose2d tagToRunner(AprilTagDetection tag) {
-        double Vx = tag.ftcPose.x * 1.6;
-        double Vy = tag.ftcPose.y * 1.6;
+        double Vx = tag.ftcPose.x;
+        double Vy = tag.ftcPose.y;
         double Vh = Math.toRadians(90 - tag.ftcPose.yaw);
 
 
@@ -21,11 +21,19 @@ public class AprilTagToRoadRunner {
         //Rh = Vh + arcsin((Vx)/(sqrt(Vx^2 + Vy^2)
 //        double runnerPoseHeading = tagPose.getHeading() + Math.asin(tagPose.getX()/(Math.sqrt(Math.pow(tagPose.getX(), 2) + Math.pow(tagPose.getY(), 2))));
 
-        double Ry = (Vy - Vx * Math.tan(Vh) * Math.sin(Vh) + Vx * Math.tan(Vh));
+//        double Rx = ((Vy - (Vx * Math.tan(Vh))) * (Math.cos(Vh)));
 
-        double Rx = ((Vy - (Vx * Math.tan(Vh))) * (Math.cos(Vh)));
+//        double Ry = (Vy - Vx * Math.tan(Vh) * Math.sin(Vh) + Vx * Math.tan(Vh));
+
+//        double Ry = Math.sqrt((Math.pow(Vx, 2) + Math.pow(Vy, 2)) - Math.pow(Rx, 2));
+
+//        double Ry = (Vx/Math.cos(Vh)) + Vy - (Vx * Math.tan(Vh));
 
         double Rh = Vh;
+
+        double Rx = Math.abs((Math.sqrt(Math.pow(Vx, 2) + Math.pow(Vy, 2))) * Math.sin(Math.toRadians(90) - (Math.toRadians(180) - Vh - Math.atan(Vy/Vx))));
+
+        double Ry = (Math.sqrt(Math.pow(Vx, 2) + Math.pow(Vy, 2))) * Math.cos(Math.toRadians(90) - (Math.toRadians(180) - Vh - Math.atan(Vy/Vx)));
 
         return new Pose2d(Rx, Ry, Rh);
     }

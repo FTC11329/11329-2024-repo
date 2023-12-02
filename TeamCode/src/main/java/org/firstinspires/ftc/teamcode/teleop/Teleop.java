@@ -176,7 +176,6 @@ public class Teleop extends OpMode {
         }
 
         telemetry.addData("actual tag pos 10", runnerPose10);
-        telemetry.addData("actual tag pos 9" , runnerPose9 );
         aprilTagDetectionPipeline.telemetryAprilTag();
     }
     @Override
