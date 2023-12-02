@@ -39,7 +39,9 @@ public class Teleop extends OpMode {
     double intakePower;
     double slidePower;
 
-    Pose2d runnerPose = new Pose2d(0,0,0);
+    Pose2d runnerPose10 = new Pose2d(0,0,0);
+    Pose2d runnerPose9 = new Pose2d(0,0,0);
+
 
 
     @Override
@@ -166,10 +168,15 @@ public class Teleop extends OpMode {
         }
              */
         }
-        if (aprilTagDetectionPipeline.getDesiredTag(9).isPresent()) {
-            runnerPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(9).get());
+        if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
+            runnerPose10 = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
         }
-        telemetry.addData("actual tag pos", runnerPose);
+        if (aprilTagDetectionPipeline.getDesiredTag(9).isPresent()) {
+            runnerPose9 = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(9).get());
+        }
+
+        telemetry.addData("actual tag pos 10", runnerPose10);
+        telemetry.addData("actual tag pos 9" , runnerPose9 );
         aprilTagDetectionPipeline.telemetryAprilTag();
     }
     @Override

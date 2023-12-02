@@ -55,7 +55,17 @@ public class AprilTagDetectionPipeline {
      */
     private void initAprilTag(WebcamName webcam) {
         // Create the AprilTag processor.
+        //5 is 7.5
+        //10 is 16
+        //15 is 24
+
+        //0.666
+        //0.625
+        //0.625
+
+        //1.6 is the scale value i think
         aprilTag = new AprilTagProcessor.Builder()
+
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)

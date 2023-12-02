@@ -6,9 +6,10 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public class AprilTagToRoadRunner {
     public static Pose2d tagToRunner(AprilTagDetection tag) {
-        double Vx = tag.ftcPose.x;
-        double Vy = tag.ftcPose.y;
+        double Vx = tag.ftcPose.x * 1.6;
+        double Vy = tag.ftcPose.y * 1.6;
         double Vh = Math.toRadians(90 - tag.ftcPose.yaw);
+
 
         //if V is vision so Vh is vision heading then this is the math in my words:
         //Rx = sqrt(Vx^2 + Vy^2) * sin(Vh + arcsin( (Vx)/(sqrt(Vx^2 + Vy^2) )
