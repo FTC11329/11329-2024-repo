@@ -166,8 +166,8 @@ public class Teleop extends OpMode {
         }
              */
         }
-        if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
-            runnerPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
+        if (aprilTagDetectionPipeline.getDesiredTag(9).isPresent()) {
+            runnerPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(9).get());
         }
         telemetry.addData("actual tag pos", runnerPose);
         aprilTagDetectionPipeline.telemetryAprilTag();
