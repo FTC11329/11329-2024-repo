@@ -9,12 +9,14 @@ import org.firstinspires.ftc.teamcode.Constants;
 public class Arm {
     public Servo armServoR;
     public Servo armServoL;
+
     public double targetPos;
     public double currentPos; //only tracked for manual control
     public boolean targeting;
+
     public Arm(HardwareMap hardwareMap) {
-        armServoR = hardwareMap.get(Servo.class, "rightArmServo");
-        armServoL = hardwareMap.get(Servo.class, "leftArmServo");
+//        armServoR = hardwareMap.get(Servo.class, "rightArmServo");
+//        armServoL = hardwareMap.get(Servo.class, "leftArmServo");
     }
 
     public void setPosition(double ArmPos){
@@ -32,7 +34,6 @@ public class Arm {
                 armServoL.setPosition(1.0 - targetPos);
                 armServoR.setPosition(targetPos);
             }
-
         }
     }
     public void setPosition(double ArmPos, double slidesPos) {
@@ -41,8 +42,7 @@ public class Arm {
             armServoR.setPosition(ArmPos);
             targeting = false;
             currentPos = ArmPos;
-        }
-        else{
+        } else {
             targeting = true;
             targetPos = ArmPos;
         }

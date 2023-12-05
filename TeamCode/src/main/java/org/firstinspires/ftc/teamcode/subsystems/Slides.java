@@ -5,50 +5,42 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Slides {
-    DcMotor slideMotorLeft;
-    DcMotor slideMotorRight;
+    DcMotor slideMotor;
 
     public Slides(HardwareMap hardwareMap) {
-        slideMotorRight = hardwareMap.get(DcMotor.class, "rightSlide");
-        slideMotorLeft = hardwareMap.get(DcMotor.class, "leftSlide");
-        //sets max power
-        slideMotorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        slideMotorRight.setPower(1);
-        slideMotorLeft.setPower(1);
+        slideMotor = hardwareMap.get(DcMotor.class, "slide");
+        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor.setTargetPosition(0);
 
-        slideMotorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotorRight.setDirection(DcMotorSimple.Direction.FORWARD);
-        slideMotorLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-        slideMotorRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        slideMotorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //sets max power
+        slideMotor.setPower(1);
+
+        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     //sets both motors to go to targetPos
     public void setPosition(int targetPos) {
-        slideMotorRight.setTargetPosition(targetPos);
-        slideMotorLeft.setTargetPosition(targetPos);
+        slideMotor.setTargetPosition(targetPos);
+
     }
     public double getPosition(){
-        return slideMotorLeft.getCurrentPosition();
+        return slideMotor.getCurrentPosition();
     }
 
     //set manual movement
     public void manualPosition(double manualPower) {
         int newPos;
-        int manualChange = (int) (manualPower * 85);
-        newPos = slideMotorLeft.getTargetPosition() + manualChange;
+        int manualChange = (int) (manualPower);
+        newPos = slideMotor.getTargetPosition() + manualChange;
 
-        slideMotorRight.setTargetPosition(newPos);
-        slideMotorLeft.setTargetPosition(newPos);
+        slideMotor.setTargetPosition(newPos);
     }
 
     public void stopSlides() {
-        slideMotorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slideMotorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        slideMotorRight.setPower(0);
-        slideMotorLeft.setPower(0);
+        slideMotor.setPower(0);
     }
 }

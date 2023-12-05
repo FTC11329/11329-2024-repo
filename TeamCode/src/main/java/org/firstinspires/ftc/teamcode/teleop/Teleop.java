@@ -26,8 +26,8 @@ import java.util.Optional;
 public class Teleop extends OpMode {
     WebcamName webcam1;
 
-    Claw claw;
-    Plane plane;
+//    Claw claw;
+//    Plane plane;
     Intake intake;
     Outtake outtake;
     Drivetrain drivetrain;
@@ -51,10 +51,10 @@ public class Teleop extends OpMode {
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         telemetry.addData("Status", "Initialized");
 
-        // claw = new Claw(hardwareMap);
-        // plane = new Plane(hardwareMap);
-        // intake = new Intake(hardwareMap);
-        // outtake = new Outtake(hardwareMap);
+//         claw = new Claw(hardwareMap);
+//         plane = new Plane(hardwareMap);
+         intake = new Intake(hardwareMap);
+         outtake = new Outtake(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap, telemetry);
 
@@ -75,7 +75,7 @@ public class Teleop extends OpMode {
 
         slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
 
-        if (autoAlignToTag) {
+        if (autoAlignToTag && false) {
             //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
@@ -92,7 +92,7 @@ public class Teleop extends OpMode {
                 //if we don't see a tag, then set the drive powers to 0)
                 drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
             }
-        } else if (gamepad1.b) {
+        } else if (gamepad1.b && false) {
             //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
@@ -118,37 +118,40 @@ public class Teleop extends OpMode {
                 driveSpeed = DriveSpeedEnum.Slow;
             }
             //Testing wheels
-            /*
+/*
                 if (gamepad1.x){
-                    drivetrain.rightFrontDrive.setPower(0.25);
+                    drivetrain.rightFront.setPower(0.25);
                 } else {
-                    drivetrain.rightFrontDrive.setPower(0);
+                    drivetrain.rightFront.setPower(0);
                 }
 
                 if (gamepad1.y){
-                    drivetrain.leftFrontDrive.setPower(0.25);
+                    drivetrain.leftFront.setPower(0.25);
                 } else {
-                    drivetrain.leftFrontDrive.setPower(0);
+                    drivetrain.leftFront.setPower(0);
                 }
 
                 if (gamepad1.b){
-                    drivetrain.rightBackDrive.setPower(0.25);
+                    drivetrain.rightRear.setPower(0.25);
                 } else {
-                    drivetrain.rightBackDrive.setPower(0);
+                    drivetrain.rightRear.setPower(0);
                 }
 
                 if (gamepad1.a){
-                    drivetrain.leftBackDrive.setPower(0.25);
+                    drivetrain.leftRear.setPower(0.25);
                 } else {
-                    drivetrain.leftBackDrive.setPower(0);
+                    drivetrain.leftRear.setPower(0);
                 }
 */
-            drivetrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
+            drivetrain.drive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
             //for avalanche
-            /*
+
             outtake.manualSlides(slidePower);
+
             intakePower = gamepad1.right_stick_y;
             intake.setIntakePower(intakePower);
+
+            /*
             outtake.periodic();
             //pre-sets
             if (gamepad1.x) {
@@ -158,6 +161,7 @@ public class Teleop extends OpMode {
             } else {
                 claw.setPower(Constants.Claw.stop);
             }
+
         if (gamepad1.dpad_right) {
             outtake.presetSlides(Constants.Slides.medSlides);
         }
@@ -180,10 +184,10 @@ public class Teleop extends OpMode {
     }
     @Override
     public void stop() {
-        // claw.stopClaw();
-        // outtake.stop();
-        // intake.stopIntake();
-        drivetrain.stopDrive();
-        aprilTagDetectionPipeline.AprilTagStop();
+//         claw.stopClaw();
+         outtake.stop();
+         intake.stopIntake();
+         drivetrain.stopDrive();
+         aprilTagDetectionPipeline.AprilTagStop();
     }
 }

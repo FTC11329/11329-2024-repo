@@ -66,10 +66,10 @@ public class Drivetrain extends MecanumDrive {
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
 
-    private final DcMotorEx leftFront;
-    private final DcMotorEx leftRear;
-    private final DcMotorEx rightRear;
-    private final DcMotorEx rightFront;
+    public final DcMotorEx leftFront;
+    public final DcMotorEx leftRear;
+    public final DcMotorEx rightRear;
+    public final DcMotorEx rightFront;
     private final List<DcMotorEx> motors;
 
     private final VoltageSensor batteryVoltageSensor;
