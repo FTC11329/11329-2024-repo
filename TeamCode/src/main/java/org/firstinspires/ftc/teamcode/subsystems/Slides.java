@@ -16,24 +16,29 @@ public class Slides {
         slideMotor.setPower(1);
 
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void setPower(double power) {
+        slideMotor.setPower(power);
     }
 
     //sets both motors to go to targetPos
     public void setPosition(int targetPos) {
         slideMotor.setTargetPosition(targetPos);
-
     }
-    public double getPosition(){
+
+    public int getPosition() {
         return slideMotor.getCurrentPosition();
     }
 
     //set manual movement
     public void manualPosition(double manualPower) {
-        int newPos;
-        int manualChange = (int) (manualPower);
-        newPos = slideMotor.getTargetPosition() + manualChange;
+        int manualChange = (int) (manualPower * 10);
+
+        int newPos = getPosition() + manualChange;
 
         slideMotor.setTargetPosition(newPos);
     }

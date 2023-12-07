@@ -30,6 +30,7 @@ public class Arm {
     }
     public void periodic(double slidesPos){
         if(targeting){
+            //if the arm could get pinched out side of the place where it is supposed to go then dont do that
             if(!(currentPos < Constants.Arm.groundPinchMax && currentPos > Constants.Arm.groundPinchMin && slidesPos <Constants.Slides.groundPinchMax && slidesPos > Constants.Slides.groundPinchMin)){
                 armServoL.setPosition(1.0 - targetPos);
                 armServoR.setPosition(targetPos);

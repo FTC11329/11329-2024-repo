@@ -13,20 +13,26 @@ import com.acmerobotics.dashboard.config.Config;
 public class Constants {
     @Config
     public static class Claw {
-        public static double intake = 0.5;
-        public static double outake = -0.5;
-        public static double stop = 0;
+        public static double intake = 0.5;  //TODO: Set value
+        public static double outake = -0.5; //TODO: Set value
+        public static double stop = 0; //TODO: Set value
     }
 
     @Config
     public static class Plane {
-        public static double hold = 0;
-        public static double release = 0.3;
+        public static double hold = 0; //TODO: Set value
+        public static double release = 0.3; //TODO: Set value
     }
 
     @Config
     public static class Slides {
-        public static int medSlides = 1000;
+        public static int highSlides = 0;//TODO: Set value
+
+        public static int medSlides = 0; //TODO: Set value
+
+        public static int lowSlides = 0; //TODO: Set value
+
+
         public static double groundPinchMax = 0;//TODO: Set value
         public static double groundPinchMin = 0;//TODO: Set value
     }
@@ -60,7 +66,7 @@ public class Constants {
         // TODO: Rework these values for Avalanche
         public static double WHEEL_RADIUS = 1.8898; // in
         public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-        public static double TRACK_WIDTH = 11.125; // in //WAS 11.125
+        public static double TRACK_WIDTH = 11.125; // in
         /*
          * These are the feedforward parameters used to model the drive motor behavior. If you are using
          * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive

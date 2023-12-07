@@ -24,7 +24,7 @@ public class Outtake {
     }
 
     public void presetSlides(int slidesPos) {
-        slides.setPosition(slidesPos);
+//        slides.setPosition(slidesPos);
     }
 
     public void presetArm(int armPos) {
@@ -32,7 +32,7 @@ public class Outtake {
     }
 
     public void preset(int slidesPos, int armPos) {
-        slides.setPosition(slidesPos);
+//        slides.setPosition(slidesPos);
         arm.setPosition(armPos, slides.getPosition());
     }
 

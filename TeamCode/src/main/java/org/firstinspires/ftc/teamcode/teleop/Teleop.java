@@ -7,13 +7,16 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.utility.AprilTagToRoadRunner;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
@@ -26,9 +29,11 @@ import java.util.Optional;
 public class Teleop extends OpMode {
     WebcamName webcam1;
 
-//    Claw claw;
+    Claw claw;
 //    Plane plane;
+    Slides slides;
     Intake intake;
+    Climber climber;
     Outtake outtake;
     Drivetrain drivetrain;
 
@@ -36,8 +41,8 @@ public class Teleop extends OpMode {
     AprilTagIntoPower aprilTagIntoPower;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    double intakePower;
-    double slidePower;
+    double slidePower = 0;
+    double climberPower = 0;
 
     Pose2d runnerPose10 = new Pose2d(0,0,0);
     Pose2d runnerPose9 = new Pose2d(0,0,0);
@@ -46,15 +51,15 @@ public class Teleop extends OpMode {
 
     @Override
     public void init() {
-        intakePower = 0;
-
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
         telemetry.addData("Status", "Initialized");
 
-//         claw = new Claw(hardwareMap);
+         claw = new Claw(hardwareMap);
 //         plane = new Plane(hardwareMap);
-         intake = new Intake(hardwareMap);
-         outtake = new Outtake(hardwareMap);
+        slides = new Slides(hardwareMap);
+        intake = new Intake(hardwareMap);
+        outtake = new Outtake(hardwareMap);
+        climber = new Climber(hardwareMap);
 
         drivetrain = new Drivetrain(hardwareMap, telemetry);
 
@@ -62,7 +67,7 @@ public class Teleop extends OpMode {
         aprilTagIntoPower = new AprilTagIntoPower();
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
 
-        aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
+//        aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
     }
 
     @Override
@@ -73,9 +78,10 @@ public class Teleop extends OpMode {
     public void loop() {
         boolean autoAlignToTag = gamepad1.a;
 
-        slidePower = gamepad1.left_trigger - gamepad1.right_trigger;
+        slidePower = gamepad1.right_stick_y;
 
         if (autoAlignToTag && false) {
+            /*
             //creates a variable of an april tag detection
             Optional<AprilTagDetection> optionalAprilTagDetection = aprilTagDetectionPipeline.getDesiredTag(10);
 
@@ -109,7 +115,7 @@ public class Teleop extends OpMode {
                 //if we don't see a tag, then set the drive powers to 0)
                 drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
             }
-
+*/
         } else {
             DriveSpeedEnum driveSpeed;
             if (gamepad1.right_bumper) {
@@ -118,7 +124,7 @@ public class Teleop extends OpMode {
                 driveSpeed = DriveSpeedEnum.Slow;
             }
             //Testing wheels
-/*
+            /*
                 if (gamepad1.x){
                     drivetrain.rightFront.setPower(0.25);
                 } else {
@@ -143,13 +149,31 @@ public class Teleop extends OpMode {
                     drivetrain.leftRear.setPower(0);
                 }
 */
+
+            //DRIVETRAIN
             drivetrain.drive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
             //for avalanche
 
-            outtake.manualSlides(slidePower);
+            //SLIDES
+            slidePower = -gamepad1.right_stick_y;
+            slides.manualPosition(slidePower);
+            telemetry.addData("slide pos", slides.getPosition());
 
-            intakePower = gamepad1.right_stick_y;
-            intake.setIntakePower(intakePower);
+            //INTAKE
+            if (gamepad1.y) {
+                claw.setPower(1);
+                intake.setIntakePower(0.6);
+            } else if (gamepad1.b) {
+                claw.setPower(-1);
+                intake.setIntakePower(-1);
+            } else {
+                claw.setPower(0);
+                intake.setIntakePower(0);
+            }
+
+            //CLIMBER
+            climberPower = gamepad1.right_trigger - gamepad1.left_trigger;
+            climber.setPower(climberPower);
 
             /*
             outtake.periodic();
@@ -172,19 +196,19 @@ public class Teleop extends OpMode {
         }
              */
         }
-        if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
-            runnerPose10 = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
-        }
-        if (aprilTagDetectionPipeline.getDesiredTag(9).isPresent()) {
-            runnerPose9 = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(9).get());
-        }
+//        if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
+//            runnerPose10 = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
+//        }
+//        if (aprilTagDetectionPipeline.getDesiredTag(9).isPresent()) {
+//            runnerPose9 = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(9).get());
+//        }
 
-        telemetry.addData("actual tag pos 10", runnerPose10);
-        aprilTagDetectionPipeline.telemetryAprilTag();
+//        telemetry.addData("actual tag pos 10", runnerPose10);
+//        aprilTagDetectionPipeline.telemetryAprilTag();
     }
     @Override
     public void stop() {
-//         claw.stopClaw();
+         claw.stopClaw();
          outtake.stop();
          intake.stopIntake();
          drivetrain.stopDrive();
