@@ -41,9 +41,6 @@ public class Teleop extends OpMode {
     AprilTagIntoPower aprilTagIntoPower;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
-    double slidePower = 0;
-    double climberPower = 0;
-
     @Override
     public void init() {
         webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -65,11 +62,22 @@ public class Teleop extends OpMode {
     }
 
     @Override
-    public void start() {
-    }
-
-    @Override
     public void loop() {
+        //INPUTS
+        boolean fastDriveSpeed = gamepad1.right_bumper;
+        double driveForward = -gamepad1.left_stick_y;
+        double driveStrafe  = -gamepad1.left_stick_x;
+        double driveTurn    =  gamepad1.right_stick_x;
+
+        boolean intakeBool  = gamepad1.y;
+        boolean outtakeBool = gamepad1.b;
+
+        double slidePower = gamepad1.right_stick_y;
+
+        double armPower = gamepad1.right_stick_y;
+
+        double climberPower = gamepad1.right_trigger - gamepad1.left_trigger;
+
         //DRIVETRAIN
         //Testing wheels
         /*
@@ -98,19 +106,18 @@ public class Teleop extends OpMode {
                 }
 */
         DriveSpeedEnum driveSpeed;
-        if (gamepad1.right_bumper) {
+        if (fastDriveSpeed) {
             driveSpeed = DriveSpeedEnum.Fast;
         } else {
             driveSpeed = DriveSpeedEnum.Slow;
         }
-        drivetrain.drive(-gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x, driveSpeed);
+        drivetrain.drive(driveForward, driveStrafe, driveTurn, driveSpeed);
 
         //INTAKE
-        outtake.periodic();
-        if (gamepad1.y) {
+        if (intakeBool) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Claw.intake);
-        } else if (gamepad1.b) {
+        } else if (outtakeBool) {
             claw.setPower(Constants.Claw.outake);
             intake.setIntakePower(Constants.Intake.outake);
         } else {
@@ -119,14 +126,12 @@ public class Teleop extends OpMode {
         }
 
         //SLIDES
-//        slidePower = -gamepad1.right_stick_y;
         outtake.manualSlides(slidePower);
 
         //ARM
-        outtake.manualArm(gamepad1.right_stick_y);
+        outtake.manualArm(armPower);
 
         //CLIMBER
-        climberPower = gamepad1.right_trigger - gamepad1.left_trigger;
         climber.setPower(climberPower);
 
         /*
@@ -141,8 +146,9 @@ public class Teleop extends OpMode {
         if (gamepad1.dpad_right) {
             outtake.presetSlides(Constants.Slides.medSlides);
         }
-
         */
+
+        outtake.periodic();
     }
     @Override
     public void stop() {

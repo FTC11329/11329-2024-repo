@@ -13,7 +13,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class Constants {
     @Config
     public static class Intake {
-        public static double intake = 0.75; //TODO: Set value
+        public static double intake = 0.65; //TODO: Set value
         public static double outake = -1;
     }
     @Config
