@@ -12,10 +12,14 @@ import com.acmerobotics.dashboard.config.Config;
  */
 public class Constants {
     @Config
+    public static class Intake {
+        public static double intake = 0.75; //TODO: Set value
+        public static double outake = -1;
+    }
+    @Config
     public static class Claw {
-        public static double intake = 0.5;  //TODO: Set value
-        public static double outake = -0.5; //TODO: Set value
-        public static double stop = 0; //TODO: Set value
+        public static double intake = 1;
+        public static double outake = -1;
     }
 
     @Config
@@ -33,21 +37,23 @@ public class Constants {
         public static int lowSlides = 0; //TODO: Set value
 
 
-        public static double groundPinchMax = 0;//TODO: Set value
-        public static double groundPinchMin = 0;//TODO: Set value
+        public static double groundPinchMax = 100000; //TODO: Set value
+        public static double groundPinchMin = 100000; //TODO: Set value
     }
     @Config
     public static class Arm{
-        public static double groundPinchMax = 0;//TODO: Set value
-        public static double groundPinchMin = 0;//TODO: Set value
+        public static double groundPinchMax = 100000; //TODO: Set value
+        public static double groundPinchMin = 100000; //TODO: Set value
+
+        public static double safePos = 0; //TODO: Set value
     }
 
     @Config
     public static class Drivetrain {
-        public static final String leftFrontHardwareMapName = "frontLeft";
-        public static final String leftRearHardwareMapName = "backLeft";
+        public static final String leftFrontHardwareMapName  = "frontLeft";
+        public static final String leftRearHardwareMapName   = "backLeft";
         public static final String rightFrontHardwareMapName = "frontRight";
-        public static final String rightRearHardwareMapName = "backRight";
+        public static final String rightRearHardwareMapName  = "backRight";
     }
 
     @Config

@@ -19,24 +19,23 @@ public class Outtake {
         slides.manualPosition(manualPower);
     }
 
+    public void presetSlides(int slidesPos) {
+        slides.setPosition(slidesPos);
+    }
     public void manualArm(double manualPower) {
         arm.manualPosition(manualPower);
     }
 
-    public void presetSlides(int slidesPos) {
-//        slides.setPosition(slidesPos);
-    }
-
     public void presetArm(int armPos) {
-        arm.setPosition(armPos);
-    }
-
-    public void preset(int slidesPos, int armPos) {
-//        slides.setPosition(slidesPos);
         arm.setPosition(armPos, slides.getPosition());
     }
 
-    public void stop() {
+    public void preset(int slidesPos, int armPos) {
+        slides.setPosition(slidesPos);
+        arm.setPosition(armPos, slides.getPosition());
+    }
+
+    public void stopOuttake() {
         slides.stopSlides();
     }
 }

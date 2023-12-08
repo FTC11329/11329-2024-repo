@@ -13,6 +13,7 @@ public class Claw {
         clawServo.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
+
     public void setPower(double clawPower) {
         clawServo.setPower(clawPower);
     }

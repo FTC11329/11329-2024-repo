@@ -16,8 +16,7 @@ public class Slides {
         slideMotor.setPower(1);
 
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        slideMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
