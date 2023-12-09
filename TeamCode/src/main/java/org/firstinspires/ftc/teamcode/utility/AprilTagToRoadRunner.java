@@ -16,6 +16,11 @@ public class AprilTagToRoadRunner {
 
         double Ry = (Math.sqrt(Math.pow(Vx, 2) + Math.pow(Vy, 2))) * Math.cos(Math.toRadians(90) - (Math.toRadians(180) - Vh - Math.atan(Vy/Vx)));
 
+        if (tag.id == 10) {
+            Rh = Math.PI - Rh;
+            Rx = Rx - 16.5;
+            Ry = Ry - 23.5;
+        }
         return new Pose2d(Rx, Ry, Rh);
     }
 }

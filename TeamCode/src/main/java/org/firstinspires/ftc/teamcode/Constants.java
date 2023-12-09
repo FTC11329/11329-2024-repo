@@ -13,7 +13,7 @@ import com.acmerobotics.dashboard.config.Config;
 public class Constants {
     @Config
     public static class Intake {
-        public static double intake = 0.65; //TODO: Set value
+        public static double intake = 0.7; //TODO: Set value
         public static double outake = -1;
     }
     @Config
@@ -30,22 +30,28 @@ public class Constants {
 
     @Config
     public static class Slides {
-        public static int highSlides = 0;//TODO: Set value
+        public static int manualSlidePower = -40;
 
-        public static int medSlides = 0; //TODO: Set value
+        public static int lowSlides = 900;
+        public static int medSlides = 1600;
+        public static int highSlides = 1900;
 
-        public static int lowSlides = 0; //TODO: Set value
 
+        public static int groundPinchMin = 130;
+        public static int groundPinchMax = 400;
 
-        public static double groundPinchMax = 100000; //TODO: Set value
-        public static double groundPinchMin = 100000; //TODO: Set value
+        public static int slideMax = 1950;
+        public static int slideMin = 0;
     }
     @Config
     public static class Arm{
-        public static double groundPinchMax = 100000; //TODO: Set value
-        public static double groundPinchMin = 100000; //TODO: Set value
+        public static double armMax = 0.65;
+        public static double armMin = 0;
 
-        public static double safePos = 0; //TODO: Set value
+        public static double scaredPos = 0.05;
+
+        public static double placePos = 0.354;
+        public static double weirdPlacePos = 0.475;
     }
 
     @Config

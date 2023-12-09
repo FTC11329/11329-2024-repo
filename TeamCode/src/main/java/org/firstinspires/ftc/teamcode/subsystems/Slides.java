@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Constants;
+
 public class Slides {
     DcMotor slideMotor;
 
@@ -16,7 +18,7 @@ public class Slides {
         slideMotor.setPower(1);
 
         slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        slideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
@@ -32,13 +34,21 @@ public class Slides {
     public int getPosition() {
         return slideMotor.getCurrentPosition();
     }
+    public int getTargetPosition() {
+        return slideMotor.getTargetPosition();
+    }
 
     //set manual movement
     public void manualPosition(double manualPower) {
-        int manualChange = (int) (manualPower * 10);
+        int manualChange = (int) (manualPower * Constants.Slides.manualSlidePower);
 
-        int newPos = getPosition() + manualChange;
-
+        int newPos = getTargetPosition() + manualChange;
+        if (newPos > Constants.Slides.slideMax) {
+            newPos = 1950;
+        }
+        if (newPos < Constants.Slides.slideMin) {
+            newPos = 0;
+        }
         slideMotor.setTargetPosition(newPos);
     }
 

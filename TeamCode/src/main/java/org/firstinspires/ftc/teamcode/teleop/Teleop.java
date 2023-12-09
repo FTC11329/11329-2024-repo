@@ -74,9 +74,9 @@ public class Teleop extends OpMode {
 
         double slidePower = gamepad1.right_stick_y;
 
-        double armPower = gamepad1.right_stick_y;
+        double armPower = gamepad1.right_trigger - gamepad1.left_trigger;
 
-        double climberPower = gamepad1.right_trigger - gamepad1.left_trigger;
+        double climberPower = gamepad1.right_stick_y * 0;
 
         //DRIVETRAIN
         //Testing wheels
@@ -116,9 +116,10 @@ public class Teleop extends OpMode {
         //INTAKE
         if (intakeBool) {
             claw.setPower(Constants.Claw.intake);
-            intake.setIntakePower(Constants.Claw.intake);
+            intake.setIntakePower(Constants.Intake.intake);
         } else if (outtakeBool) {
             claw.setPower(Constants.Claw.outake);
+        } else if (gamepad1.x) {
             intake.setIntakePower(Constants.Intake.outake);
         } else {
             claw.setPower(0);
@@ -127,9 +128,13 @@ public class Teleop extends OpMode {
 
         //SLIDES
         outtake.manualSlides(slidePower);
+        telemetry.addData("Slide Position", outtake.getSlidePosition());
+        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
         //ARM
         outtake.manualArm(armPower);
+        telemetry.addData("Arm Position", outtake.getArmPosition());
+        telemetry.addData("Sad arm", outtake.arm.isArmScared(outtake.getSlidePosition()));
 
         //CLIMBER
         climber.setPower(climberPower);
@@ -141,13 +146,25 @@ public class Teleop extends OpMode {
         } else {
             plane.setPos(Constants.Plane.hold);
         }
-
-        //PRE-SETS
-        if (gamepad1.dpad_right) {
-            outtake.presetSlides(Constants.Slides.medSlides);
-        }
         */
 
+        //PRE-SETS
+        if (gamepad1.dpad_up) {
+            //high
+            outtake.preset(Constants.Slides.highSlides, Constants.Arm.weirdPlacePos);
+        }
+        if (gamepad1.dpad_right) {
+            //med
+            outtake.preset(Constants.Slides.medSlides, Constants.Arm.placePos);
+        }
+        if (gamepad1.dpad_down) {
+            //low
+            outtake.preset(Constants.Slides.lowSlides, Constants.Arm.placePos);
+        }
+        if (gamepad1.dpad_left) {
+            //intake
+            outtake.preset(0,0.01);
+        }
         outtake.periodic();
     }
     @Override
