@@ -5,12 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
-import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
-import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
+
+import java.util.Optional;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -23,41 +21,24 @@ import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
 public class MyLocalizationTest extends LinearOpMode {
     Drivetrain drive;
 
-    WebcamName webcam1;
-
-    AprilTagDetector aprilTagDetector;
-    AprilTagIntoPower aprilTagIntoPower;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    Cameras cameras;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        webcam1 = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
-
         drive = new Drivetrain(hardwareMap, telemetry);
-
-        aprilTagDetector = new AprilTagDetector();
-        aprilTagIntoPower = new AprilTagIntoPower();
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
-
-        aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
-            drive.setWeightedDrivePower(new Pose2d(
-                            gamepad1.left_stick_y * 0.7,
-                            gamepad1.left_stick_x * 0.7,
-                            gamepad1.right_stick_x * 0.7
-                    ));
+            drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * 0.7, gamepad1.left_stick_x * 0.7, gamepad1.right_stick_x * 0.7));
 
             drive.update();
 
-            if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
-                Pose2d tagPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
-                drive.setPoseEstimate(tagPose);
-            }
+            Optional<Pose2d> pose = cameras.getPoseEstimate();
+
+            pose.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
 
             Pose2d poseEstimate = drive.getPoseEstimate();
 

@@ -87,6 +87,7 @@ public class BarcodeProcessor implements VisionProcessor {
         if (rightNumber > leftNumber && rightNumber > middleNumber)
             lastKnownPosition = Optional.of(Position.Three);
 
+
         Imgproc.putText(thresholded, String.format("Thirds: %d %d %d", leftNumber, middleNumber, rightNumber), new Point(0, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
         Imgproc.putText(thresholded, String.format("Determination: %s", getLastKnownPosition().toString()), new Point(0, 50), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
 

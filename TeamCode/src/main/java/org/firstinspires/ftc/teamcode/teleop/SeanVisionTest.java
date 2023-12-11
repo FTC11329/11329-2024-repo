@@ -21,11 +21,11 @@ public class SeanVisionTest extends OpMode {
 
     @Override
     public void init() {
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
+        WebcamName frontWebcam = hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName);
 
         visionPortal = new VisionPortal
                 .Builder()
-                .setCamera(webcamName)
+                .setCamera(frontWebcam)
                 .addProcessor(barcodeProcessor)
                 .addProcessor(dashboardCameraStreamProcessor)
                 .enableLiveView(true)

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
@@ -17,14 +17,12 @@ import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
-    WebcamName webcam1;
-
     Claw claw;
-//    Plane plane;
     Intake intake;
     Climber climber;
     Outtake outtake;
     Drivetrain drivetrain;
+    Cameras cameras;
 
     AprilTagDetector aprilTagDetector;
     AprilTagIntoPower aprilTagIntoPower;
@@ -32,22 +30,14 @@ public class Teleop extends OpMode {
 
     @Override
     public void init() {
-        webcam1 = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
         telemetry.addData("Status", "Initialized");
 
         claw = new Claw(hardwareMap);
-//         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
-
+        cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
-
-        aprilTagDetector = new AprilTagDetector();
-        aprilTagIntoPower = new AprilTagIntoPower();
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
-
-//        aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
     }
 
     @Override
@@ -55,10 +45,10 @@ public class Teleop extends OpMode {
         //INPUTS
         boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
-        double driveStrafe  = -gamepad1.left_stick_x;
-        double driveTurn    =  gamepad1.right_stick_x;
+        double driveStrafe = -gamepad1.left_stick_x;
+        double driveTurn = gamepad1.right_stick_x;
 
-        boolean intakeBool  = gamepad1.y;
+        boolean intakeBool = gamepad1.y;
         boolean outtakeBool = gamepad1.b;
 
         double slidePower = gamepad1.right_stick_y;
@@ -152,16 +142,16 @@ public class Teleop extends OpMode {
         }
         if (gamepad1.dpad_left) {
             //intake
-            outtake.preset(0,0.01);
+            outtake.preset(0, 0.01);
         }
         outtake.periodic();
     }
+
     @Override
     public void stop() {
-         claw.stopClaw();
-         intake.stopIntake();
-         outtake.stopOuttake();
-         drivetrain.stopDrive();
-         aprilTagDetectionPipeline.aprilTagStop();
+        claw.stopClaw();
+        intake.stopIntake();
+        outtake.stopOuttake();
+        drivetrain.stopDrive();
     }
 }

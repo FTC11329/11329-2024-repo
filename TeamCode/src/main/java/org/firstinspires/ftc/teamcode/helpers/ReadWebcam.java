@@ -15,7 +15,7 @@ public class ReadWebcam extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         final DashboardCameraStreamProcessor processor = new DashboardCameraStreamProcessor();
 
-        WebcamName webcam = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
+        WebcamName webcam = hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName);
 
         new VisionPortal.Builder().addProcessor(processor).setCamera(webcam).build();
 

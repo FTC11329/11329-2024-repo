@@ -1,16 +1,11 @@
 package org.firstinspires.ftc.teamcode.vision;
 
-import static org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower.DISTANCE;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class AprilTagDetector {
-    public Pose2d distanceFromAprilTag(AprilTagDetection tag) {
+    public static Pose2d distanceFromAprilTag(AprilTagDetection tag) {
         // Step through the list of detected tags and look for a matching tag
         // Determine range, yaw, and heading (tag image rotation) error so we can use them to control the robot automatically
         double rangeError = tag.ftcPose.range;
@@ -20,7 +15,7 @@ public class AprilTagDetector {
         return new Pose2d(-rangeError, yawError, -headingError);
     }
 
-    public Pose2d distanceFromAprilTagExact(AprilTagDetection tag) {
+    public static Pose2d distanceFromAprilTagExact(AprilTagDetection tag) {
         double yError = tag.ftcPose.y;
         double xError = tag.ftcPose.x;
         double yawError = tag.ftcPose.yaw;

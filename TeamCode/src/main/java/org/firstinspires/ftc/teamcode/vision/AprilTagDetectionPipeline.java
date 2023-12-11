@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.utility.RunAfterTime;
@@ -20,33 +19,12 @@ import java.util.concurrent.TimeUnit;
 
 
 public class AprilTagDetectionPipeline {
-    private ElapsedTime runtime = new ElapsedTime();
-
-    private AprilTagProcessor aprilTag;
-
-    private VisionPortal visionPortal;
-
-    Telemetry telemetry;
-
-    public void AprilTagInit(WebcamName webcam, Telemetry telemetry) {
-        this.telemetry = telemetry;
-        initAprilTag(webcam);
-
-        // Wait for the DS start button to be touched.
-        telemetry.addLine("Ready to start");
-        telemetry.update();
-
-        setManualExposure(6, 250);
-    }
-
-    public void aprilTagStop() {
-        visionPortal.close();
-    }
+    private final ElapsedTime runtime = new ElapsedTime();
 
     /**
      * Initialize the AprilTag processor.
      */
-    private void initAprilTag(WebcamName webcam) {
+    public static AprilTagProcessor createAprilTagProcessor() {
         // Create the AprilTag processor.
         //5 is 7.5
         //10 is 16
@@ -57,7 +35,7 @@ public class AprilTagDetectionPipeline {
         //0.625
 
         //1.6 is the scale value i think
-        aprilTag = new AprilTagProcessor.Builder()
+        return new AprilTagProcessor.Builder()
 
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
@@ -76,40 +54,43 @@ public class AprilTagDetectionPipeline {
 
                 .build();
 
-        // Create the vision portal by using a builder.
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-
-        // Set the camera
-        builder.setCamera(webcam);
-
-        // Choose a camera resolution. Not all cameras support all resolutions.
-        //builder.setCameraResolution(new Size(640, 480));
-
-        // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
-        //builder.enableCameraMonitoring(true);
-
-        // Set the stream format; MJPEG uses less bandwidth than default YUY2.
-        builder.setStreamFormat(VisionPortal.StreamFormat.YUY2);
-
-        // Choose whether or not LiveView stops if no processors are enabled.
-        // If set "true", monitor shows solid orange screen if no processors enabled.
-        // If set "false", monitor shows camera view without annotations.
-        //builder.setAutoStopLiveView(false);
-
-        // Set and enable the processor.
-        builder.addProcessor(aprilTag);
-
-        // Build the Vision Portal, using the above settings.
-        visionPortal = builder.build();
-
         // Disable or re-enable the aprilTag processor at any time.
         //visionPortal.setProcessorEnabled(aprilTag, true);
 
     }
 
+    //Idk what this function actually does but it makes the robot run smooth so ya it stays.
+    private static void setManualExposure(VisionPortal visionPortal, int exposureMS, int gain) {
+        // Wait for the camera to be open, then use the controls
+
+        if (visionPortal == null) {
+            return;
+        }
+
+        // Make sure camera is streaming before we try to set the exposure controls
+        while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
+            RunAfterTime.runAfterTime(10, () -> {
+            });
+        }
+        // Set camera controls
+        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
+        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
+            exposureControl.setMode(ExposureControl.Mode.Manual);
+            RunAfterTime.runAfterTime(50, () -> {
+            });
+        }
+        exposureControl.setExposure(exposureMS, TimeUnit.MILLISECONDS);
+        RunAfterTime.runAfterTime(20, () -> {
+        });
+        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
+        gainControl.setGain(gain);
+        RunAfterTime.runAfterTime(20, () -> {
+        });
+    }
+
     @SuppressLint("DefaultLocale")
-    public void telemetryAprilTag() {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+    public void telemetryAprilTag(Telemetry telemetry, List<AprilTagDetection> currentDetections) {
+
         telemetry.addData("# AprilTags Detected", currentDetections.size());
         // Step through the list of detections and display info for each one.
         for (AprilTagDetection detection : currentDetections) {
@@ -129,38 +110,12 @@ public class AprilTagDetectionPipeline {
         telemetry.addLine("RBE = Range, Bearing & Elevation");
     }
 
-    public Optional<AprilTagDetection> getDesiredTag(int id) {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+    public static Optional<AprilTagDetection> getDesiredTag(List<AprilTagDetection> currentDetections, int id) {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.id == id && detection.metadata != null) {
                 return Optional.of(detection);
             }
         }
         return Optional.empty();
-    }
-
-    //Idk what this function actually does but it makes the robot run smooth so ya it stays.
-    private void setManualExposure(int exposureMS, int gain) {
-        // Wait for the camera to be open, then use the controls
-
-        if (visionPortal == null) {
-            return;
-        }
-
-        // Make sure camera is streaming before we try to set the exposure controls
-        while (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            RunAfterTime.runAfterTime(10, () -> {});
-        }
-        // Set camera controls
-        ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
-        if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
-            exposureControl.setMode(ExposureControl.Mode.Manual);
-            RunAfterTime.runAfterTime(50, () -> {});
-        }
-        exposureControl.setExposure((long)exposureMS, TimeUnit.MILLISECONDS);
-        RunAfterTime.runAfterTime(20, () -> {});
-        GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
-        gainControl.setGain(gain);
-        RunAfterTime.runAfterTime(20, () -> {});
     }
 }
