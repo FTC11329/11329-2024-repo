@@ -1,13 +1,8 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import static org.firstinspires.ftc.teamcode.utility.RunAfterTime.runAfterTime;
-
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -16,15 +11,9 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
-import org.firstinspires.ftc.teamcode.subsystems.Plane;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.firstinspires.ftc.teamcode.utility.AprilTagToRoadRunner;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-
-import java.util.Optional;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
@@ -43,7 +32,7 @@ public class Teleop extends OpMode {
 
     @Override
     public void init() {
-        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcam1 = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
         telemetry.addData("Status", "Initialized");
 
         claw = new Claw(hardwareMap);
@@ -173,6 +162,6 @@ public class Teleop extends OpMode {
          intake.stopIntake();
          outtake.stopOuttake();
          drivetrain.stopDrive();
-         aprilTagDetectionPipeline.AprilTagStop();
+         aprilTagDetectionPipeline.aprilTagStop();
     }
 }

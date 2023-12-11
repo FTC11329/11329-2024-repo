@@ -27,7 +27,7 @@
 //    @Override
 //    public void runOpMode()
 //    {
-//        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+//        webcam1 = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
 //        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
 //        telemetry.addData("Status", "Initialized");
 //        drivetrain = new Drivetrain(hardwareMap, telemetry);

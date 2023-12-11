@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
@@ -30,7 +31,7 @@ public class MyLocalizationTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcam1 = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
 
         drive = new Drivetrain(hardwareMap, telemetry);
 
@@ -39,8 +40,6 @@ public class MyLocalizationTest extends LinearOpMode {
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
 
         aprilTagDetectionPipeline.AprilTagInit(webcam1, telemetry);
-
-        Pose2d tagPose = new Pose2d();
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -56,7 +55,7 @@ public class MyLocalizationTest extends LinearOpMode {
             drive.update();
 
             if (aprilTagDetectionPipeline.getDesiredTag(10).isPresent()) {
-                tagPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
+                Pose2d tagPose = AprilTagToRoadRunner.tagToRunner(aprilTagDetectionPipeline.getDesiredTag(10).get());
                 drive.setPoseEstimate(tagPose);
             }
 

@@ -1,67 +1,60 @@
-package org.firstinspires.ftc.teamcode.vision;
-//no comments? :(
+package org.firstinspires.ftc.teamcode.vision.processors;
+
+import android.annotation.SuppressLint;
+import android.graphics.Canvas;
+
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.utility.RobotSide;
+import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Optional;
 
-public class BarcodePipeline extends OpenCvPipeline {
-    public enum Position {
-        Reading,
-        One,
-        Two,
-        Three
-    }
-
-    public Position position = Position.Reading;
+public class BarcodeProcessor implements VisionProcessor {
     public RobotSide side;
-
     Mat hue = new Mat();
     Mat saturation = new Mat();
     Mat value = new Mat();
     ArrayList<Mat> channels = new ArrayList<Mat>();
     Mat redtmp1 = new Mat();
     Mat redtmp2 = new Mat();
-
     Mat hsv = new Mat();
     Mat cropped = new Mat();
     Mat thresholded = new Mat();
-
-    Mat leftThird = new Mat();
-    Mat middleThird = new Mat();
-    Mat rightThird = new Mat();
-
-    Mat outthing = new Mat();
-
     int leftNumber = 0;
     int middleNumber = 0;
     int rightNumber = 0;
     int swapNumber = 0;
-
-    int output = 0;
+    Mat leftThird = new Mat();
+    Mat middleThird = new Mat();
+    Mat rightThird = new Mat();
+    private Optional<Position> lastKnownPosition = Optional.empty();
 
     @Override
-    public void init(Mat input) {
+    public void init(int width, int height, CameraCalibration calibration) {
         channels.add(hue);
         channels.add(saturation);
         channels.add(value);
     }
 
-    @Override
-    public Mat processFrame(Mat input) {
-        // Imgproc
+    public Optional<Position> getLastKnownPosition() {
+        return lastKnownPosition;
+    }
 
+    @SuppressLint("DefaultLocale")
+    @Override
+    public Object processFrame(Mat input, long captureTimeNanos) {
         Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
 
         cropped = hsv.submat(input.rows() / 4, input.rows() - (input.rows() / 4), 24, input.cols() - 24);
 
         Core.split(cropped, channels);
+
 
         if (side == RobotSide.Red) { // Invert this after testing is complete
             Core.inRange(cropped, new Scalar(0, 70, 100), new Scalar(10, 255, 255), redtmp1);
@@ -87,13 +80,25 @@ public class BarcodePipeline extends OpenCvPipeline {
             leftNumber = swapNumber;
         }
 
-        if (leftNumber > middleNumber && leftNumber > rightNumber) position = Position.One;
-        if (middleNumber > leftNumber && middleNumber > rightNumber) position = Position.Two;
-        if (rightNumber > leftNumber && rightNumber > middleNumber) position = Position.Three;
+        if (leftNumber > middleNumber && leftNumber > rightNumber)
+            lastKnownPosition = Optional.of(Position.One);
+        if (middleNumber > leftNumber && middleNumber > rightNumber)
+            lastKnownPosition = Optional.of(Position.Two);
+        if (rightNumber > leftNumber && rightNumber > middleNumber)
+            lastKnownPosition = Optional.of(Position.Three);
 
         Imgproc.putText(thresholded, String.format("Thirds: %d %d %d", leftNumber, middleNumber, rightNumber), new Point(0, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
-        Imgproc.putText(thresholded, String.format("Determination: %s", position.toString()), new Point(0, 50), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
+        Imgproc.putText(thresholded, String.format("Determination: %s", getLastKnownPosition().toString()), new Point(0, 50), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
 
         return thresholded;
+    }
+
+    @Override
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+
+    }
+
+    public enum Position {
+        One, Two, Three
     }
 }

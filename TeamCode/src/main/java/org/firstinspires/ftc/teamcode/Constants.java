@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethod
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 /**
  * If we want to be able to change any of the constants, they can not be marked with final
  * <p>
@@ -11,6 +13,10 @@ import com.acmerobotics.dashboard.config.Config;
  * that it had values that can be changed.
  */
 public class Constants {
+    @Config
+    public static class Vision {
+        public static String webcamName = "Webcam 1";
+    }
     @Config
     public static class Intake {
         public static double intake = 0.7; //TODO: Set value

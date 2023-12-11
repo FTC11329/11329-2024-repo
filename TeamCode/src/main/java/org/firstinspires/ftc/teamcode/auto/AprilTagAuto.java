@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.utility.RunAfterTime;
@@ -27,19 +26,17 @@ public class AprilTagAuto extends LinearOpMode {
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     private boolean exactTolerance(int id) {
-        try {
-            return aprilTagIntoPower.inToleranceExact(
-                    aprilTagDetector.distanceFromAprilTag(
-                            aprilTagDetectionPipeline.getDesiredTag(id).get()));
-        } catch (Exception e){
-            return false;
-        }
+        Optional<AprilTagDetection> tag = aprilTagDetectionPipeline.getDesiredTag(id);
+
+        if (!tag.isPresent()) return false;
+
+        return aprilTagIntoPower.inToleranceExact(aprilTagDetector.distanceFromAprilTag(tag.get()));
     }
 
     @Override
     public void runOpMode() {
         //init
-        webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
+        webcam1 = hardwareMap.get(WebcamName.class, Constants.Vision.webcamName);
 
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         aprilTagDetector = new AprilTagDetector();
@@ -52,14 +49,14 @@ public class AprilTagAuto extends LinearOpMode {
         //start
 
         //goes forward for 1 second
-        drivetrain.drive(-.5,0,0, DriveSpeedEnum.Auto);
-        RunAfterTime.runAfterTime(400,() -> {
-            drivetrain.drive(0,0,0, DriveSpeedEnum.Auto);
+        drivetrain.drive(-.5, 0, 0, DriveSpeedEnum.Auto);
+        RunAfterTime.runAfterTime(400, () -> {
+            drivetrain.drive(0, 0, 0, DriveSpeedEnum.Auto);
         });
 
         //turns until it sees the tag
-        while (!aprilTagDetectionPipeline.getDesiredTag(10).isPresent() && opModeIsActive()){
-            drivetrain.drive(0,0,0.3, DriveSpeedEnum.Auto);
+        while (!aprilTagDetectionPipeline.getDesiredTag(10).isPresent() && opModeIsActive()) {
+            drivetrain.drive(0, 0, 0.3, DriveSpeedEnum.Auto);
         }
 
         //moves to tag
