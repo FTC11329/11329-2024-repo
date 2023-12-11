@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 import org.firstinspires.ftc.teamcode.vision.processors.BarcodeProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.DashboardCameraStreamProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -36,7 +37,7 @@ public class SeanVisionTest extends OpMode {
 
     @Override
     public void loop() {
-        Optional<BarcodeProcessor.Position> positionOptional = barcodeProcessor.getLastKnownPosition();
+        Optional<BarcodePosition> positionOptional = barcodeProcessor.getLastKnownPosition();
 
         if (positionOptional.isPresent()) {
             telemetry.addData("Known Position", positionOptional.get());

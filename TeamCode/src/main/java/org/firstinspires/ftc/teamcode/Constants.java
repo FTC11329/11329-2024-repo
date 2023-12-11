@@ -4,6 +4,8 @@ import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethod
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.opencv.core.Scalar;
+
 /**
  * If we want to be able to change any of the constants, they can not be marked with final
  * <p>
@@ -14,12 +16,23 @@ public class Constants {
     @Config
     public static class Vision {
         public static String frontWebcamName = "Webcam 1";
+
+        public static Scalar blueMin = new Scalar(100, 150, 100);
+        public static Scalar blueMax = new Scalar(120, 245, 255);
+
+        public static Scalar redPosMin = new Scalar(0, 70, 100);
+        public static Scalar redPosMax = new Scalar(10, 255, 255);
+
+        public static Scalar redNegMin = new Scalar(170, 70, 100);
+        public static Scalar redNegMax = new Scalar(180, 255, 255);
     }
+
     @Config
     public static class Intake {
         public static double intake = 0.7; //TODO: Set value
         public static double outake = -1;
     }
+
     @Config
     public static class Claw {
         public static double intake = 1;
@@ -47,8 +60,9 @@ public class Constants {
         public static int slideMax = 1950;
         public static int slideMin = 0;
     }
+
     @Config
-    public static class Arm{
+    public static class Arm {
         public static double armMax = 0.65;
         public static double armMin = 0;
 
@@ -60,10 +74,10 @@ public class Constants {
 
     @Config
     public static class Drivetrain {
-        public static final String leftFrontHardwareMapName  = "frontLeft";
-        public static final String leftRearHardwareMapName   = "backLeft";
+        public static final String leftFrontHardwareMapName = "frontLeft";
+        public static final String leftRearHardwareMapName = "backLeft";
         public static final String rightFrontHardwareMapName = "frontRight";
-        public static final String rightRearHardwareMapName  = "backRight";
+        public static final String rightRearHardwareMapName = "backRight";
     }
 
     @Config
