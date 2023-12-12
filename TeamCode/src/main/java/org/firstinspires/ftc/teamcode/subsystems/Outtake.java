@@ -2,9 +2,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.Constants;
+
 public class Outtake {
     public Arm arm;
     public Slides slides;
+
+    boolean tryingIntake = false;
 
     public Outtake(HardwareMap hardwareMap) {
         arm = new Arm(hardwareMap);
@@ -37,7 +41,6 @@ public class Outtake {
     public double getArmPosition() {
         return arm.getCurrentPos();
     }
-
 
     public void preset(int slidesPos, double armPos) {
         slides.setPosition(slidesPos);

@@ -47,13 +47,5 @@ public class Arm {
 
     public void periodic(int tempSlidesPos) {
         slidesPos = tempSlidesPos;
-        if (isArmScared(slidesPos)) {
-            setPosition(Constants.Arm.placePos);
-        }
-    }
-
-    public boolean isArmScared(int slidesPos) {
-        //if the arm could get pinched aka where it is not supposed to go
-        return !(slidesPos < 10 || getCurrentPos() > Constants.Arm.scaredPos);
     }
 }
