@@ -44,13 +44,19 @@ public class Teleop extends OpMode {
         double driveTurn = gamepad1.right_stick_x;
 
         boolean intakeBool = gamepad2.y;
-        boolean outtakeBool = gamepad2.b;
+        boolean clawOuttakeBool = gamepad2.b;
+        boolean intakeOuttakeBool = gamepad1.x;
 
-        double slidePower = gamepad2.left_stick_y;
+        double slidePower = gamepad2.right_trigger - gamepad1.left_trigger;
 
-        double armPower = gamepad2.right_trigger - gamepad1.left_trigger;
+        double armPower = gamepad2.left_stick_y;
 
         double climberPower = gamepad2.right_stick_y;
+
+        boolean highPresetBool = gamepad1.dpad_up;
+        boolean medPresetBool = gamepad1.dpad_right;
+        boolean lowPresetBool = gamepad1.dpad_down;
+        boolean intakePresetBool = gamepad1.dpad_left;
 
         //DRIVETRAIN
         //Testing wheels
@@ -78,7 +84,7 @@ public class Teleop extends OpMode {
                 } else {
                     drivetrain.leftRear.setPower(0);
                 }
-*/
+        */
         DriveSpeedEnum driveSpeed;
         if (fastDriveSpeed) {
             driveSpeed = DriveSpeedEnum.Fast;
@@ -91,9 +97,9 @@ public class Teleop extends OpMode {
         if (intakeBool) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Intake.intake);
-        } else if (outtakeBool) {
+        } else if (clawOuttakeBool) {
             claw.setPower(Constants.Claw.outake);
-        } else if (gamepad2.x) {
+        } else if (intakeOuttakeBool) {
             intake.setIntakePower(Constants.Intake.outake);
         } else {
             claw.setPower(0);
@@ -113,19 +119,19 @@ public class Teleop extends OpMode {
         climber.setPower(climberPower);
 
         //PRE-SETS
-        if (gamepad2.dpad_up) {
+        if (highPresetBool) {
             //high
             outtake.preset(Constants.Slides.high, Constants.Arm.weirdPlacePos);
         }
-        if (gamepad2.dpad_right) {
+        if (medPresetBool) {
             //med
             outtake.preset(Constants.Slides.med, Constants.Arm.placePos);
         }
-        if (gamepad2.dpad_down) {
+        if (lowPresetBool) {
             //low
             outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
         }
-        if (gamepad2.dpad_left) {
+        if (intakePresetBool) {
             //intake
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
         }

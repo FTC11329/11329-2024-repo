@@ -5,26 +5,26 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Climber {
-    DcMotor slideMotor;
+    DcMotor climberMotor;
 
     public Climber(HardwareMap hardwareMap) {
-        slideMotor = hardwareMap.get(DcMotor.class, "climber");
-        slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        slideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        climberMotor = hardwareMap.get(DcMotor.class, "climber");
+        climberMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        climberMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        climberMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     public void setPower(double power) {
-        slideMotor.setPower(power);
+        climberMotor.setPower(power);
     }
 
     //sets both motors to go to targetPos
 
     public int getPosition() {
-        return slideMotor.getCurrentPosition();
+        return climberMotor.getCurrentPosition();
     }
 
     public void stopClimber() {
-        slideMotor.setPower(0);
+        climberMotor.setPower(0);
     }
 }
