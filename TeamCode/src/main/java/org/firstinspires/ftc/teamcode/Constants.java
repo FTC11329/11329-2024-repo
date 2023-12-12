@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethods.rpmToVelocity;
 
+import android.net.wifi.WpsInfo;
+
 import com.acmerobotics.dashboard.config.Config;
 
 import org.opencv.core.Scalar;
@@ -49,9 +51,10 @@ public class Constants {
     public static class Slides {
         public static int manualSlidePower = -40;
 
-        public static int lowSlides = 900;
-        public static int medSlides = 1600;
-        public static int highSlides = 1900;
+        public static int intake = 0;
+        public static int low = 900;
+        public static int med = 1600;
+        public static int high = 1900;
 
 
         public static int groundPinchMin = 130;
@@ -70,10 +73,15 @@ public class Constants {
 
         public static double placePos = 0.354;
         public static double weirdPlacePos = 0.475;
+        public static double intakePos = 0;
     }
 
     @Config
     public static class Drivetrain {
+        public static final String leftEncoderName  = "";
+        public static final String rightEncoderName = "";
+        public static final String frontEncoderName = "";
+
         public static final String leftFrontHardwareMapName = "frontLeft";
         public static final String leftRearHardwareMapName = "backLeft";
         public static final String rightFrontHardwareMapName = "frontRight";
