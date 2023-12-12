@@ -5,7 +5,9 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.PtzControl;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.vision.processors.BarcodeProcessor;
 import org.firstinspires.ftc.teamcode.vision.processors.DashboardCameraStreamProcessor;
@@ -38,6 +40,16 @@ public class Cameras {
         FtcDashboard.getInstance().startCameraStream(dashboardCameraStreamProcessor, 30);
     }
 
+    public boolean isZoomCorrectionLegal() {
+        return frontCamera.getCameraState() == VisionPortal.CameraState.STREAMING;
+    }
+
+    public void correctZoom() {
+        PtzControl frontWebcamControl = frontCamera.getCameraControl(PtzControl.class);
+
+        frontWebcamControl.setZoom(frontWebcamControl.getMinZoom());
+    }
+
     public ArrayList<AprilTagDetection> getAprilTagRecognitions() {
         return aprilTag.getDetections();
     }
@@ -50,5 +62,9 @@ public class Cameras {
         Pose2d pose = new Pose2d(desiredTag.get().ftcPose.x, desiredTag.get().ftcPose.y, desiredTag.get().ftcPose.yaw);
 
         return Optional.of(pose);
+    }
+
+    public Optional<BarcodePosition> getBarcodePosition() {
+        return barcodeProcessor.getLastKnownPosition();
     }
 }

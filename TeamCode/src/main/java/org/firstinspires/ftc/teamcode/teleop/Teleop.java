@@ -24,10 +24,6 @@ public class Teleop extends OpMode {
     Drivetrain drivetrain;
     Cameras cameras;
 
-    AprilTagDetector aprilTagDetector;
-    AprilTagIntoPower aprilTagIntoPower;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
@@ -42,7 +38,6 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
-        //INPUTS
         boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
@@ -117,15 +112,6 @@ public class Teleop extends OpMode {
 
         //CLIMBER
         climber.setPower(climberPower);
-
-        /*
-        //PLANE
-        if (gamepad1.dpad_up) {
-            plane.setPos(Constants.Plane.release);
-        } else {
-            plane.setPos(Constants.Plane.hold);
-        }
-        */
 
         //PRE-SETS
         if (gamepad1.dpad_up) {
