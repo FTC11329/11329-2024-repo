@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Cameras {
-    VisionPortal frontCamera;
+    public VisionPortal frontCamera;
 
     AprilTagProcessor aprilTag;
     BarcodeProcessor barcodeProcessor = new BarcodeProcessor();
