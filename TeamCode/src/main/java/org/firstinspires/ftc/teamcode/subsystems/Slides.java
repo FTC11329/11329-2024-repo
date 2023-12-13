@@ -39,8 +39,7 @@ public class Slides {
     }
 
     //set manual movement
-    public void manualPosition(double manualPower) {
-        int manualChange = (int) (manualPower * Constants.Slides.manualSlidePower);
+    public void manualPosition(int manualChange) {
 
         int newPos = getTargetPosition() + manualChange;
         if (newPos > Constants.Slides.slideMax) {

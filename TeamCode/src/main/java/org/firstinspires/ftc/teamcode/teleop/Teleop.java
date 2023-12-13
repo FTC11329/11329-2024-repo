@@ -48,6 +48,8 @@ public class Teleop extends OpMode {
         boolean intakeOuttakeBool = gamepad1.x;
 
         double slidePower = gamepad2.right_trigger - gamepad1.left_trigger;
+        boolean downBool = gamepad2.left_bumper;
+        boolean upBool = gamepad2.right_bumper;
 
         double armPower = gamepad2.left_stick_y;
 
@@ -108,6 +110,8 @@ public class Teleop extends OpMode {
 
         //SLIDES
         outtake.manualSlides(slidePower);
+        outtake.upSlide(Constants.Slides.upAmount, upBool);
+        outtake.upSlide(-Constants.Slides.upAmount, downBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
@@ -116,7 +120,7 @@ public class Teleop extends OpMode {
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLIMBER
-        climber.setPower(climberPower);
+        climber.setPower(climberPower * Constants.Climber.climberPower);
 
         //PRE-SETS
         if (highPresetBool) {

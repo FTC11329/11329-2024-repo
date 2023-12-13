@@ -51,6 +51,8 @@ public class Constants {
     public static class Slides {
         public static int manualSlidePower = -40;
 
+        public static int upAmount = 10;
+
         public static int intake = 0;
         public static int low = 900;
         public static int med = 1600;
@@ -74,6 +76,11 @@ public class Constants {
         public static double placePos = 0.354;
         public static double weirdPlacePos = 0.475;
         public static double intakePos = 0;
+    }
+
+    @Config
+    public static class Climber {
+        public static double climberPower = 0.5;
     }
 
     @Config
