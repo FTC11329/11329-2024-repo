@@ -8,8 +8,7 @@ public class Outtake {
     public Arm arm;
     public Slides slides;
 
-    boolean tryingIntake = false;
-
+    boolean upDebounce;
     public Outtake(HardwareMap hardwareMap) {
         arm = new Arm(hardwareMap);
         slides = new Slides(hardwareMap);
@@ -20,11 +19,21 @@ public class Outtake {
     }
 
     public void manualSlides(double manualPower) {
-        slides.manualPosition(manualPower);
+        int manualChange = (int) (manualPower * Constants.Slides.manualSlidePower);
+        slides.manualPosition(manualChange);
     }
     public void presetSlides(int slidesPos) {
         slides.setPosition(slidesPos);
     }
+    public void upSlide(int upAmount, boolean go) {
+        if (go && !upDebounce){
+            manualSlides(upAmount);
+            upDebounce = true;
+        } else if (!go) {
+            upDebounce = false;
+        }
+    }
+
     public int getSlidePosition() {
         return slides.getPosition();
     }
