@@ -85,9 +85,9 @@ public class Constants {
 
     @Config
     public static class Drivetrain {
-        public static final String leftEncoderName  = "";
-        public static final String rightEncoderName = "";
-        public static final String frontEncoderName = "";
+        public static final String leftEncoderName  = "intakeMotor";
+        public static final String rightEncoderName = "backLeft";
+        public static final String frontEncoderName = "frontRight";
 
         public static final String leftFrontHardwareMapName = "frontLeft";
         public static final String leftRearHardwareMapName = "backLeft";
@@ -111,7 +111,7 @@ public class Constants {
         // TODO: Rework these values for Avalanche
         public static double WHEEL_RADIUS = 1.8898; // in
         public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-        public static double TRACK_WIDTH = 11.125; // in
+        public static double TRACK_WIDTH = 9.65; // in
         /*
          * These are the feedforward parameters used to model the drive motor behavior. If you are using
          * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive
@@ -134,5 +134,4 @@ public class Constants {
         public static double MAX_ANG_VEL = Math.toRadians(60);
         public static double MAX_ANG_ACCEL = Math.toRadians(60);
     }
-
 }

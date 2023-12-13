@@ -41,7 +41,7 @@ public class Teleop extends OpMode {
         boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
-        double driveTurn = gamepad1.right_stick_x;
+        double driveTurn = -gamepad1.right_stick_x;
 
         boolean intakeBool = gamepad2.y;
         boolean clawOuttakeBool = gamepad2.b;
