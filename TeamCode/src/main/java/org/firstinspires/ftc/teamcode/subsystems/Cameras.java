@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import android.util.Size;
+
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -31,6 +33,7 @@ public class Cameras {
         frontCamera = new VisionPortal
                 .Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
+                .setCameraResolution(new Size(1280, 720))
                 .addProcessor(barcodeProcessor)
                 .addProcessor(aprilTag)
                 .addProcessor(dashboardCameraStreamProcessor)
