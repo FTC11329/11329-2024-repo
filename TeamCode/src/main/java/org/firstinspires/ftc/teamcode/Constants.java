@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethods.rpmToVelocity;
 
-import android.net.wifi.WpsInfo;
-
 import com.acmerobotics.dashboard.config.Config;
 
 import org.opencv.core.Scalar;
@@ -85,7 +83,7 @@ public class Constants {
 
     @Config
     public static class Drivetrain {
-        public static final String leftEncoderName  = "intakeMotor";
+        public static final String leftEncoderName = "intakeMotor";
         public static final String rightEncoderName = "backLeft";
         public static final String frontEncoderName = "frontRight";
 
@@ -97,7 +95,8 @@ public class Constants {
 
     @Config
     public static class Roadrunner {
-        public static final double TICKS_PER_REV = 8192;
+        public static final double PARALLEL_ENCODER_TICKS = 8192;
+        public static final double LATERAL_ENCODER_TICKS = 4096;
         public static final double MAX_RPM = 312;
 
         /*
@@ -108,7 +107,7 @@ public class Constants {
          * angular distances although most angular parameters are wrapped in Math.toRadians() for
          * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
          */
-        // TODO: Rework these values for Avalanche
+//         TODO: Rework these values for Avalanche
         public static double WHEEL_RADIUS = 1.8898; // in
         public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
         public static double TRACK_WIDTH = 9.65; // in

@@ -8,11 +8,6 @@ import org.firstinspires.ftc.teamcode.Constants;
  * This makes sure we don't get name collisions with other classes which have similar variables
  */
 public class DriveUtilityMethods {
-
-    public static double encoderTicksToInches(double ticks) {
-        return Constants.Roadrunner.WHEEL_RADIUS * 2 * Math.PI * Constants.Roadrunner.GEAR_RATIO * ticks / Constants.Roadrunner.TICKS_PER_REV;
-    }
-
     public static double rpmToVelocity(double rpm) {
         return rpm * Constants.Roadrunner.GEAR_RATIO * 2 * Math.PI * Constants.Roadrunner.WHEEL_RADIUS / 60.0;
     }

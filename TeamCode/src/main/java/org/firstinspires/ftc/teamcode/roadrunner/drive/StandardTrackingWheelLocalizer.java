@@ -16,7 +16,6 @@ import java.util.List;
 
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 8192;
     public static double WHEEL_RADIUS = 0.6889764; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
@@ -49,8 +48,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         frontEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
-    public static double encoderTicksToInches(double ticks) {
-        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
+    public static double encoderTicksToInches(double ticks, double ticks_per_rev) {
+        return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / ticks_per_rev;
     }
 
     @NonNull
@@ -66,9 +65,9 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         lastEncoderPositions.add(frontPos);
 
         return Arrays.asList(
-                encoderTicksToInches(leftPos),
-                encoderTicksToInches(rightPos),
-                encoderTicksToInches(frontPos)
+                encoderTicksToInches(leftPos, Constants.Roadrunner.LATERAL_ENCODER_TICKS),
+                encoderTicksToInches(rightPos, Constants.Roadrunner.LATERAL_ENCODER_TICKS),
+                encoderTicksToInches(frontPos, Constants.Roadrunner.PARALLEL_ENCODER_TICKS)
         );
     }
 
@@ -85,9 +84,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         lastEncoderVelocities.add(frontVel);
 
         return Arrays.asList(
-                encoderTicksToInches(leftVel),
-                encoderTicksToInches(rightVel),
-                encoderTicksToInches(frontVel)
-        );
+                encoderTicksToInches(leftVel, Constants.Roadrunner.LATERAL_ENCODER_TICKS),
+                encoderTicksToInches(rightVel, Constants.Roadrunner.LATERAL_ENCODER_TICKS),
+                encoderTicksToInches(frontVel, Constants.Roadrunner.PARALLEL_ENCODER_TICKS));
     }
 }

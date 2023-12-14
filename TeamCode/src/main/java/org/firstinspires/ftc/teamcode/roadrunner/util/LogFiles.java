@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.roadrunner.util;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,7 +46,6 @@ public final class LogFiles {
         public long nsInit = System.nanoTime();
         public long nsStart, nsStop;
 
-        public double ticksPerRev = Constants.Roadrunner.TICKS_PER_REV;
         public double maxRpm = Constants.Roadrunner.MAX_RPM;
         public double wheelRadius = Constants.Roadrunner.WHEEL_RADIUS;
         public double gearRatio = Constants.Roadrunner.GEAR_RATIO;
@@ -69,7 +67,6 @@ public final class LogFiles {
         // public double mecHeadingD = DriveTrain.HEADING_PID.kD;
         // public double mecLateralMultiplier = DriveTrain.LATERAL_MULTIPLIER;
 
-        public double trackingTicksPerRev = StandardTrackingWheelLocalizer.TICKS_PER_REV;
         public double trackingWheelRadius = StandardTrackingWheelLocalizer.WHEEL_RADIUS;
         public double trackingGearRatio = StandardTrackingWheelLocalizer.GEAR_RATIO;
         public double trackingLateralDistance = StandardTrackingWheelLocalizer.LATERAL_DISTANCE;

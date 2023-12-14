@@ -12,7 +12,6 @@ import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.TRACK_WIDTH;
 import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kA;
 import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kStatic;
 import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kV;
-import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethods.encoderTicksToInches;
 
 import androidx.annotation.NonNull;
 
@@ -75,7 +74,7 @@ public class Drivetrain extends MecanumDrive {
     private final VoltageSensor batteryVoltageSensor;
 
     private final List<Integer> lastEncoderPositions = new ArrayList<>();
-    private final List<Integer> lastEncoderVelcities = new ArrayList<>();
+    private final List<Integer> lastEncoderVelocities = new ArrayList<>();
 
     private Telemetry telemetry;
 
@@ -114,7 +113,7 @@ public class Drivetrain extends MecanumDrive {
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 follower, HEADING_PID, batteryVoltageSensor,
-                lastEncoderPositions, lastEncoderVelcities, lastTrackingEncoderPositions, lastTrackingEncoderVelocities
+                lastEncoderPositions, lastEncoderVelocities, lastTrackingEncoderPositions, lastTrackingEncoderVelocities
         );
     }
 
@@ -259,33 +258,6 @@ public class Drivetrain extends MecanumDrive {
         setDrivePower(vel);
     }
 
-    @NonNull
-    @Override
-    public List<Double> getWheelPositions() {
-        lastEncoderPositions.clear();
-
-        List<Double> wheelPositions = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
-            int position = motor.getCurrentPosition();
-            lastEncoderPositions.add(position);
-            wheelPositions.add(encoderTicksToInches(position));
-        }
-        return wheelPositions;
-    }
-
-    @Override
-    public List<Double> getWheelVelocities() {
-        lastEncoderVelcities.clear();
-
-        List<Double> wheelVelocities = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
-            int vel = (int) motor.getVelocity();
-            lastEncoderVelcities.add(vel);
-            wheelVelocities.add(encoderTicksToInches(vel));
-        }
-        return wheelVelocities;
-    }
-
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
         leftFront.setPower(v);
@@ -304,5 +276,11 @@ public class Drivetrain extends MecanumDrive {
     public void stopDrive() {
         drive(0, 0, 0, DriveSpeedEnum.Slow);
         telemetry.addLine("Drivetrain Stopped");
+    }
+
+    @NonNull
+    @Override
+    public List<Double> getWheelPositions() {
+        return null;
     }
 }
