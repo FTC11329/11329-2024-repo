@@ -110,8 +110,8 @@ public class Teleop extends OpMode {
 
         //SLIDES
         outtake.manualSlides(slidePower);
-        outtake.upSlide(Constants.Slides.upAmount, upBool);
-        outtake.upSlide(-Constants.Slides.upAmount, downBool);
+//        outtake.upSlide(Constants.Slides.upAmount, upBool);
+//        outtake.upSlide(-Constants.Slides.upAmount, downBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
