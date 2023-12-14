@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.roadrunner.drive.DriveUtilityMethods.rpmToVelocity;
-
 import com.acmerobotics.dashboard.config.Config;
 
 import org.opencv.core.Scalar;
@@ -31,6 +29,8 @@ public class Constants {
     public static class Intake {
         public static double intake = 0.7; //TODO: Set value
         public static double outake = -1;
+
+        public static double autoVomitSpeed = -0.25;
     }
 
     @Config
@@ -128,9 +128,9 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 30;
-        public static double MAX_ACCEL = 30;
-        public static double MAX_ANG_VEL = Math.toRadians(270);
-        public static double MAX_ANG_ACCEL = Math.toRadians(270);
+        public static double MAX_VEL = 10;
+        public static double MAX_ACCEL = 10;
+        public static double MAX_ANG_VEL = Math.toRadians(120);
+        public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }
 }

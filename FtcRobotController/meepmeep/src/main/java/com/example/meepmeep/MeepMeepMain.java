@@ -17,7 +17,7 @@ public class MeepMeepMain {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setDimensions(12, 16).setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11).followTrajectorySequence(MeepMeepMain::redRight);
+                .setDimensions(12.75, 15).setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 11).followTrajectorySequence(MeepMeepMain::redRight);
 
         myBot.setPose(startingPosition);
 
@@ -25,6 +25,7 @@ public class MeepMeepMain {
     }
 
     public static TrajectorySequence redRight(DriveShim drive) {
-        return drive.trajectorySequenceBuilder(startingPosition).build();
+        return drive.trajectorySequenceBuilder(startingPosition)
+                .build();
     }
 }
