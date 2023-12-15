@@ -36,7 +36,7 @@ public class Constants {
     @Config
     public static class Claw {
         public static double intake = 1;
-        public static double outake = -1;
+        public static double outake = -0.5;
     }
 
     @Config

@@ -20,9 +20,9 @@ public class BlueRight extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(56, 29);
     static Vector2d placePositionTwo = new Vector2d(56,27);
-    static Vector2d placePositionThree = new Vector2d(53,12);
+    static Vector2d placePositionThree = new Vector2d(53,14);
 
-    BarcodePosition barcodePosition = BarcodePosition.One;
+    BarcodePosition barcodePosition = BarcodePosition.Three;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,14 +39,14 @@ public class BlueRight extends LinearOpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
-                    .splineTo(new Vector2d(-30, 38), Math.toRadians(-46))
+                    .splineTo(new Vector2d(-30, 38), Math.toRadians(-45))
                     .addTemporalMarker(() -> {
                         intake.setIntakePower(Constants.Intake.autoVomitSpeed);
                     })
                     .addTemporalMarkerOffset(0.1, () -> {
                         intake.setIntakePower(0);
                     })
-                    .waitSeconds(1)
+                    .waitSeconds(0.5)
                     .back(15)
                     .setReversed(true)
                     .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
@@ -98,7 +98,7 @@ public class BlueRight extends LinearOpMode {
         drivetrain.followTrajectorySequence(drivetrain
                 .trajectorySequenceBuilder(placeSpikeMark.end())
                 .setReversed(true)
-                .splineTo(new Vector2d(-11,4), Math.toRadians(0))
+                .splineTo(new Vector2d(-11,9), Math.toRadians(0))
                 .splineTo(finalPlaceLocation.plus(new Vector2d(-10,0)), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
