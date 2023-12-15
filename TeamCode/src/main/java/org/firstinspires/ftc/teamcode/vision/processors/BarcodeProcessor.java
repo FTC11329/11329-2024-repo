@@ -37,6 +37,7 @@ public class BarcodeProcessor implements VisionProcessor {
     private Mat rightHalf = new Mat();
     private int xPadding;
     private int yPadding;
+    private double percentDiff;
     private Optional<BarcodePosition> lastKnownPosition = Optional.empty();
 
     @Override
@@ -85,8 +86,8 @@ public class BarcodeProcessor implements VisionProcessor {
         // Split the camera view into 2
         int columnSize = thresholded.cols() / 2;
         leftHalf = thresholded.colRange(0, columnSize);
-       // middleThird = thresholded.colRange(columnSize, 2 * columnSize);
-        rightHalf = thresholded.colRange( columnSize, thresholded.cols());
+        // middleThird = thresholded.colRange(columnSize, 2 * columnSize);
+        rightHalf = thresholded.colRange(columnSize, thresholded.cols());
 
         // Count every pixel that has target color
         leftNumber = Core.countNonZero(leftHalf);
@@ -100,16 +101,19 @@ public class BarcodeProcessor implements VisionProcessor {
             leftNumber = swapNumber;
         }
 
-        if (leftNumber<100 && rightNumber < Constants.Vision.breakpointNumber){
+        percentDiff = (leftNumber - rightNumber) / rightNumber;
+
+        if (percentDiff == Double.NaN) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
-        }
-        else if (leftNumber > rightNumber){
+        } else if (Math.abs(percentDiff) < Constants.Vision.percentThreshold) {
+            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
+        } else if (leftNumber > rightNumber) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);
-        }
-        else{
+        } else {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Three);
         }
-//        if (leftNumber > middleNumber && leftNumber > rightNumber)
+
+        //        if (leftNumber > middleNumber && leftNumber > rightNumber)
 //            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
 //        if (middleNumber > leftNumber && middleNumber > rightNumber)
 //            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);

@@ -22,7 +22,7 @@ public class Constants {
 
         public static Scalar redNegMin = new Scalar(170, 70, 100);
         public static Scalar redNegMax = new Scalar(180, 255, 255);
-        public static int breakpointNumber = 100;
+        public static double percentThreshold = 100;
     }
 
     @Config
