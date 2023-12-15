@@ -41,10 +41,10 @@ public class RedLeft extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .splineTo(new Vector2d(-31, -38), Math.toRadians(45))
                     .addTemporalMarker(() -> {
-                        intake.setIntakePower(Constants.Intake.autoVomitSpeed);
+                        intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
                     .addTemporalMarkerOffset(0.1, () -> {
-                        intake.setIntakePower(0);
+                        intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(0.5)
                     .back(15)
@@ -56,10 +56,10 @@ public class RedLeft extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .splineTo(new Vector2d(-41,-30), Math.toRadians(90))
                     .addTemporalMarker(() -> {
-                        intake.setIntakePower(Constants.Intake.autoVomitSpeed);
+                        intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
                     .addTemporalMarkerOffset(0.05, () -> {
-                        intake.setIntakePower(0);
+                        intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(0.5)
                     .lineTo(new Vector2d(-53,-35))
@@ -72,10 +72,10 @@ public class RedLeft extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .lineTo(new Vector2d(-50,-37))
                     .addTemporalMarker(() -> {
-                        intake.setIntakePower(Constants.Intake.autoVomitSpeed);
+                        intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
                     .addTemporalMarkerOffset(0.05, () -> {
-                        intake.setIntakePower(0);
+                        intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(0.5)
                     .lineToLinearHeading(new Pose2d(-54, -52, Math.toRadians(90)))

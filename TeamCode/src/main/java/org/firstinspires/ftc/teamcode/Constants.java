@@ -42,7 +42,7 @@ public class Constants {
     @Config
     public static class Plane {
         public static double hold = 0; //TODO: Set value
-        public static double release = 0.3; //TODO: Set value
+        public static double fire = 0.3; //TODO: Set value
     }
 
     @Config

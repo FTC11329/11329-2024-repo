@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Constants;
 
 
 public class Intake {
@@ -27,13 +28,15 @@ public class Intake {
         dropServo.setPosition(servoPos);
     }
 
-    public void setIntakePower(double intakePower) {
-        intakeMotor.setPower(intakePower);
+    public void setIntakePower(double intakePower, int slidePos) {
+        //if you can find a cleaner way to make sure the intake doesn't run with the slide up, please fix this.
+//        if (slidePos > Constants.Slides.slideMin) {
+            intakeMotor.setPower(intakePower);
+//        }
     }
 
     public void stopIntake() {
         intakeMotor.setPower(0);
         telemetry.addLine("stopped");
     }
-
 }

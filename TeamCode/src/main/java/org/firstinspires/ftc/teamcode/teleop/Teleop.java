@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.Plane;
+import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
 import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
@@ -18,17 +20,19 @@ import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
     Claw claw;
+//    Plane plane;
     Intake intake;
     Climber climber;
     Outtake outtake;
-    Drivetrain drivetrain;
     Cameras cameras;
+    Drivetrain drivetrain;
 
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
 
         claw = new Claw(hardwareMap);
+//        plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
@@ -38,6 +42,7 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
+        //INPUTS
         boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
@@ -48,12 +53,14 @@ public class Teleop extends OpMode {
         boolean intakeOuttakeBool = gamepad1.x;
 
         double slidePower = gamepad2.right_trigger - gamepad1.left_trigger;
-        boolean downBool = gamepad2.left_bumper;
-        boolean upBool = gamepad2.right_bumper;
+        boolean downSlidesBool = gamepad2.left_bumper;
+        boolean upSlidesBool = gamepad2.right_bumper;
 
         double armPower = gamepad2.left_stick_y;
 
         double climberPower = gamepad2.right_stick_y;
+
+        boolean planeFire = gamepad2.back;
 
         boolean highPresetBool = gamepad1.dpad_up;
         boolean medPresetBool = gamepad1.dpad_right;
@@ -98,20 +105,20 @@ public class Teleop extends OpMode {
         //INTAKE
         if (intakeBool) {
             claw.setPower(Constants.Claw.intake);
-            intake.setIntakePower(Constants.Intake.intake);
+            intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
         } else if (clawOuttakeBool) {
             claw.setPower(Constants.Claw.outake);
         } else if (intakeOuttakeBool) {
-            intake.setIntakePower(Constants.Intake.outake);
+            intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
         } else {
             claw.setPower(0);
-            intake.setIntakePower(0);
+            intake.setIntakePower(0, outtake.getSlideTargetPosition());
         }
 
         //SLIDES
         outtake.manualSlides(slidePower);
-//        outtake.upSlide(Constants.Slides.upAmount, upBool);
-//        outtake.upSlide(-Constants.Slides.upAmount, downBool);
+//        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
+//        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
@@ -122,23 +129,27 @@ public class Teleop extends OpMode {
         //CLIMBER
         climber.setPower(climberPower * Constants.Climber.climberPower);
 
+        //PLANE
+        if (planeFire) {
+//            plane.fire();
+        } else {
+//            plane.hold();
+        }
+
         //PRE-SETS
         if (highPresetBool) {
-            //high
             outtake.preset(Constants.Slides.high, Constants.Arm.weirdPlacePos);
         }
         if (medPresetBool) {
-            //med
             outtake.preset(Constants.Slides.med, Constants.Arm.placePos);
         }
         if (lowPresetBool) {
-            //low
             outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
         }
         if (intakePresetBool) {
-            //intake
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
         }
+
         outtake.periodic();
     }
 
