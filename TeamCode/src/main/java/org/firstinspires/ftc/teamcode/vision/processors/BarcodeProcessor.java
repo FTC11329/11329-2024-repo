@@ -29,11 +29,11 @@ public class BarcodeProcessor implements VisionProcessor {
     public RobotSide side;
     private Mat cropped = new Mat();
     private int leftNumber = 0;
-    private int middleNumber = 0;
+    private final int middleNumber = 0;
     private int rightNumber = 0;
     private int swapNumber = 0;
     private Mat leftHalf = new Mat();
-    private Mat middleThird = new Mat();
+    private final Mat middleThird = new Mat();
     private Mat rightHalf = new Mat();
     private int xPadding;
     private int yPadding;
@@ -101,11 +101,10 @@ public class BarcodeProcessor implements VisionProcessor {
             leftNumber = swapNumber;
         }
 
-        percentDiff = Math.abs(leftNumber - rightNumber) / rightNumber;
+        // Prevent divide by zero error
+        if (leftNumber == 0 || rightNumber == 0) return thresholded;
 
-        if (percentDiff == Double.NaN) {
-            return thresholded;
-        }
+        percentDiff = Math.abs(leftNumber - rightNumber) / rightNumber;
 
         if ((percentDiff) > Constants.Vision.percentThreshold) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
