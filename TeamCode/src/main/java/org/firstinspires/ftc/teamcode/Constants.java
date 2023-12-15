@@ -14,7 +14,6 @@ public class Constants {
     @Config
     public static class Vision {
         public static String frontWebcamName = "Webcam 1";
-
         public static Scalar blueMin = new Scalar(100, 150, 100);
         public static Scalar blueMax = new Scalar(120, 245, 255);
 
@@ -23,6 +22,7 @@ public class Constants {
 
         public static Scalar redNegMin = new Scalar(170, 70, 100);
         public static Scalar redNegMax = new Scalar(180, 255, 255);
+        public static int breakpointNumber = 100;
     }
 
     @Config

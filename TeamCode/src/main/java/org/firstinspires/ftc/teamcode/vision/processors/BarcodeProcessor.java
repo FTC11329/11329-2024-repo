@@ -32,9 +32,9 @@ public class BarcodeProcessor implements VisionProcessor {
     private int middleNumber = 0;
     private int rightNumber = 0;
     private int swapNumber = 0;
-    private Mat leftThird = new Mat();
+    private Mat leftHalf = new Mat();
     private Mat middleThird = new Mat();
-    private Mat rightThird = new Mat();
+    private Mat rightHalf = new Mat();
     private int xPadding;
     private int yPadding;
     private Optional<BarcodePosition> lastKnownPosition = Optional.empty();
@@ -82,16 +82,16 @@ public class BarcodeProcessor implements VisionProcessor {
             Core.inRange(cropped, Constants.Vision.blueMin, Constants.Vision.blueMax, thresholded);
         }
 
-        // Split the camera view into 3
-        int columnSize = thresholded.cols() / 3;
-        leftThird = thresholded.colRange(0, columnSize);
-        middleThird = thresholded.colRange(columnSize, 2 * columnSize);
-        rightThird = thresholded.colRange(2 * columnSize, thresholded.cols());
+        // Split the camera view into 2
+        int columnSize = thresholded.cols() / 2;
+        leftHalf = thresholded.colRange(0, columnSize);
+       // middleThird = thresholded.colRange(columnSize, 2 * columnSize);
+        rightHalf = thresholded.colRange( columnSize, thresholded.cols());
 
         // Count every pixel that has target color
-        leftNumber = Core.countNonZero(leftThird);
-        middleNumber = Core.countNonZero(middleThird);
-        rightNumber = Core.countNonZero(rightThird);
+        leftNumber = Core.countNonZero(leftHalf);
+        //middleNumber = Core.countNonZero(middleThird);
+        rightNumber = Core.countNonZero(rightHalf);
 
         // Reverse left and right if red or blue
         if (side == RobotSide.Red) {
@@ -100,14 +100,23 @@ public class BarcodeProcessor implements VisionProcessor {
             leftNumber = swapNumber;
         }
 
-        if (leftNumber > middleNumber && leftNumber > rightNumber)
+        if (leftNumber<100 && rightNumber < Constants.Vision.breakpointNumber){
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
-        if (middleNumber > leftNumber && middleNumber > rightNumber)
+        }
+        else if (leftNumber > rightNumber){
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);
-        if (rightNumber > leftNumber && rightNumber > middleNumber)
+        }
+        else{
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Three);
+        }
+//        if (leftNumber > middleNumber && leftNumber > rightNumber)
+//            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
+//        if (middleNumber > leftNumber && middleNumber > rightNumber)
+//            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);
+//        if (rightNumber > leftNumber && rightNumber > middleNumber)
+//            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Three);
 
-        Imgproc.putText(thresholded, String.format("Thirds: %d %d %d", leftNumber, middleNumber, rightNumber), new Point(0, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
+        Imgproc.putText(thresholded, String.format("Halfs: %d %d", leftNumber, rightNumber), new Point(0, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
         Imgproc.putText(thresholded, String.format("Determination: %s", getLastKnownPosition().toString()), new Point(0, 50), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
 
         return thresholded;
