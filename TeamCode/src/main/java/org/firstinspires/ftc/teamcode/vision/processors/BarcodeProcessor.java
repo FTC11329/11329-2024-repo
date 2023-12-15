@@ -101,11 +101,13 @@ public class BarcodeProcessor implements VisionProcessor {
             leftNumber = swapNumber;
         }
 
-        percentDiff = (leftNumber - rightNumber) / rightNumber;
+        percentDiff = Math.abs(leftNumber - rightNumber) / rightNumber;
 
         if (percentDiff == Double.NaN) {
-            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
-        } else if (Math.abs(percentDiff) < Constants.Vision.percentThreshold) {
+            return thresholded;
+        }
+
+        if ((percentDiff) > Constants.Vision.percentThreshold) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
         } else if (leftNumber > rightNumber) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);
