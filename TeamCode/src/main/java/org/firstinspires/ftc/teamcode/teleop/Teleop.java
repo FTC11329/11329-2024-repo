@@ -22,6 +22,7 @@ public class Teleop extends OpMode {
     Claw claw;
 //    Plane plane;
     Intake intake;
+    Slides slides; //temp
     Climber climber;
     Outtake outtake;
     Cameras cameras;
@@ -34,6 +35,7 @@ public class Teleop extends OpMode {
         claw = new Claw(hardwareMap);
 //        plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
+        slides = new Slides(hardwareMap);
         outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
         cameras = new Cameras(hardwareMap);
@@ -116,7 +118,8 @@ public class Teleop extends OpMode {
         }
 
         //SLIDES
-        outtake.manualSlides(slidePower);
+//        outtake.manualSlides(slidePower);
+        slides.manualPosition(0.5);
 //        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
 //        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
@@ -144,7 +147,9 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.med, Constants.Arm.placePos);
         }
         if (lowPresetBool) {
-            outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
+//            outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
+            outtake.presetSlides(Constants.Slides.low);
+            outtake.presetArm(Constants.Arm.placePos);
         }
         if (intakePresetBool) {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);

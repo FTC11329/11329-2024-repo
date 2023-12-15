@@ -35,7 +35,7 @@ public class Outtake {
     public void manualArm(double manualPower) {
         arm.manualPosition(manualPower);
     }
-    public void presetArm(int armPos) {
+    public void presetArm(double armPos) {
         arm.setPosition(armPos);
     }
 
