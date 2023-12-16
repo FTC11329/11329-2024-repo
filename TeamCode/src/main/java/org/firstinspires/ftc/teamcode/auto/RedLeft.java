@@ -24,7 +24,7 @@ public class RedLeft extends LinearOpMode {
     static Vector2d placePositionTwo = new Vector2d(53, -38);
     static Vector2d placePositionThree = new Vector2d(53, -38);
 
-    static double timeForPixelPlacement = 0.05;
+    static double timeForPixelPlacement = 0.02;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -39,6 +39,7 @@ public class RedLeft extends LinearOpMode {
         waitForStart();
 
         BarcodePosition barcodePosition = cameras.getBarcodePosition().orElse(BarcodePosition.One);
+//        BarcodePosition barcodePosition = BarcodePosition.One;
 
         drivetrain.setPoseEstimate(startingPose);
 
@@ -54,13 +55,14 @@ public class RedLeft extends LinearOpMode {
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
                     .back(15)
-                    .setReversed(true)
-                    .splineTo(new Vector2d(-34, -9), Math.toRadians(0))
+//                    .turn(30)
+//                    .forward(5)
+//                    .splineTo(new Vector2d(-34, -9), Math.toRadians(90))
                     .build();
 
         } else if (barcodePosition == BarcodePosition.Two) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
-                    .splineTo(new Vector2d(-41, -30), Math.toRadians(90))
+                    .splineTo(new Vector2d(-41, -31), Math.toRadians(90))
                     .addTemporalMarker(() -> {
                         intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
@@ -68,11 +70,11 @@ public class RedLeft extends LinearOpMode {
                         intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
-
-                    .lineTo(new Vector2d(-53, -35))
-                    .setReversed(true)
-                    .splineTo(new Vector2d(-59, -25), Math.toRadians(90))
-                    .splineTo(new Vector2d(-34, -9), Math.toRadians(0))
+                    .back(5)
+//                    .lineTo(new Vector2d(-53, -35))
+//                    .setReversed(true)
+//                    .splineTo(new Vector2d(-59, -25), Math.toRadians(90))
+//                    .splineTo(new Vector2d(-34, -9), Math.toRadians(0))
                     .build();
 
         } else if (barcodePosition == BarcodePosition.One) {
@@ -86,13 +88,9 @@ public class RedLeft extends LinearOpMode {
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
                     .back(10)
-                    .turn(Math.toRadians(40))
-                    .splineTo(new Vector2d(-50, -6), Math.toRadians(0))
-                    .setReversed(true)
-                    .splineTo(new Vector2d(-42, -12), Math.toRadians(90))
-                    .splineTo(new Vector2d(-34, -9), Math.toRadians(90))
                     .build();
         }
+
 
         drivetrain.followTrajectorySequence(placeSpikeMark);
 
@@ -104,25 +102,30 @@ public class RedLeft extends LinearOpMode {
             finalPlaceLocation = placePositionTwo;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
-        } else return;
+        } else {
+        }
 
-        drivetrain.followTrajectorySequence(drivetrain
-                .trajectorySequenceBuilder(placeSpikeMark.end())
-                .setReversed(true)
-                .splineTo(new Vector2d(-11, -9), Math.toRadians(0))
-                .splineTo(new Vector2d(25, -9), Math.toRadians(0))
 
-                .splineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
-                })
-                .waitSeconds(0.05)
-                .lineTo(finalPlaceLocation)
-                .addTemporalMarker(() -> {
-                    claw.setPower(Constants.Claw.outake);
-                })
-                .waitSeconds(1)
-                .forward(3)
-                .build());
+//        drivetrain.followTrajectorySequence(drivetrain
+//                .trajectorySequenceBuilder(placeSpikeMark.end())
+//                .setReversed(true)
+//                .splineTo(new Vector2d(-11, -9), Math.toRadians(0))
+//                .splineTo(new Vector2d(25, -9), Math.toRadians(0))
+//
+//                .splineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)), Math.toRadians(0))
+//                .addTemporalMarker(() -> {
+//                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
+//                })
+//                .waitSeconds(0.05)
+//                .lineTo(finalPlaceLocation)
+//                .addTemporalMarker(() -> {
+//                    claw.setPower(Constants.Claw.outake);
+//                })
+//                .waitSeconds(0.75)
+//                .lineTo(finalPlaceLocation.plus(new Vector2d(-20, 0)))
+//                .addTemporalMarker(() -> {
+//                    outtake.preset(Constants.Slides.intake, 0.1);
+//                })
+//                .build());
     }
 }

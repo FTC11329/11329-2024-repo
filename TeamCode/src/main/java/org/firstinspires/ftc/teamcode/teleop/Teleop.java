@@ -49,7 +49,7 @@ public class Teleop extends OpMode {
 
         boolean intakeBool = gamepad2.y;
         boolean clawOuttakeBool = gamepad2.b;
-        boolean intakeOuttakeBool = gamepad1.x;
+        boolean intakeOuttakeBool = gamepad2.x;
 
         double slidePower = gamepad2.right_trigger - gamepad1.left_trigger;
         boolean downSlidesBool = gamepad2.left_bumper;

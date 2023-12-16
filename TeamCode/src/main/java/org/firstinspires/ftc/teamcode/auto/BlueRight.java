@@ -116,7 +116,11 @@ public class BlueRight extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .waitSeconds(5)
+                .waitSeconds(0.75)
+                .lineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)))
+                .addTemporalMarker(() -> {
+                    outtake.preset(Constants.Slides.intake, 0.1);
+                })
                 .build());
     }
 }

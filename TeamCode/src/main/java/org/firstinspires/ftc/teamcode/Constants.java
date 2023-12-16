@@ -17,11 +17,11 @@ public class Constants {
         public static Scalar blueMin = new Scalar(100, 150, 100);
         public static Scalar blueMax = new Scalar(120, 245, 255);
 
-        public static Scalar redPosMin = new Scalar(0, 70, 100);
-        public static Scalar redPosMax = new Scalar(10, 255, 255);
+        public static Scalar redPosMin = new Scalar(5, 70, 100);
+        public static Scalar redPosMax = new Scalar(30, 255, 255);
 
-        public static Scalar redNegMin = new Scalar(170, 70, 100);
-        public static Scalar redNegMax = new Scalar(180, 255, 255);
+        public static Scalar redNegMin = new Scalar(0, 0, 0);
+        public static Scalar redNegMax = new Scalar(0, 0, 0);
         public static double percentThreshold = 5.0;
     }
 
