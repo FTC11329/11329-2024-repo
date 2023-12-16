@@ -109,7 +109,7 @@ public class RedLeft extends LinearOpMode {
             finalPlaceLocation = placePositionThree;
         } else return;
 
-        if (barcodePosition != BarcodePosition.Three) return;
+        if (barcodePosition != BarcodePosition.One) return;
 
         drivetrain.followTrajectorySequence(drivetrain
                 .trajectorySequenceBuilder(placeSpikeMark.end())
@@ -127,8 +127,7 @@ public class RedLeft extends LinearOpMode {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .waitSeconds(0.75)
-                .setReversed(false)
-                .forward(3)
+                .splineTo(finalPlaceLocation, Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     outtake.preset(Constants.Slides.intake, 0.1);
                 })
