@@ -20,11 +20,11 @@ import org.firstinspires.ftc.teamcode.utility.RobotSide;
 @Config
 public class BlueRight extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
-    static Vector2d placePositionOne = new Vector2d(56, 29);
-    static Vector2d placePositionTwo = new Vector2d(56, 29);
-    static Vector2d placePositionThree = new Vector2d(56, 29);
+    static Vector2d placePositionOne = new Vector2d(56, 26);
+    static Vector2d placePositionTwo = placePositionOne;
+    static Vector2d placePositionThree = placePositionOne;
 
-    static double timeForPixelPlacement = 0.05;
+    static double timeForPixelPlacement = 0.02;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -46,7 +46,7 @@ public class BlueRight extends LinearOpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
-                    .splineTo(new Vector2d(-30, 38), Math.toRadians(-45))
+                    .splineTo(new Vector2d(-29, 38), Math.toRadians(-45))
                     .addTemporalMarker(() -> {
                         intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
@@ -69,6 +69,7 @@ public class BlueRight extends LinearOpMode {
                         intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
+                    .back(5)
                     .setReversed(true)
                     .splineTo(new Vector2d(-50, 32), Math.toRadians(-90))
                     .splineTo(new Vector2d(-32, 9), Math.toRadians(0))
@@ -84,9 +85,10 @@ public class BlueRight extends LinearOpMode {
                         intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
-                    .lineToLinearHeading(new Pose2d(-60, 50, Math.toRadians(90)))
-                    .setReversed(true)
-                    .splineTo(new Vector2d(-32, 9), Math.toRadians(0))
+                    .back(13)
+                    .turn(Math.toRadians(-40))
+                    .splineTo(new Vector2d(-54, 5), Math.toRadians(-110))
+                    .turn(Math.toRadians(-50))
                     .build();
         }
 
@@ -121,6 +123,7 @@ public class BlueRight extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     outtake.preset(Constants.Slides.intake, 0.1);
                 })
+                .waitSeconds(2)
                 .build());
     }
 }

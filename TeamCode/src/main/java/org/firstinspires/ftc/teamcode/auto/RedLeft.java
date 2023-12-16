@@ -20,9 +20,9 @@ import org.firstinspires.ftc.teamcode.utility.RobotSide;
 @Config
 public class RedLeft extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(53, -38);
-    static Vector2d placePositionTwo = new Vector2d(53, -38);
-    static Vector2d placePositionThree = new Vector2d(53, -38);
+    static Vector2d placePositionOne = new Vector2d(51, -38);
+    static Vector2d placePositionTwo = placePositionOne;
+    static Vector2d placePositionThree = placePositionOne;
 
     static double timeForPixelPlacement = 0.02;
 
@@ -38,7 +38,7 @@ public class RedLeft extends LinearOpMode {
 
         waitForStart();
 
-        BarcodePosition barcodePosition = cameras.getBarcodePosition().orElse(BarcodePosition.One);
+        BarcodePosition barcodePosition = cameras.getBarcodePosition().orElse(BarcodePosition.Three);
 //        BarcodePosition barcodePosition = BarcodePosition.One;
 
         drivetrain.setPoseEstimate(startingPose);
@@ -70,7 +70,9 @@ public class RedLeft extends LinearOpMode {
                         intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
-                    .back(5)
+                    .back(10)
+                    .turn(Math.toRadians(40))
+                    .splineTo(new Vector2d(-57, -3), Math.toRadians(-100))
 //                    .lineTo(new Vector2d(-53, -35))
 //                    .setReversed(true)
 //                    .splineTo(new Vector2d(-59, -25), Math.toRadians(90))
@@ -88,9 +90,12 @@ public class RedLeft extends LinearOpMode {
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
                     .back(10)
+                    .strafeLeft(7)
+                    .forward(43)
+                    .turn(Math.toRadians(45))
+                    .waitSeconds(2.5)
                     .build();
         }
-
 
         drivetrain.followTrajectorySequence(placeSpikeMark);
 
@@ -102,30 +107,31 @@ public class RedLeft extends LinearOpMode {
             finalPlaceLocation = placePositionTwo;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
-        } else {
-        }
+        } else return;
 
+        if (barcodePosition != BarcodePosition.Three) return;
 
-//        drivetrain.followTrajectorySequence(drivetrain
-//                .trajectorySequenceBuilder(placeSpikeMark.end())
-//                .setReversed(true)
-//                .splineTo(new Vector2d(-11, -9), Math.toRadians(0))
-//                .splineTo(new Vector2d(25, -9), Math.toRadians(0))
-//
-//                .splineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)), Math.toRadians(0))
-//                .addTemporalMarker(() -> {
-//                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
-//                })
-//                .waitSeconds(0.05)
-//                .lineTo(finalPlaceLocation)
-//                .addTemporalMarker(() -> {
-//                    claw.setPower(Constants.Claw.outake);
-//                })
-//                .waitSeconds(0.75)
-//                .lineTo(finalPlaceLocation.plus(new Vector2d(-20, 0)))
-//                .addTemporalMarker(() -> {
-//                    outtake.preset(Constants.Slides.intake, 0.1);
-//                })
-//                .build());
+        drivetrain.followTrajectorySequence(drivetrain
+                .trajectorySequenceBuilder(placeSpikeMark.end())
+                .setReversed(true)
+                .splineTo(new Vector2d(-11, -9), Math.toRadians(0))
+                .splineTo(new Vector2d(25, -9), Math.toRadians(0))
+
+                .splineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
+                })
+                .waitSeconds(0.05)
+                .forward(10)
+                .addTemporalMarker(() -> {
+                    claw.setPower(Constants.Claw.outake);
+                })
+                .waitSeconds(0.75)
+                .setReversed(false)
+                .forward(3)
+                .addTemporalMarker(() -> {
+                    outtake.preset(Constants.Slides.intake, 0.1);
+                })
+                .build());
     }
 }

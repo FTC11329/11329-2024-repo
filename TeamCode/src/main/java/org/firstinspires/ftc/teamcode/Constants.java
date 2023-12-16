@@ -30,7 +30,7 @@ public class Constants {
         public static double intake = 0.7; //TODO: Set value
         public static double outake = -1;
 
-        public static double autoVomitSpeed = -0.25;
+        public static double autoVomitSpeed = -0.2;
     }
 
     @Config
