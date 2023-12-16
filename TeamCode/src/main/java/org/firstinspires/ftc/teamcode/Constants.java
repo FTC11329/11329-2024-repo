@@ -78,7 +78,7 @@ public class Constants {
 
     @Config
     public static class Climber {
-        public static double climberPower = 0.5;
+        public static double climberPower = 0.75;
     }
 
     @Config

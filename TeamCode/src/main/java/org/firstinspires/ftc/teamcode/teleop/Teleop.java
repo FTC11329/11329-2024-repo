@@ -35,8 +35,8 @@ public class Teleop extends OpMode {
         claw = new Claw(hardwareMap);
 //        plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
-        slides = new Slides(hardwareMap);
         outtake = new Outtake(hardwareMap);
+        slides = outtake.slides;
         climber = new Climber(hardwareMap);
         cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
@@ -64,10 +64,10 @@ public class Teleop extends OpMode {
 
         boolean planeFire = gamepad2.back;
 
-        boolean highPresetBool = gamepad1.dpad_up;
-        boolean medPresetBool = gamepad1.dpad_right;
-        boolean lowPresetBool = gamepad1.dpad_down;
-        boolean intakePresetBool = gamepad1.dpad_left;
+        boolean highPresetBool = gamepad2.dpad_up;
+        boolean medPresetBool = gamepad2.dpad_right;
+        boolean lowPresetBool = gamepad2.dpad_down;
+        boolean intakePresetBool = gamepad2.dpad_left;
 
         //DRIVETRAIN
         //Testing wheels
@@ -119,7 +119,9 @@ public class Teleop extends OpMode {
 
         //SLIDES
 //        outtake.manualSlides(slidePower);
-        slides.manualPosition(0.5);
+        if(downSlidesBool || upSlidesBool) {
+            outtake.slides.manualPosition(slidePower);
+        }
 //        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
 //        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
