@@ -56,7 +56,7 @@ public class BlueRight extends LinearOpMode {
                     .waitSeconds(3 * timeForPixelPlacement)
                     .back(15)
                     .setReversed(true)
-                    .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
+                    .splineTo(new Vector2d(-32, 9), Math.toRadians(0))
                     .build();
 
         } else if (barcodePosition == BarcodePosition.Two) {
@@ -71,7 +71,7 @@ public class BlueRight extends LinearOpMode {
                     .waitSeconds(3 * timeForPixelPlacement)
                     .setReversed(true)
                     .splineTo(new Vector2d(-50, 32), Math.toRadians(-90))
-                    .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
+                    .splineTo(new Vector2d(-32, 9), Math.toRadians(0))
                     .build();
 
         } else if (barcodePosition == BarcodePosition.Three) {
@@ -86,7 +86,7 @@ public class BlueRight extends LinearOpMode {
                     .waitSeconds(3 * timeForPixelPlacement)
                     .lineToLinearHeading(new Pose2d(-60, 50, Math.toRadians(90)))
                     .setReversed(true)
-                    .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
+                    .splineTo(new Vector2d(-32, 9), Math.toRadians(0))
                     .build();
         }
 

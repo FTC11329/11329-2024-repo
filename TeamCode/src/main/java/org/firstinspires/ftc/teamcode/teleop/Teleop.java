@@ -13,14 +13,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
-import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
-import org.firstinspires.ftc.teamcode.vision.AprilTagDetector;
-import org.firstinspires.ftc.teamcode.vision.AprilTagIntoPower;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
     Claw claw;
-//    Plane plane;
+    Plane plane;
     Intake intake;
     Slides slides; //temp
     Climber climber;
@@ -33,7 +30,7 @@ public class Teleop extends OpMode {
         telemetry.addData("Status", "Initialized");
 
         claw = new Claw(hardwareMap);
-//        plane = new Plane(hardwareMap);
+        plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         slides = outtake.slides;
@@ -60,7 +57,7 @@ public class Teleop extends OpMode {
 
         double armPower = gamepad2.left_stick_y;
 
-        double climberPower = gamepad2.right_stick_y;
+        int climberPower = (int) (gamepad2.right_stick_y * Constants.Climber.manualClimberPower);
 
         boolean planeFire = gamepad2.back;
 
@@ -119,7 +116,7 @@ public class Teleop extends OpMode {
 
         //SLIDES
 //        outtake.manualSlides(slidePower);
-        if(downSlidesBool || upSlidesBool) {
+        if (downSlidesBool || upSlidesBool) {
             outtake.slides.manualPosition(slidePower);
         }
 //        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
@@ -132,13 +129,18 @@ public class Teleop extends OpMode {
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLIMBER
-        climber.setPower(climberPower * Constants.Climber.climberPower);
+
+        int climberPos =  climberPower + climber.getPosition();
+        telemetry.addData("climber power ", climberPower);
+        telemetry.addData("climber target pos ", climberPos);
+        telemetry.addData("climver pos", climber.getPosition());
+        climber.setPos(climberPos);
 
         //PLANE
         if (planeFire) {
-//            plane.fire();
+            plane.fire();
         } else {
-//            plane.hold();
+            plane.hold();
         }
 
         //PRE-SETS

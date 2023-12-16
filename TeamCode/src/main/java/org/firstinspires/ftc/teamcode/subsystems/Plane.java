@@ -9,8 +9,9 @@ public class Plane {
     public Servo planeServo;
 
     public Plane(HardwareMap hardwareMap) {
-        planeServo = hardwareMap.get(Servo.class, "planeServo");
-        planeServo.setPosition(0);
+        planeServo = hardwareMap.get(Servo.class, Constants.Plane.servoName);
+        planeServo.setDirection(Servo.Direction.REVERSE);
+        planeServo.setPosition(0.1);
     }
 
     public void setPos(double planePos) {

@@ -14,10 +14,17 @@ public class VisionTest extends OpMode {
         cameras = new Cameras(hardwareMap);
     }
 
+
+    @Override
+    public void init_loop() {
+        loop();
+    }
+
     @Override
     public void loop() {
         telemetry.addData("Barcode Position", cameras.getBarcodePosition());
         // Pose2d finalUpdatePose = new Pose2d(0, 0, 0);
         // drivetrain.setPoseEstimate(finalUpdatePose)
+        telemetry.update();
     }
 }

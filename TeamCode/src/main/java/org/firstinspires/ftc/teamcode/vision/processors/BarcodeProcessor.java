@@ -6,8 +6,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import com.qualcomm.robotcore.robot.Robot;
-
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
@@ -31,21 +29,22 @@ public class BarcodeProcessor implements VisionProcessor {
     private final Mat redtmp2 = new Mat();
     private final Mat hsv = new Mat();
     private final Mat thresholded = new Mat();
+    private final int middleNumber = 0;
+    private final Mat middleThird = new Mat();
+    private final int swapNumber = 0;
     public RobotSide side = RobotSide.Red;
     private Mat cropped = new Mat();
     private int leftNumber = 0;
-    private final int middleNumber = 0;
     private int rightNumber = 0;
-    private int swapNumber = 0;
     private Mat leftHalf = new Mat();
-    private final Mat middleThird = new Mat();
     private Mat rightHalf = new Mat();
     private int xPadding;
     private int yPadding;
     private double percentDiff;
     private double percentDiff3;
     private Optional<BarcodePosition> lastKnownPosition = Optional.empty();
-    public void setSide(RobotSide side){
+
+    public void setSide(RobotSide side) {
         this.side = side;
     }
 
@@ -68,11 +67,12 @@ public class BarcodeProcessor implements VisionProcessor {
 
         // Crop the padding around the actual barcodes
         xPadding = input.cols() / 4;
-        yPadding = 24;
+        yPadding = 0;
 
-        cropped = hsv.submat(
-                xPadding,
-                input.rows() - xPadding, yPadding, input.cols() - yPadding);
+        cropped = hsv;
+//                hsv.submat(
+//                xPadding,
+//                input.rows() - xPadding, yPadding, input.cols() - yPadding);
 
         //
         Core.split(cropped, channels);
@@ -103,25 +103,29 @@ public class BarcodeProcessor implements VisionProcessor {
         //middleNumber = Core.countNonZero(middleThird);
         rightNumber = Core.countNonZero(rightHalf);
 
-        // Reverse left and right if red or blue
-        if (side == RobotSide.Red) {
-            swapNumber = rightNumber;
-            rightNumber = leftNumber;
-            leftNumber = swapNumber;
-        }
-
         // Prevent divide by zero error
-       // if (leftNumber == 0 || rightNumber == 0) return thresholded;
+        // if (leftNumber == 0 || rightNumber == 0) return thresholded;
         leftNumber += 1;
         rightNumber += 1;
         percentDiff = (leftNumber - rightNumber) / rightNumber;
-        percentDiff3 = (rightNumber - leftNumber)/leftNumber;
-        if ((Math.abs(percentDiff) < Constants.Vision.percentThreshold )&&(Math.abs(percentDiff3) < Constants.Vision.percentThreshold )) {
-            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
+        percentDiff3 = (rightNumber - leftNumber) / leftNumber;
+        if ((Math.abs(percentDiff) < Constants.Vision.percentThreshold) && (Math.abs(percentDiff3) < Constants.Vision.percentThreshold)) {
+            lastKnownPosition = Optional.of(
+                    side == RobotSide.Blue ?
+                            BarcodePosition.One
+                            : BarcodePosition.Three);
         } else if (leftNumber > rightNumber) {
-            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);
+            lastKnownPosition = Optional.of(
+                    side == RobotSide.Blue ?
+                            BarcodePosition.Two
+                            : BarcodePosition.One
+            );
         } else {
-            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Three);
+            lastKnownPosition = Optional.of(
+                    side == RobotSide.Blue ?
+                            BarcodePosition.Three
+                            : BarcodePosition.Two
+            );
         }
 
         //        if (leftNumber > middleNumber && leftNumber > rightNumber)
