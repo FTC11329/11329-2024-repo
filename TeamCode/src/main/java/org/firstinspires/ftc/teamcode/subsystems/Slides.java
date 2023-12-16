@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Constants;
 
@@ -34,21 +35,19 @@ public class Slides {
     public int getPosition() {
         return slideMotor.getCurrentPosition();
     }
+
     public int getTargetPosition() {
         return slideMotor.getTargetPosition();
     }
 
     //set manual movement
     public void manualPosition(double manualPower) {
-        int manualChange = (int) (manualPower * Constants.Slides.manualSlidePower);
+        int manualChange = (int) Math.round(manualPower * Constants.Slides.manualSlidePower);
 
         int newPos = getTargetPosition() + manualChange;
-        if (newPos > Constants.Slides.slideMax) {
-            newPos = 1950;
-        }
-        if (newPos < Constants.Slides.slideMin) {
-            newPos = 0;
-        }
+
+        newPos = Range.clip(newPos, Constants.Slides.slideMin, Constants.Slides.slideMax);
+
         slideMotor.setTargetPosition(newPos);
     }
 

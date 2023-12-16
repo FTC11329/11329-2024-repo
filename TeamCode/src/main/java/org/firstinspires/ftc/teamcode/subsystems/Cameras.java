@@ -24,7 +24,7 @@ public class Cameras {
     public VisionPortal frontCamera;
 
     AprilTagProcessor aprilTag;
-    BarcodeProcessor barcodeProcessor = new BarcodeProcessor();
+    public BarcodeProcessor barcodeProcessor = new BarcodeProcessor();
     DashboardCameraStreamProcessor dashboardCameraStreamProcessor = new DashboardCameraStreamProcessor();
 
     public Cameras(HardwareMap hardwareMap) {
@@ -35,7 +35,7 @@ public class Cameras {
                 .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
                 .setCameraResolution(new Size(1280, 720))
                 .addProcessor(barcodeProcessor)
-                .addProcessor(aprilTag)
+//                .addProcessor(aprilTag)
                 .addProcessor(dashboardCameraStreamProcessor)
                 .enableLiveView(true)
                 .build();

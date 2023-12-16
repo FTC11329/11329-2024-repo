@@ -1,23 +1,28 @@
 package org.firstinspires.ftc.teamcode.vision.processors;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
+
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 import org.firstinspires.ftc.teamcode.utility.RobotSide;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 import java.util.Optional;
 
 public class BarcodeProcessor implements VisionProcessor {
+
     private final Mat hue = new Mat();
     private final Mat saturation = new Mat();
     private final Mat value = new Mat();
@@ -26,7 +31,7 @@ public class BarcodeProcessor implements VisionProcessor {
     private final Mat redtmp2 = new Mat();
     private final Mat hsv = new Mat();
     private final Mat thresholded = new Mat();
-    public RobotSide side;
+    public RobotSide side = RobotSide.Red;
     private Mat cropped = new Mat();
     private int leftNumber = 0;
     private final int middleNumber = 0;
@@ -38,7 +43,11 @@ public class BarcodeProcessor implements VisionProcessor {
     private int xPadding;
     private int yPadding;
     private double percentDiff;
+    private double percentDiff3;
     private Optional<BarcodePosition> lastKnownPosition = Optional.empty();
+    public void setSide(RobotSide side){
+        this.side = side;
+    }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
@@ -102,11 +111,12 @@ public class BarcodeProcessor implements VisionProcessor {
         }
 
         // Prevent divide by zero error
-        if (leftNumber == 0 || rightNumber == 0) return thresholded;
-
-        percentDiff = Math.abs(leftNumber - rightNumber) / rightNumber;
-
-        if ((percentDiff) > Constants.Vision.percentThreshold) {
+       // if (leftNumber == 0 || rightNumber == 0) return thresholded;
+        leftNumber += 1;
+        rightNumber += 1;
+        percentDiff = (leftNumber - rightNumber) / rightNumber;
+        percentDiff3 = (rightNumber - leftNumber)/leftNumber;
+        if ((Math.abs(percentDiff) < Constants.Vision.percentThreshold )&&(Math.abs(percentDiff3) < Constants.Vision.percentThreshold )) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.One);
         } else if (leftNumber > rightNumber) {
             lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Two);
@@ -121,14 +131,20 @@ public class BarcodeProcessor implements VisionProcessor {
 //        if (rightNumber > leftNumber && rightNumber > middleNumber)
 //            lastKnownPosition = Optional.of(org.firstinspires.ftc.teamcode.utility.BarcodePosition.Three);
 
-        Imgproc.putText(thresholded, String.format("Halfs: %d %d", leftNumber, rightNumber), new Point(0, 20), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
-        Imgproc.putText(thresholded, String.format("Determination: %s", getLastKnownPosition().toString()), new Point(0, 50), Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, new Scalar(255, 255, 255));
-
         return thresholded;
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-        // TODO: Convert old openCV drawing commands to canvas methods
+        Paint whiteTextPaint = new Paint();
+        whiteTextPaint.setTextSize(50);
+        whiteTextPaint.setARGB(255, 255, 255, 255);
+        Bitmap b = Bitmap.createBitmap(thresholded.width(), thresholded.height(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(thresholded, b);
+        canvas.drawBitmap(b, null, new Rect(0, 0, thresholded.width(), thresholded.height()), null);
+//        canvas.drawText(String.format("Halves: %d %d", leftNumber, rightNumber), 10, 50, whiteTextPaint);
+        canvas.drawText(String.format("Percent Diff: %f", percentDiff3), 20, 50, whiteTextPaint);
     }
 }
+

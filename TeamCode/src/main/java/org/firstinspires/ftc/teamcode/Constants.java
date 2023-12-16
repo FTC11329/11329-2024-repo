@@ -22,7 +22,7 @@ public class Constants {
 
         public static Scalar redNegMin = new Scalar(170, 70, 100);
         public static Scalar redNegMax = new Scalar(180, 255, 255);
-        public static double percentThreshold = 100;
+        public static double percentThreshold = 5.0;
     }
 
     @Config
@@ -36,7 +36,7 @@ public class Constants {
     @Config
     public static class Claw {
         public static double intake = 1;
-        public static double outake = -0.5;
+        public static double outake = -0.7;
     }
 
     @Config
@@ -52,6 +52,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
+        public static int superLow = 600;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1900;
@@ -96,7 +97,7 @@ public class Constants {
     @Config
     public static class Roadrunner {
         public static final double PARALLEL_ENCODER_TICKS = 8192;
-        public static final double LATERAL_ENCODER_TICKS = 4096;
+        public static final double LATERAL_ENCODER_TICKS = 8192;
         public static final double MAX_RPM = 312;
 
         /*
@@ -110,7 +111,7 @@ public class Constants {
 //         TODO: Rework these values for Avalanche
         public static double WHEEL_RADIUS = 1.8898; // in
         public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-        public static double TRACK_WIDTH = 9.65; // in
+        public static double TRACK_WIDTH = 10.5; // in
         /*
          * These are the feedforward parameters used to model the drive motor behavior. If you are using
          * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive
@@ -128,8 +129,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 15;
-        public static double MAX_ACCEL = 12;
+        public static double MAX_VEL = 25;
+        public static double MAX_ACCEL = 18;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }
