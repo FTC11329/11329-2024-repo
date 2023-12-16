@@ -21,8 +21,10 @@ import org.firstinspires.ftc.teamcode.utility.RobotSide;
 public class BlueRight extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(56, 29);
-    static Vector2d placePositionTwo = new Vector2d(56, 27);
-    static Vector2d placePositionThree = new Vector2d(53, 14);
+    static Vector2d placePositionTwo = new Vector2d(56, 29);
+    static Vector2d placePositionThree = new Vector2d(56, 29);
+
+    static double timeForPixelPlacement = 0.05;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -48,10 +50,10 @@ public class BlueRight extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
-                    .addTemporalMarkerOffset(0.1, () -> {
+                    .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                         intake.setIntakePower(0, 10);
                     })
-                    .waitSeconds(0.5)
+                    .waitSeconds(3 * timeForPixelPlacement)
                     .back(15)
                     .setReversed(true)
                     .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
@@ -63,10 +65,10 @@ public class BlueRight extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
-                    .addTemporalMarkerOffset(0.05, () -> {
+                    .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                         intake.setIntakePower(0, 10);
                     })
-                    .waitSeconds(0.5)
+                    .waitSeconds(3 * timeForPixelPlacement)
                     .setReversed(true)
                     .splineTo(new Vector2d(-50, 32), Math.toRadians(-90))
                     .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
@@ -78,10 +80,10 @@ public class BlueRight extends LinearOpMode {
                     .addTemporalMarker(() -> {
                         intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
-                    .addTemporalMarkerOffset(0.05, () -> {
+                    .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                         intake.setIntakePower(0, 10);
                     })
-                    .waitSeconds(0.5)
+                    .waitSeconds(3 * timeForPixelPlacement)
                     .lineToLinearHeading(new Pose2d(-60, 50, Math.toRadians(90)))
                     .setReversed(true)
                     .splineTo(new Vector2d(-34, 9), Math.toRadians(0))
@@ -104,14 +106,17 @@ public class BlueRight extends LinearOpMode {
                 .trajectorySequenceBuilder(placeSpikeMark.end())
                 .setReversed(true)
                 .splineTo(new Vector2d(-11, 9), Math.toRadians(0))
+                .splineTo(new Vector2d(25, 9), Math.toRadians(0))
                 .splineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
-                }).waitSeconds(1)
+                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
+                })
+                .waitSeconds(0.05)
                 .lineTo(finalPlaceLocation)
                 .addTemporalMarker(() -> {
                     claw.setPower(Constants.Claw.outake);
                 })
+                .waitSeconds(5)
                 .build());
     }
 }
