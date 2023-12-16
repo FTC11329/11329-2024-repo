@@ -96,7 +96,7 @@ public class Constants {
     @Config
     public static class Roadrunner {
         public static final double PARALLEL_ENCODER_TICKS = 8192;
-        public static final double LATERAL_ENCODER_TICKS = 4096;
+        public static final double LATERAL_ENCODER_TICKS = 8192;
         public static final double MAX_RPM = 312;
 
         /*
