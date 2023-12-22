@@ -114,7 +114,7 @@ public class Constants {
 //         TODO: Rework these values for Avalanche
         public static double WHEEL_RADIUS = 1.8898; // in
         public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
-        public static double TRACK_WIDTH = 10.5; // in
+        public static double TRACK_WIDTH = 9.8; // in
         /*
          * These are the feedforward parameters used to model the drive motor behavior. If you are using
          * the built-in velocity PID, *these values are fine as is*. However, if you do not have drive

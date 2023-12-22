@@ -25,7 +25,7 @@ public class LocalizationWithAprilTags extends OpMode {
     public void loop() {
         drivetrain.drive(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, DriveSpeedEnum.Fast);
 
-        Optional<Pose2d> poseOptional = cameras.getPoseEstimate();
+        Optional<Pose2d> poseOptional = cameras.getRunnerPoseEstimate(10);
 
         poseOptional.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
 

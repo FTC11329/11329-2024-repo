@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 
 import java.util.Optional;
 
@@ -20,6 +21,8 @@ import java.util.Optional;
 @TeleOp(name = "My Localization Test", group = "Allen op mode")
 public class MyLocalizationTest extends LinearOpMode {
     Drivetrain drive;
+    AprilTagToRoadRunner aprilTagToRoadRunner;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     Cameras cameras;
 
@@ -35,10 +38,8 @@ public class MyLocalizationTest extends LinearOpMode {
             drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * 0.7, gamepad1.left_stick_x * 0.7, gamepad1.right_stick_x * 0.7));
 
             drive.update();
-
-            Optional<Pose2d> pose = cameras.getPoseEstimate();
-
-            pose.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
+            Optional<Pose2d> optionalDetection = cameras.getRunnerPoseEstimate(10);
+            optionalDetection.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
 
             Pose2d poseEstimate = drive.getPoseEstimate();
 
