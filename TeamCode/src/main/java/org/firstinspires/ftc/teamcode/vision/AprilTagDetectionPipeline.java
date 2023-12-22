@@ -26,17 +26,7 @@ public class AprilTagDetectionPipeline {
      */
     public static AprilTagProcessor createAprilTagProcessor() {
         // Create the AprilTag processor.
-        //5 is 7.5
-        //10 is 16
-        //15 is 24
-
-        //0.666
-        //0.625
-        //0.625
-
-        //1.6 is the scale value i think
         return new AprilTagProcessor.Builder()
-
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
@@ -46,17 +36,13 @@ public class AprilTagDetectionPipeline {
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
-//                .setLensIntrinsics(578.272, 578.272, 402.145, 221.506) previous values (glacier)
                 .setLensIntrinsics(934.078, 934.078, 332.145, 257.176)
-
-
                 // ... these parameters are fx, fy, cx, cy.
 
                 .build();
 
         // Disable or re-enable the aprilTag processor at any time.
         //visionPortal.setProcessorEnabled(aprilTag, true);
-
     }
 
     //Idk what this function actually does but it makes the robot run smooth so ya it stays.
@@ -72,6 +58,7 @@ public class AprilTagDetectionPipeline {
             RunAfterTime.runAfterTime(10, () -> {
             });
         }
+
         // Set camera controls
         ExposureControl exposureControl = visionPortal.getCameraControl(ExposureControl.class);
         if (exposureControl.getMode() != ExposureControl.Mode.Manual) {
@@ -79,9 +66,11 @@ public class AprilTagDetectionPipeline {
             RunAfterTime.runAfterTime(50, () -> {
             });
         }
+
         exposureControl.setExposure(exposureMS, TimeUnit.MILLISECONDS);
         RunAfterTime.runAfterTime(20, () -> {
         });
+
         GainControl gainControl = visionPortal.getCameraControl(GainControl.class);
         gainControl.setGain(gain);
         RunAfterTime.runAfterTime(20, () -> {

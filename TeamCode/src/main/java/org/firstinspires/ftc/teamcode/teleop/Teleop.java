@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
@@ -24,6 +26,7 @@ public class Teleop extends OpMode {
     Outtake outtake;
     Cameras cameras;
     Drivetrain drivetrain;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     @Override
     public void init() {
@@ -33,10 +36,11 @@ public class Teleop extends OpMode {
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
-        slides = outtake.slides;
+        slides = outtake.slides; //temp
         climber = new Climber(hardwareMap);
         cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
     }
 
     @Override
@@ -57,7 +61,9 @@ public class Teleop extends OpMode {
 
         double armPower = gamepad2.left_stick_y;
 
-        int climberPower = (int) (gamepad2.right_stick_y * Constants.Climber.manualClimberPower);
+        int climberPos = 0;
+        boolean climberUpBool = gamepad1.y;
+        boolean climberFireBool = gamepad1.b;
 
         boolean planeFire = gamepad2.back;
 
@@ -129,11 +135,13 @@ public class Teleop extends OpMode {
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLIMBER
-
-        int climberPos =  climberPower + climber.getPosition();
-        telemetry.addData("climber power ", climberPower);
-        telemetry.addData("climber target pos ", climberPos);
-        telemetry.addData("climver pos", climber.getPosition());
+        if (climberUpBool) {
+            climberPos = Constants.Climber.climb;
+        } else if (climberFireBool) {
+            climberPos = Constants.Climber.climberFire;
+        } else {
+            climberPos = Constants.Climber.down;
+        }
         climber.setPos(climberPos);
 
         //PLANE
@@ -159,6 +167,9 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
         }
 
+        aprilTagDetectionPipeline.telemetryAprilTag(telemetry, cameras.getAprilTagRecognitions());
+
+        //Finale
         outtake.periodic();
     }
 

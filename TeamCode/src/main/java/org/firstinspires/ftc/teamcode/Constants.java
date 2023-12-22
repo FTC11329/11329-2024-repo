@@ -82,6 +82,8 @@ public class Constants {
     public static class Climber {
         public static double manualClimberPower = 60;
 
+        public static int down = 0;
+        public static int climberFire = -1025;
         public static int climb = -1400;
     }
 

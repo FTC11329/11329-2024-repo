@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utility;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,7 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.utility.AprilTagToRoadRunner;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.Optional;
 
@@ -21,27 +23,35 @@ import java.util.Optional;
 @TeleOp(name = "My Localization Test", group = "Allen op mode")
 public class MyLocalizationTest extends LinearOpMode {
     Drivetrain drive;
-    AprilTagToRoadRunner aprilTagToRoadRunner;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
-
     Cameras cameras;
 
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new Drivetrain(hardwareMap, telemetry);
+        cameras = new Cameras(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
 
         waitForStart();
 
         while (!isStopRequested()) {
-            drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * 0.7, gamepad1.left_stick_x * 0.7, gamepad1.right_stick_x * 0.7));
+            drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * -0.7, gamepad1.left_stick_x * -0.7, gamepad1.right_stick_x * -0.7));
 
             drive.update();
+
             Optional<Pose2d> optionalDetection = cameras.getRunnerPoseEstimate(10);
             optionalDetection.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
+            telemetry.addData("seas tag", optionalDetection.isPresent());
 
             Pose2d poseEstimate = drive.getPoseEstimate();
+            if (AprilTagDetectionPipeline.getDesiredTag(cameras.getAprilTagRecognitions(),10).isPresent()) {
+                AprilTagDetection detection = AprilTagDetectionPipeline.getDesiredTag(cameras.getAprilTagRecognitions(), 10).get();
+                telemetry.addData("cam x", detection.ftcPose.x);
+                telemetry.addData("cam y", detection.ftcPose.y);
+                telemetry.addData("cam yaw", detection.ftcPose.yaw);
+            }
 
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
