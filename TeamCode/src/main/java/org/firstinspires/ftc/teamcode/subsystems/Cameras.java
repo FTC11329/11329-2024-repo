@@ -35,8 +35,8 @@ public class Cameras {
                 .Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
                 .setCameraResolution(new Size(1280, 720))
-                .addProcessor(barcodeProcessor)
-//                .addProcessor(aprilTag)
+//                .addProcessor(barcodeProcessor)
+                .addProcessor(aprilTag)
                 .addProcessor(dashboardCameraStreamProcessor)
                 .enableLiveView(true)
                 .build();
