@@ -69,13 +69,24 @@ public class Cameras {
     }
 
     public Optional<Pose2d> getRunnerPoseEstimate(int id) {
-        Optional<AprilTagDetection> desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTag.getDetections(), id);
-
+        Optional<AprilTagDetection> desiredTag = Optional.empty();
+        if (id == 0) {
+            //for cycling through all of them
+            for (int i = 1; i < 10; i++) {
+                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTag.getDetections(), i);
+                if (desiredTag.isPresent()) {
+                    break;
+                }
+            }
+        } else {
+            desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTag.getDetections(), id);
+        }
         if (!desiredTag.isPresent()) return Optional.empty();
 
         Pose2d pose = AprilTagToRoadRunner.tagToRunner(desiredTag.get());
 
         return Optional.of(pose);
+
     }
 
     public Optional<BarcodePosition> getBarcodePosition() {

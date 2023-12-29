@@ -41,18 +41,11 @@ public class MyLocalizationTest extends LinearOpMode {
 
             drive.update();
 
-            Optional<Pose2d> optionalDetection = cameras.getRunnerPoseEstimate(10);
+            Optional<Pose2d> optionalDetection = cameras.getRunnerPoseEstimate(0);
             optionalDetection.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
             telemetry.addData("seas tag", optionalDetection.isPresent());
 
             Pose2d poseEstimate = drive.getPoseEstimate();
-            if (AprilTagDetectionPipeline.getDesiredTag(cameras.getAprilTagRecognitions(),10).isPresent()) {
-                AprilTagDetection detection = AprilTagDetectionPipeline.getDesiredTag(cameras.getAprilTagRecognitions(), 10).get();
-                telemetry.addData("cam x", detection.ftcPose.x);
-                telemetry.addData("cam y", detection.ftcPose.y);
-                telemetry.addData("cam yaw", detection.ftcPose.yaw);
-            }
-
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", poseEstimate.getHeading());
