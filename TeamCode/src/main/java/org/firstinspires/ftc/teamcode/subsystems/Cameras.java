@@ -23,6 +23,7 @@ import java.util.Optional;
 
 public class Cameras {
     public VisionPortal frontCamera;
+    public VisionPortal backCamera;
 
     AprilTagProcessor aprilTag;
     public BarcodeProcessor barcodeProcessor = new BarcodeProcessor();
@@ -31,13 +32,22 @@ public class Cameras {
     public Cameras(HardwareMap hardwareMap) {
         aprilTag = AprilTagDetectionPipeline.createAprilTagProcessor();
 
-        frontCamera = new VisionPortal
+//        frontCamera = new VisionPortal
+//                .Builder()
+//                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
+//                .setCameraResolution(new Size(1280, 720))
+//                .addProcessor(barcodeProcessor)
+////                .addProcessor(aprilTag)
+//                .addProcessor(dashboardCameraStreamProcessor)
+//                .enableLiveView(true)
+//                .build();
+
+        backCamera = new VisionPortal
                 .Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
+                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.backWebcamName))
                 .setCameraResolution(new Size(1280, 720))
 //                .addProcessor(barcodeProcessor)
                 .addProcessor(aprilTag)
-                .addProcessor(dashboardCameraStreamProcessor)
                 .enableLiveView(true)
                 .build();
 

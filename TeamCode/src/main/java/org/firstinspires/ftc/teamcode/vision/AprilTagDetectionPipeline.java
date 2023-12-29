@@ -36,7 +36,10 @@ public class AprilTagDetectionPipeline {
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
-                .setLensIntrinsics(934.078, 934.078, 332.145, 257.176)
+                //for Webcam
+//                .setLensIntrinsics(934.078, 934.078, 332.145, 257.176)
+                //for global shudder
+                .setLensIntrinsics(903.79, 903.79, 699.758, 372.872)
                 // ... these parameters are fx, fy, cx, cy.
 
                 .build();

@@ -61,7 +61,6 @@ import java.util.Locale;
  */
 
 @TeleOp(name = "Utility: Camera Frame Capture", group = "Utility")
-@Disabled
 public class UtilityCameraFrameCapture extends LinearOpMode
 {
     /*
@@ -69,8 +68,8 @@ public class UtilityCameraFrameCapture extends LinearOpMode
      */
     final boolean USING_WEBCAM = true;
     final BuiltinCameraDirection INTERNAL_CAM_DIR = BuiltinCameraDirection.BACK;
-    final int RESOLUTION_WIDTH = 640;
-    final int RESOLUTION_HEIGHT = 480;
+    final int RESOLUTION_WIDTH = 1280;
+    final int RESOLUTION_HEIGHT = 720;
 
     // Internal state
     boolean lastX;
@@ -86,7 +85,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
         if (USING_WEBCAM)
         {
             portal = new VisionPortal.Builder()
-                    .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
+                    .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.backWebcamName))
                     .setCameraResolution(new Size(RESOLUTION_WIDTH, RESOLUTION_HEIGHT))
                     .build();
         }

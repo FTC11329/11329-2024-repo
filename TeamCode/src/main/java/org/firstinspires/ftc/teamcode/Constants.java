@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.opencv.core.Scalar;
 
@@ -14,6 +15,7 @@ public class Constants {
     @Config
     public static class Vision {
         public static String frontWebcamName = "Webcam 1";
+        public static String backWebcamName  = "Webcam 2";
         public static Scalar blueMin = new Scalar(100, 150, 100);
         public static Scalar blueMax = new Scalar(120, 245, 255);
 
@@ -23,6 +25,22 @@ public class Constants {
         public static Scalar redNegMin = new Scalar(0, 0, 0);
         public static Scalar redNegMax = new Scalar(0, 0, 0);
         public static double percentThreshold = 5.0;
+
+        public static Pose2d camOffset = new Pose2d(7.5, 3, Math.toRadians(180));
+
+        public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
+        public static Pose2d tag2Pose = new Pose2d(62,35.5,0);
+        public static Pose2d tag3Pose = new Pose2d(62,29.5,0);
+
+        public static Pose2d tag4Pose = new Pose2d(62,-29.5,0);
+        public static Pose2d tag5Pose = new Pose2d(62,-35.5,0);
+        public static Pose2d tag6Pose = new Pose2d(62,-41.5,0);
+
+        public static Pose2d tag7Pose = new Pose2d(-47,-40, Math.toRadians(180));
+        public static Pose2d tag8Pose = new Pose2d(-47,-34.5, Math.toRadians(180));
+
+        public static Pose2d tag9Pose = new Pose2d(-47,34.5, Math.toRadians(180));
+        public static Pose2d tag10Pose= new Pose2d(-47,40, Math.toRadians(180));
     }
 
     @Config

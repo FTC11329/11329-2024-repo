@@ -167,6 +167,7 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
         }
 
+        telemetry.addData("runner Pose estamate", cameras.getRunnerPoseEstimate(10));
         aprilTagDetectionPipeline.telemetryAprilTag(telemetry, cameras.getAprilTagRecognitions());
 
         //Finale
