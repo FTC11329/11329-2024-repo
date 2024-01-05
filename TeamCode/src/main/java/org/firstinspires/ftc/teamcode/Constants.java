@@ -36,16 +36,16 @@ public class Constants {
         public static Pose2d tag5Pose = new Pose2d(62,-35.5,0);
         public static Pose2d tag6Pose = new Pose2d(62,-41.5,0);
 
-        public static Pose2d tag7Pose = new Pose2d(-47,-40, Math.toRadians(180));
-        public static Pose2d tag8Pose = new Pose2d(-47,-34.5, Math.toRadians(180));
+        public static Pose2d tag7Pose = new Pose2d(-70.5,-40, Math.toRadians(180));
+        public static Pose2d tag8Pose = new Pose2d(-70.5,-34.5, Math.toRadians(180));
 
-        public static Pose2d tag9Pose = new Pose2d(-47,34.5, Math.toRadians(180));
-        public static Pose2d tag10Pose= new Pose2d(-47,40, Math.toRadians(180));
+        public static Pose2d tag9Pose = new Pose2d(-70.5,34.5, Math.toRadians(180));
+        public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
     }
 
     @Config
     public static class Intake {
-        public static double intake = 0.7; //TODO: Set value
+        public static double intake = 0.7;
         public static double outake = -1;
 
         public static double autoVomitSpeed = -0.2;

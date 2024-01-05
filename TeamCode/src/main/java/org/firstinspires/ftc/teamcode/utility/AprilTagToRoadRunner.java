@@ -24,39 +24,45 @@ public class AprilTagToRoadRunner {
         Pose2d runnerPose = new Pose2d(Rx, Ry, Rh);
 
         //haha i made my super long if-tree not a super long if-tree yay
+        //if I don't need the breaks in here feel free to remove them.
+        if (tag.id > 6.5){
+            runnerPose = new Pose2d(runnerPose.getX() * 1, runnerPose.getY(), runnerPose.getHeading());
+        }
+
         switch (tag.id) {
             case 1:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag1Pose);
+                runnerPose = Constants.Vision.tag1Pose.plus(runnerPose);
                 break;
             } case 2:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag2Pose);
+                runnerPose = Constants.Vision.tag2Pose.plus(runnerPose);
                 break;
             } case 3:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag3Pose);
+                runnerPose = Constants.Vision.tag3Pose.plus(runnerPose);
                 break;
             } case 4:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag4Pose);
+                runnerPose = Constants.Vision.tag4Pose.plus(runnerPose);
                 break;
             } case 5:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag5Pose);
+                runnerPose = Constants.Vision.tag5Pose.plus(runnerPose);
                 break;
             } case 6:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag6Pose);
+                runnerPose = Constants.Vision.tag6Pose.plus(runnerPose);
                 break;
             } case 7:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag7Pose);
+                runnerPose = Constants.Vision.tag7Pose.plus(runnerPose);
                 break;
             } case 8:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag8Pose);
+                runnerPose = Constants.Vision.tag8Pose.plus(runnerPose);
                 break;
             } case 9:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag9Pose);
+                runnerPose = Constants.Vision.tag9Pose.plus(runnerPose);
                 break;
             } case 10:{
-                runnerPose = runnerPose.minus(Constants.Vision.tag10Pose);
+                runnerPose = Constants.Vision.tag10Pose.plus(runnerPose);
                 break;
             }
         }
+
         return runnerPose;
     }
 }

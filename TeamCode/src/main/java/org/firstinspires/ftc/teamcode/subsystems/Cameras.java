@@ -81,6 +81,7 @@ public class Cameras {
         } else {
             desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTag.getDetections(), id);
         }
+
         if (!desiredTag.isPresent()) return Optional.empty();
 
         Pose2d pose = AprilTagToRoadRunner.tagToRunner(desiredTag.get());
