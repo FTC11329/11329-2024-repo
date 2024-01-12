@@ -26,7 +26,7 @@ public class Constants {
         public static Scalar redNegMax = new Scalar(0, 0, 0);
         public static double percentThreshold = 5.0;
 
-        public static Pose2d camOffset = new Pose2d(7.5, -3, Math.toRadians(180));
+        public static Pose2d camOffset = new Pose2d(3, -7.5, Math.toRadians(0));
 
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(62,35.5,0);

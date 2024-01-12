@@ -13,9 +13,9 @@ public class AprilTagToRoadRunner {
         double Vy = tag.ftcPose.y;
         double Vh = Math.toRadians(90 - tag.ftcPose.yaw);
 
-//        Vx += Constants.Vision.camOffset.getX();
-//        Vy += Constants.Vision.camOffset.getY();
-//        Vh -= Constants.Vision.camOffset.getHeading();
+        Vx -= Constants.Vision.camOffset.getX();
+        Vy -= Constants.Vision.camOffset.getY();
+        Vh -= Constants.Vision.camOffset.getHeading();
 
         double Rh = Vh;
 
@@ -73,8 +73,8 @@ public class AprilTagToRoadRunner {
                 break;
             }
         }
-
-
+        //to account for line 14
+        runnerPose = runnerPose.plus(new Pose2d(0,0,Math.toRadians(-90)));
         return runnerPose;
     }
 }
