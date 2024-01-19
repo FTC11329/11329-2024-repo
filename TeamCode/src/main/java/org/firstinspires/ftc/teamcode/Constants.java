@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+import org.checkerframework.checker.compilermsgs.qual.CompilerMessageKey;
 import org.opencv.core.Scalar;
 
 /**
@@ -103,6 +104,11 @@ public class Constants {
         public static int down = 0;
         public static int climberFire = -1025;
         public static int climb = -1400;
+    }
+
+    @Config
+    public static class DistanceSensors {
+        public static int Tolerance = 35;
     }
 
     @Config

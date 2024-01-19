@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
+import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -21,11 +22,11 @@ public class Teleop extends OpMode {
     Claw claw;
     Plane plane;
     Intake intake;
-    Slides slides; //temp
     Climber climber;
     Outtake outtake;
     Cameras cameras;
     Drivetrain drivetrain;
+    DistanceSensors distanceSensors;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     @Override
@@ -36,10 +37,10 @@ public class Teleop extends OpMode {
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
-        slides = outtake.slides; //temp
         climber = new Climber(hardwareMap);
         cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
+        distanceSensors = new DistanceSensors(hardwareMap);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
     }
 
@@ -167,11 +168,17 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
         }
 
-        telemetry.addData("runner Pose estamate", cameras.getRunnerPoseEstimate(10));
-        aprilTagDetectionPipeline.telemetryAprilTag(telemetry, cameras.getAprilTagRecognitions());
-
-        //Finale
+        //FINALE
         outtake.periodic();
+
+
+        //TEMPORARY
+        telemetry.addData("blue", distanceSensors.getDirectionBlue());
+        telemetry.addData("red ", distanceSensors.getDirectionRed());
+
+        telemetry.addData("left ", distanceSensors.getLeftState());
+        telemetry.addData("right", distanceSensors.getRightState());
+
     }
 
     @Override
