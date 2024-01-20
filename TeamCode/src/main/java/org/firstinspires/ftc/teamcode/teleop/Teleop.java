@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.utility.CustomHardwareMap;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
@@ -27,6 +28,8 @@ public class Teleop extends OpMode {
 
     @Override
     public void init() {
+        hardwareMap = (CustomHardwareMap) hardwareMap;
+
         telemetry.addData("Status", "Initialized");
 
         claw = new Claw(hardwareMap);
