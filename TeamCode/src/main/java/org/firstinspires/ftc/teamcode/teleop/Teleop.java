@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.internal.files.DataLogger;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -15,6 +16,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.utility.CustomHardwareMap;
 
+import java.io.IOException;
+
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
     Claw claw;
@@ -26,9 +29,27 @@ public class Teleop extends OpMode {
     Cameras cameras;
     Drivetrain drivetrain;
 
+    CustomHardwareMap hardwareMap;
+
+    DataLogger dataLog;
+
     @Override
     public void init() {
-        hardwareMap = (CustomHardwareMap) hardwareMap;
+        this.hardwareMap = (CustomHardwareMap) super.hardwareMap;
+        try {
+            dataLog = new DataLogger("magicRobotDiagnostics");
+            dataLog.addHeaderLine("type", "serialNumber", "deviceName");
+            hardwareMap.getMagicHardwareMapStuff().forEach((s, hardwareDevices) -> hardwareDevices.forEach(hardwareDevice -> {
+                try {
+                    dataLog.addDataLine(s, "unimplemented", hardwareDevice.getDeviceName());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         telemetry.addData("Status", "Initialized");
 
@@ -44,6 +65,8 @@ public class Teleop extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addLine(hardwareMap.getMagicHardwareMapStuff().toString());
+
         //INPUTS
         boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
@@ -133,7 +156,7 @@ public class Teleop extends OpMode {
 
         //CLIMBER
 
-        int climberPos =  climberPower + climber.getPosition();
+        int climberPos = climberPower + climber.getPosition();
         telemetry.addData("climber power ", climberPower);
         telemetry.addData("climber target pos ", climberPos);
         telemetry.addData("climver pos", climber.getPosition());
