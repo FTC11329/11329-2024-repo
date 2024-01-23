@@ -95,6 +95,7 @@ public class Constants {
         public static double placePos = 0.354;
         public static double weirdPlacePos = 0.475;
         public static double intakePos = 0;
+        public static double autoArmDrop = 0.134;
     }
 
     @Config
@@ -108,7 +109,7 @@ public class Constants {
 
     @Config
     public static class DistanceSensors {
-        public static int Tolerance = 35;
+        public static int tolerance = 35;
     }
 
     @Config
