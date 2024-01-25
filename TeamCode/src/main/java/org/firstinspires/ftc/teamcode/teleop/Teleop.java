@@ -24,9 +24,10 @@ public class Teleop extends OpMode {
     Intake intake;
     Climber climber;
     Outtake outtake;
+    Cameras cameras;
     Drivetrain drivetrain;
-//    DistanceSensors distanceSensors;
-//    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    DistanceSensors distanceSensors;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     @Override
     public void init() {
@@ -37,9 +38,10 @@ public class Teleop extends OpMode {
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
+        cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
-//        distanceSensors = new DistanceSensors(hardwareMap);
-//        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
+        distanceSensors = new DistanceSensors(hardwareMap);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
     }
 
     @Override
@@ -107,7 +109,7 @@ public class Teleop extends OpMode {
         drivetrain.drive(driveForward, driveStrafe, driveTurn, driveSpeed);
 
         //INTAKE
-        if (intakeBool && outtake.getSlidePosition() < 40) {
+        if (intakeBool) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
         } else if (clawOuttakeBool) {
@@ -119,11 +121,11 @@ public class Teleop extends OpMode {
             intake.setIntakePower(0, outtake.getSlideTargetPosition());
         }
 
-        //SLIDES ******************************************FIX*THIS*******************************
+        //SLIDES
 //        outtake.manualSlides(slidePower);
-//        if (downSlidesBool || upSlidesBool) {
-//            outtake.slides.manualPosition(slidePower);
-//        }
+        if (downSlidesBool || upSlidesBool) {
+            outtake.slides.manualPosition(slidePower);
+        }
 //        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
 //        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
@@ -158,7 +160,9 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.med, Constants.Arm.placePos);
         }
         if (lowPresetBool) {
-            outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
+//            outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
+            outtake.presetSlides(Constants.Slides.low);
+            outtake.presetArm(Constants.Arm.placePos);
         }
         if (intakePresetBool) {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
@@ -168,12 +172,12 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
 
-//        //TEMPORARY
-//        telemetry.addData("blue", distanceSensors.getDirectionBlue());
-//        telemetry.addData("red ", distanceSensors.getDirectionRed());
-//
-//        telemetry.addData("left ", distanceSensors.getLeftState());
-//        telemetry.addData("right", distanceSensors.getRightState());
+        //TEMPORARY
+        telemetry.addData("blue", distanceSensors.getDirectionBlue());
+        telemetry.addData("red ", distanceSensors.getDirectionRed());
+
+        telemetry.addData("left ", distanceSensors.getLeftState());
+        telemetry.addData("right", distanceSensors.getRightState());
 
     }
 

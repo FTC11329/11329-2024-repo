@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
@@ -29,19 +28,18 @@ public class BlueRight extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Claw claw = new Claw(hardwareMap);
-        Intake intake = new Intake(hardwareMap);
         Cameras cameras = new Cameras(hardwareMap);
-        Outtake outtake = new Outtake(hardwareMap);
         Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry);
-        DistanceSensors distanceSensors = new DistanceSensors(hardwareMap);
+        Intake intake = new Intake(hardwareMap);
+        Outtake outtake = new Outtake(hardwareMap);
+        Claw claw = new Claw(hardwareMap);
 
+        cameras.barcodeProcessor.setSide(RobotSide.Blue);
 
         waitForStart();
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue();
+        BarcodePosition barcodePosition = cameras.getBarcodePosition().orElse(BarcodePosition.One);
 
-        barcodePosition = BarcodePosition.Three;
         drivetrain.setPoseEstimate(startingPose);
 
         TrajectorySequence placeSpikeMark = null;
@@ -50,10 +48,10 @@ public class BlueRight extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .splineTo(new Vector2d(-29, 38), Math.toRadians(-45))
                     .addTemporalMarker(() -> {
-                        outtake.presetArm(Constants.Arm.autoArmDrop);
+                        intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
                     .back(15)
@@ -65,10 +63,10 @@ public class BlueRight extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .splineTo(new Vector2d(-41, 30), Math.toRadians(-90))
                     .addTemporalMarker(() -> {
-                        outtake.presetArm(Constants.Arm.autoArmDrop);
+                        intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
                     .back(5)
@@ -79,14 +77,15 @@ public class BlueRight extends LinearOpMode {
 
         } else if (barcodePosition == BarcodePosition.Three) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
-                    .lineTo(new Vector2d(-48, 21))
+                    .lineTo(new Vector2d(-48, 37))
                     .addTemporalMarker(() -> {
-                        outtake.presetArm(Constants.Arm.autoArmDrop);
+                        intake.setIntakePower(Constants.Intake.autoVomitSpeed, 10);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        intake.setIntakePower(0, 10);
                     })
                     .waitSeconds(3 * timeForPixelPlacement)
+                    .back(13)
                     .turn(Math.toRadians(-40))
                     .splineTo(new Vector2d(-54, 5), Math.toRadians(-110))
                     .turn(Math.toRadians(-50))

@@ -4,13 +4,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 public class DistanceSensors {
     private com.qualcomm.robotcore.hardware.DistanceSensor leftDistanceSensor;
     private com.qualcomm.robotcore.hardware.DistanceSensor rightDistanceSensor;
 
-    BarcodePosition spikeNumber;
+    int spikeNumber = 0;
 
     public DistanceSensors(HardwareMap hardwareMap) {
         leftDistanceSensor = hardwareMap.get(com.qualcomm.robotcore.hardware.DistanceSensor.class, "left_distance");
@@ -26,23 +25,23 @@ public class DistanceSensors {
 
 
 
-    public BarcodePosition getDirectionBlue() {
-        if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
-            spikeNumber = BarcodePosition.Two; //center
-        } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance){
-            spikeNumber = BarcodePosition.Three; //left
+    public int getDirectionBlue() {
+        if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.Tolerance) {
+            spikeNumber = 3; //left
+        } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.Tolerance){
+            spikeNumber = 2; //center
         } else {
-            spikeNumber = BarcodePosition.One; //right
+            spikeNumber = 1; //right
         }
         return spikeNumber;
     }
-    public BarcodePosition getDirectionRed() {
-        if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
-            spikeNumber = BarcodePosition.One; //left
-        } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance){
-            spikeNumber = BarcodePosition.Two; //center
+    public int getDirectionRed() {
+        if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.Tolerance) {
+            spikeNumber = 1; //left
+        } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.Tolerance){
+            spikeNumber = 2; //center
         } else {
-            spikeNumber = BarcodePosition.Three; //right
+            spikeNumber = 3; //right
         }
         return spikeNumber;
     }

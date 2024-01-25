@@ -74,7 +74,7 @@ public class AprilTagToRoadRunner {
             }
         }
         //to account for line 14
-        runnerPose = runnerPose.plus(new Pose2d(0,0,Math.toRadians(90)));
+        runnerPose = runnerPose.plus(new Pose2d(0,0,Math.toRadians(-90)));
         return runnerPose;
     }
 }
