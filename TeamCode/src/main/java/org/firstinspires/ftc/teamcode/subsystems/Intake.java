@@ -16,8 +16,6 @@ public class Intake {
     Telemetry telemetry;
 
     public Intake(HardwareMap hardwareMap) {
-//        dropServo = hardwareMap.get(Servo.class, "dropServo");
-
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);

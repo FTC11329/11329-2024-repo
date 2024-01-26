@@ -53,6 +53,20 @@ public class Constants {
     }
 
     @Config
+    public static class SpecialIntake {
+        public static double min = 0;
+        public static double max = 0;
+
+        public static double up = 0;
+        public static double down5 = 0.23;
+        public static double down4 = 0.24;
+        public static double down3 = 0.25;
+        public static double down2 = 0.26;
+        public static double down1 = 0.27;
+
+    }
+
+    @Config
     public static class Claw {
         public static double intake = 1;
         public static double outake = -0.7;
@@ -137,7 +151,6 @@ public class Constants {
          * angular distances although most angular parameters are wrapped in Math.toRadians() for
          * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
          */
-//         TODO: Rework these values for Avalanche
         public static double WHEEL_RADIUS = 1.8898; // in
         public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
         public static double TRACK_WIDTH = 9.8; // in

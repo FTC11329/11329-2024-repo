@@ -15,10 +15,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.Slides;
+import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
+    double temp2 = 0;
+
     Claw claw;
     Plane plane;
     Intake intake;
@@ -26,6 +29,7 @@ public class Teleop extends OpMode {
     Outtake outtake;
     Cameras cameras;
     Drivetrain drivetrain;
+    SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -40,6 +44,7 @@ public class Teleop extends OpMode {
         climber = new Climber(hardwareMap);
         cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
+        specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
     }
@@ -120,6 +125,14 @@ public class Teleop extends OpMode {
             claw.setPower(0);
             intake.setIntakePower(0, outtake.getSlideTargetPosition());
         }
+
+        //SPECIAL INTAKE
+        double temp = gamepad2.left_stick_x;
+        temp *= 0.02;
+        temp2 += temp;
+        specialIntake.setIntakeServo(temp2);
+        telemetry.addData("special", temp2);
+
 
         //SLIDES
 //        outtake.manualSlides(slidePower);

@@ -136,12 +136,13 @@ public class BlueRight extends LinearOpMode {
                 })
 
                 .waitSeconds(0.75)
-                .lineTo(finalPlaceLocation.plus(new Vector2d(-10, 0)))
+                .setReversed(false)
+                .splineTo(new Vector2d(36,12), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.intake, 0.1);
+                    outtake.preset(Constants.Slides.intake, 0);
                     claw.setPower(0);
                 })
-                .waitSeconds(2)
+
                 .build());
     }
 }
