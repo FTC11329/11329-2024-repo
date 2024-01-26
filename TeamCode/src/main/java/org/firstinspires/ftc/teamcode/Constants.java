@@ -72,11 +72,10 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 600;
+        public static int superLow = 500;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1900;
-
 
         public static int groundPinchMin = 130;
         public static int groundPinchMax = 400;
@@ -95,6 +94,7 @@ public class Constants {
         public static double placePos = 0.354;
         public static double weirdPlacePos = 0.475;
         public static double intakePos = 0;
+        public static double autoArmDrop = 0.07;
     }
 
     @Config
@@ -108,7 +108,7 @@ public class Constants {
 
     @Config
     public static class DistanceSensors {
-        public static int Tolerance = 35;
+        public static int tolerance = 60;
     }
 
     @Config
