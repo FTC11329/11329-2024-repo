@@ -46,7 +46,7 @@ public class Constants {
 
     @Config
     public static class Intake {
-        public static double intake = 0.8;
+        public static double intake = 0.75;
         public static double outake = -1;
 
         public static double autoVomitSpeed = -0.2;
@@ -59,7 +59,7 @@ public class Constants {
 
         public static double ready = 0.2;
         public static double up = 0;
-        public static double down5 = 0.265;
+        public static double down5 = 0.257;
         public static double down4 = 0.24;
         public static double down3 = 0.29;
         public static double down2 = 0.26;
@@ -69,7 +69,7 @@ public class Constants {
 
     @Config
     public static class Claw {
-        public static double intake = 0.9;
+        public static double intake = 1;
         public static double outake = -0.7;
     }
 
@@ -109,7 +109,7 @@ public class Constants {
         public static double placePos = 0.38;
         public static double weirdPlacePos = 0.475;
         public static double intakePos = 0;
-        public static double autoArmDrop = 0.07;
+        public static double autoArmDrop = 0.06;
     }
 
     @Config

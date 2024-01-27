@@ -22,13 +22,13 @@ import java.util.Optional;
 @Autonomous(name = "Blue Right", group = "Competition")
 @Config
 public class BlueRight extends LinearOpMode {
-    static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
-    static Vector2d placePositionOne = new Vector2d(52.5, 45);
-    static Vector2d placePositionTwo = new Vector2d(53, 36);
-    static Vector2d placePositionThree = new Vector2d(53, 32);
+    static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(-90));
+    static Vector2d placePositionOne = new Vector2d(52.5, -45);
+    static Vector2d placePositionTwo = new Vector2d(53, -36);
+    static Vector2d placePositionThree = new Vector2d(53, -32);
 
-    static Vector2d pickupSpecial = new Vector2d(-56,13);
-    static Vector2d pickupSpecial2 = new Vector2d(-60, 18);
+    static Vector2d pickupSpecial = new Vector2d(-56,-12);
+    static Vector2d pickupSpecial2 = new Vector2d(-55, -19);
 
 
     static double timeForPixelPlacement = 0.1;
@@ -44,7 +44,7 @@ public class BlueRight extends LinearOpMode {
         DistanceSensors distanceSensors = new DistanceSensors(hardwareMap);
 
         while (!opModeIsActive() && !isStopRequested()) {
-            BarcodePosition barcodePosition = distanceSensors.getDirectionBlue();
+            BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
             telemetry.addData("Barcode Position", barcodePosition);
             telemetry.update();
         }
@@ -74,9 +74,9 @@ public class BlueRight extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .addTemporalMarker(() -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
-                        intake.setIntakePower(Constants.Intake.outake, 0);
+                        intake.setIntakePower(0.9, 0);
                     })
-                    .lineTo(new Vector2d(-40, 11))
+                    .lineTo(new Vector2d(-34, 11))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -93,6 +93,7 @@ public class BlueRight extends LinearOpMode {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .addTemporalMarker(() -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
+                        intake.setIntakePower(0.9, 0);
                     })
                     .splineTo(new Vector2d(-47, 14), Math.toRadians(-90))
                     .addTemporalMarker(() -> {
@@ -101,6 +102,7 @@ public class BlueRight extends LinearOpMode {
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                         outtake.presetArm(0);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                        intake.setIntakePower(0, 0);
                     })
                     .waitSeconds(timeForPixelPlacement)
                     .splineTo(pickupSpecial, Math.toRadians(180))
@@ -123,19 +125,22 @@ public class BlueRight extends LinearOpMode {
                 .trajectorySequenceBuilder(placeSpikeMark.end())
                 .setReversed(true)
                 .addTemporalMarkerOffset(-1, () -> {
-                    intake.setIntakePower(Constants.Intake.intake, 0);
+                    intake.setIntakePower(1, 0);
                     claw.setPower(Constants.Claw.intake);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .addTemporalMarkerOffset(0, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                 })
+                .addTemporalMarkerOffset(0.5, () -> {
+                    intake.setIntakePower(Constants.Intake.intake, 0);
+                })
                 .addTemporalMarkerOffset(1, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(1)
                 .setReversed(true)
-                .addTemporalMarkerOffset(0.25, () -> {
+                .addTemporalMarkerOffset(1, () -> {
                     intake.setIntakePower(0, 0);
                     claw.setPower(0);
                 })
@@ -189,7 +194,7 @@ public class BlueRight extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(3)
                 .setReversed(true)
-                .addTemporalMarkerOffset(0.5, () -> {
+                .addTemporalMarkerOffset(1, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(0);
                 })
@@ -198,7 +203,8 @@ public class BlueRight extends LinearOpMode {
                         .resetConstraints()
                 .splineTo(new Vector2d(37.7, 19.5), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                    intake.setIntakePower(0, 0);
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
