@@ -15,6 +15,7 @@ public class Outtake {
 
     public void periodic() {
         arm.periodic(slides.getPosition());
+        slides.slidesPeriodic();
     }
 
     public void manualSlides(double manualPower) {

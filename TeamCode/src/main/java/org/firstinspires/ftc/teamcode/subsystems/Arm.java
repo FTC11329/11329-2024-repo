@@ -10,7 +10,6 @@ public class Arm {
     public Servo armServoL;
 
     public int slidesPos;
-    public double targetPos;
     public double currentPos;
 
     public Boolean sadArm = false;

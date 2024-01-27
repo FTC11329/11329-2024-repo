@@ -27,11 +27,9 @@ public class Teleop extends OpMode {
     Intake intake;
     Climber climber;
     Outtake outtake;
-    Cameras cameras;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
     @Override
     public void init() {
@@ -42,11 +40,9 @@ public class Teleop extends OpMode {
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
-        cameras = new Cameras(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline();
     }
 
     @Override
@@ -61,7 +57,7 @@ public class Teleop extends OpMode {
         boolean clawOuttakeBool = gamepad2.b;
         boolean intakeOuttakeBool = gamepad2.x;
 
-        double slidePower = gamepad2.right_trigger - gamepad1.left_trigger;
+        double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
         boolean downSlidesBool = gamepad2.left_bumper;
         boolean upSlidesBool = gamepad2.right_bumper;
 
@@ -135,10 +131,8 @@ public class Teleop extends OpMode {
 
 
         //SLIDES
-//        outtake.manualSlides(slidePower);
-        if (downSlidesBool || upSlidesBool) {
-            outtake.slides.manualPosition(slidePower);
-        }
+        outtake.manualSlides(slidePower);
+
 //        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
 //        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
@@ -183,7 +177,6 @@ public class Teleop extends OpMode {
 
         //FINALE
         outtake.periodic();
-
 
         //TEMPORARY
         telemetry.addData("blue", distanceSensors.getDirectionBlue());

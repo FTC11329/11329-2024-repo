@@ -58,7 +58,7 @@ public class Constants {
         public static double max = 0;
 
         public static double up = 0;
-        public static double down5 = 0.23;
+        public static double down5 = 0.27;
         public static double down4 = 0.24;
         public static double down3 = 0.25;
         public static double down2 = 0.26;
@@ -81,7 +81,7 @@ public class Constants {
 
     @Config
     public static class Slides {
-        public static int manualSlidePower = -40;
+        public static int manualSlidePower = 100;
 
         public static int upAmount = 10;
 

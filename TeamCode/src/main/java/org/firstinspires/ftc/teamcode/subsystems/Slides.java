@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 public class Slides {
     DcMotor slideMotor;
+    double manualChangeD;
+    int manualChangeI;
 
     public Slides(HardwareMap hardwareMap) {
         slideMotor = hardwareMap.get(DcMotor.class, "slide");
@@ -42,18 +44,23 @@ public class Slides {
 
     //set manual movement
     public void manualPosition(double manualPower) {
-        int manualChange = (int) Math.round(manualPower * Constants.Slides.manualSlidePower);
-
-        int newPos = getTargetPosition() + manualChange;
-
-        newPos = Range.clip(newPos, Constants.Slides.slideMin, Constants.Slides.slideMax);
-
-        slideMotor.setTargetPosition(newPos);
+        manualChangeD = manualPower * Constants.Slides.manualSlidePower;
+        manualChangeI = (int) manualChangeD;
+        setPosition(getTargetPosition() + manualChangeI);
     }
 
     public void stopSlides() {
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         slideMotor.setPower(0);
+    }
+
+    public void slidesPeriodic() {
+        if (getTargetPosition() > Constants.Slides.slideMax) {
+            setPosition(Constants.Slides.slideMax);
+        }
+        if (getTargetPosition() < Constants.Slides.slideMin) {
+            setPosition(Constants.Slides.slideMin);
+        }
     }
 }
