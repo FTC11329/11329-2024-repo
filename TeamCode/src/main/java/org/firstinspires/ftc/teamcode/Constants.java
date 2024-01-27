@@ -87,7 +87,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 600;
+        public static int superLow = 550;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1900;

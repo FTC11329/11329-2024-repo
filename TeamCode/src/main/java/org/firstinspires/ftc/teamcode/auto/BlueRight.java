@@ -27,8 +27,8 @@ public class BlueRight extends LinearOpMode {
     static Vector2d placePositionTwo = new Vector2d(53, 36);
     static Vector2d placePositionThree = new Vector2d(53, 32);
 
-    static Vector2d pickupSpecial = new Vector2d(-54,11);
-    static Vector2d pickupSpecial2 = new Vector2d(-54, 16);
+    static Vector2d pickupSpecial = new Vector2d(-56,13);
+    static Vector2d pickupSpecial2 = new Vector2d(-60, 18);
 
 
     static double timeForPixelPlacement = 0.1;
@@ -187,7 +187,7 @@ public class BlueRight extends LinearOpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(1)
-                .forward(5)
+                .forward(3)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
