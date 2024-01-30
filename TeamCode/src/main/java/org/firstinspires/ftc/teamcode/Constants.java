@@ -55,15 +55,15 @@ public class Constants {
     @Config
     public static class SpecialIntake {
         public static double min = 0;
-        public static double max = 0;
+        public static double max = 0.34;
 
-        public static double ready = 0.2;
-        public static double up = 0;
-        public static double down5 = 0.257;
-        public static double down4 = 0.24;
-        public static double down3 = 0.29;
-        public static double down2 = 0.26;
-        public static double down1 = 0.27;
+        public static double ready = 0.22;
+        public static double up = 0.0001;
+        public static double down5 = 0.26;
+        public static double down4 = 0.27;
+        public static double down3 = 0.291;
+        public static double down2 = 0.308;
+        public static double down1 = 0.33;
 
     }
 
@@ -76,8 +76,8 @@ public class Constants {
     @Config
     public static class Plane {
         public static final String servoName = "planeServo";
-        public static double hold = 0.1; //TODO: Set value
-        public static double fire = 0.7; //TODO: Set value
+        public static double hold = 0.1;
+        public static double fire = 0.7;
     }
 
     @Config
@@ -129,7 +129,7 @@ public class Constants {
     @Config
     public static class Drivetrain {
         public static final String leftEncoderName = "intakeMotor";
-        public static final String rightEncoderName = "backLeft";
+        public static final String rightEncoderName = "backRight";
         public static final String frontEncoderName = "frontRight";
 
         public static final String leftFrontHardwareMapName = "frontLeft";

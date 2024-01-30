@@ -21,8 +21,8 @@ public class SpecialIntake {
     }
 
     public void setIntakeServo(double servoPos) {
-//        if (Constants.SpecialIntake.max > servoPos && servoPos > Constants.SpecialIntake.min) {
+        if (Constants.SpecialIntake.max > servoPos && servoPos > Constants.SpecialIntake.min) {
             intakeServo.setPosition(servoPos);
-//        }
+        }
     }
 }

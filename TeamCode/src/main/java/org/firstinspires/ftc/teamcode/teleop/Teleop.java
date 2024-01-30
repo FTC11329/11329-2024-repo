@@ -180,12 +180,11 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
-        telemetry.addData("blue", distanceSensors.getDirectionBlue());
-        telemetry.addData("red ", distanceSensors.getDirectionRed());
-
-        telemetry.addData("left ", distanceSensors.getLeftState());
-        telemetry.addData("right", distanceSensors.getRightState());
-
+        if (gamepad1.a){
+            drivetrain.leftRear.setPower(0.25);
+        } else {
+            drivetrain.leftRear.setPower(0);
+        }
     }
 
     @Override

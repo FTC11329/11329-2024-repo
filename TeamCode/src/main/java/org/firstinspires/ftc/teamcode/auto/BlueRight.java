@@ -27,8 +27,8 @@ public class BlueRight extends LinearOpMode {
     static Vector2d placePositionTwo = new Vector2d(52.5, 36.5);
     static Vector2d placePositionThree = new Vector2d(53, 32);
 
-    static Vector2d pickupSpecial = new Vector2d(-55.5,12);
-    static Vector2d pickupSpecial2 = new Vector2d(-51, 12);
+    static Vector2d pickupSpecial = new Vector2d(-54,12);
+    static Vector2d pickupSpecial2 = new Vector2d(-49, 18);
 
     static double timeForPixelPlacement = 0.1;
 
@@ -124,7 +124,7 @@ public class BlueRight extends LinearOpMode {
                 .trajectorySequenceBuilder(placeSpikeMark.end())
                 .setReversed(true)
                 .addTemporalMarkerOffset(-1, () -> {
-                    intake.setIntakePower(1, 0);
+                    intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
@@ -138,7 +138,6 @@ public class BlueRight extends LinearOpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(1)
-                .forward(2.5)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
@@ -203,7 +202,7 @@ public class BlueRight extends LinearOpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(1)
-                .forward(3)
+                .forward(2.5)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.8, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
@@ -236,6 +235,7 @@ public class BlueRight extends LinearOpMode {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                 })
+                .waitSeconds(1) //not needed
                 .build());
     }
 }
