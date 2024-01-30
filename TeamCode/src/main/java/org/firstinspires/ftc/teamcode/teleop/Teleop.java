@@ -57,6 +57,7 @@ public class Teleop extends OpMode {
         boolean clawOuttakeBool = gamepad2.b;
         boolean intakeOuttakeBool = gamepad2.x;
 
+        boolean overwriteBool = gamepad1.back;
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
         boolean downSlidesBool = gamepad2.left_bumper;
         boolean upSlidesBool = gamepad2.right_bumper;
@@ -131,7 +132,7 @@ public class Teleop extends OpMode {
 
 
         //SLIDES
-        outtake.manualSlides(slidePower);
+        outtake.manualSlides(slidePower, overwriteBool);
 
 //        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
 //        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);

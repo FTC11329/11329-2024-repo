@@ -36,6 +36,8 @@ public class DistanceSensors {
         }
         return spikeNumber;
     }
+
+
     public BarcodePosition getDirectionRed() {
         if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
             spikeNumber = BarcodePosition.One; //left

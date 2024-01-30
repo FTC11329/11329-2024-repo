@@ -18,8 +18,8 @@ public class Outtake {
         slides.slidesPeriodic();
     }
 
-    public void manualSlides(double manualPower) {
-        slides.manualPosition(manualPower);
+    public void manualSlides(double manualPower, boolean overwrite) {
+        slides.manualPosition(manualPower, overwrite);
     }
     public void presetSlides(int slidesPos) {
         slides.setPosition(slidesPos);

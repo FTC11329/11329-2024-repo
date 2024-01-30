@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.Constants;
 
 public class Slides {
+    boolean overwrite = false;
     DcMotor slideMotor;
     double manualChangeD;
     int manualChangeI;
@@ -43,7 +44,8 @@ public class Slides {
     }
 
     //set manual movement
-    public void manualPosition(double manualPower) {
+    public void manualPosition(double manualPower, boolean tempOverwrite) {
+        overwrite = tempOverwrite;
         manualChangeD = manualPower * Constants.Slides.manualSlidePower;
         manualChangeI = (int) manualChangeD;
         setPosition(getTargetPosition() + manualChangeI);
@@ -59,7 +61,7 @@ public class Slides {
         if (getTargetPosition() > Constants.Slides.slideMax) {
             setPosition(Constants.Slides.slideMax);
         }
-        if (getTargetPosition() < Constants.Slides.slideMin) {
+        if ((getTargetPosition() < Constants.Slides.slideMin)&& !overwrite) {
             setPosition(Constants.Slides.slideMin);
         }
     }

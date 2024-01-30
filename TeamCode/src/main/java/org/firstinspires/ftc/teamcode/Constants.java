@@ -70,7 +70,7 @@ public class Constants {
     @Config
     public static class Claw {
         public static double intake = 1;
-        public static double outake = -0.7;
+        public static double outake = -0.6;
     }
 
     @Config
@@ -106,10 +106,10 @@ public class Constants {
 
         public static double scaredPos = 0.05;
 
-        public static double placePos = 0.38;
+        public static double placePos = 0.37;
         public static double weirdPlacePos = 0.475;
         public static double intakePos = 0;
-        public static double autoArmDrop = 0.06;
+        public static double autoArmDrop = 0.05;
     }
 
     @Config
@@ -172,8 +172,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 35;
-        public static double MAX_ACCEL = 35;
+        public static double MAX_VEL = 40;
+        public static double MAX_ACCEL = 40;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }
