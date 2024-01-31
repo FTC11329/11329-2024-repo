@@ -234,6 +234,7 @@ public class BlueRight extends LinearOpMode {
                 .addTemporalMarkerOffset(-0.5, () -> {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
+                    outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .waitSeconds(1) //not needed
                 .build());

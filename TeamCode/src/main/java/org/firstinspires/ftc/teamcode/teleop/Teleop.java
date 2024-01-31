@@ -20,7 +20,8 @@ import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
-    double temp2 = 0;
+    int intakeLevel = 6;
+    boolean intakeDebounce = false;
 
     Claw claw;
     Plane plane;
@@ -34,6 +35,8 @@ public class Teleop extends OpMode {
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
+
+        //VARIABLES
 
         claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
@@ -124,11 +127,44 @@ public class Teleop extends OpMode {
         }
 
         //SPECIAL INTAKE
-        double temp = gamepad2.left_stick_x;
-        temp *= 0.02;
-        temp2 += temp;
-        specialIntake.setIntakeServo(temp2);
-        telemetry.addData("special", temp2);
+        if (gamepad2.left_bumper) {
+            intakeLevel = 6;
+        }
+
+        if (gamepad2.right_bumper && !intakeDebounce) {
+            intakeLevel --;
+            intakeDebounce = true;
+        } else if (!gamepad2.right_bumper && intakeDebounce){
+            intakeDebounce = false;
+        }
+
+
+        switch (intakeLevel) {
+            case 6: {
+                specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                break;
+            }
+            case 5: {
+                specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                break;
+            }
+            case 4: {
+                specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                break;
+            }
+            case 3: {
+                specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
+                break;
+            }
+            case 2: {
+                specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
+                break;
+            }
+            case 1: {
+                specialIntake.setIntakeServo(Constants.SpecialIntake.down1);
+                break;
+            }
+        }
 
 
         //SLIDES
@@ -180,11 +216,7 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
-        if (gamepad1.a){
-            drivetrain.leftRear.setPower(0.25);
-        } else {
-            drivetrain.leftRear.setPower(0);
-        }
+        telemetry.addData("special inake height", intakeLevel);
     }
 
     @Override

@@ -55,15 +55,15 @@ public class Constants {
     @Config
     public static class SpecialIntake {
         public static double min = 0;
-        public static double max = 0.34;
+        public static double max = 0.33;
 
         public static double ready = 0.22;
         public static double up = 0.0001;
-        public static double down5 = 0.26;
-        public static double down4 = 0.27;
+        public static double down5 = 0.259;
+        public static double down4 = 0.275;
         public static double down3 = 0.291;
-        public static double down2 = 0.308;
-        public static double down1 = 0.33;
+        public static double down2 = 0.301;
+        public static double down1 = 0.32;
 
     }
 
@@ -87,7 +87,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 550;
+        public static int superLow = 450;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1900;
