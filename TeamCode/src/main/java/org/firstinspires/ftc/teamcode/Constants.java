@@ -87,7 +87,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 450;
+        public static int superLow = 500;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1900;
@@ -172,8 +172,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 40;
-        public static double MAX_ACCEL = 40;
+        public static double MAX_VEL = 35;
+        public static double MAX_ACCEL = 35;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }
