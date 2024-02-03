@@ -53,6 +53,7 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
         //INPUTS
+        boolean superFastSpeed = gamepad1.left_bumper;
         boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
@@ -109,6 +110,8 @@ public class Teleop extends OpMode {
         DriveSpeedEnum driveSpeed;
         if (fastDriveSpeed) {
             driveSpeed = DriveSpeedEnum.Fast;
+        } else if (superFastSpeed) {
+            driveSpeed = DriveSpeedEnum.SuperFast;
         } else {
             driveSpeed = DriveSpeedEnum.Slow;
         }

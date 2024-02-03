@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
@@ -131,11 +132,13 @@ public class Drivetrain extends MecanumDrive {
     public void drive(double forward, double strafe, double turn, DriveSpeedEnum driveSpeed) {
         double speed = 0;
         if (driveSpeed == DriveSpeedEnum.Fast) {
-            speed = 0.85;
+            speed = Constants.Drivetrain.fast;
         } else if (driveSpeed == DriveSpeedEnum.Slow) {
-            speed = 0.5;
+            speed = Constants.Drivetrain.slow;
         } else if (driveSpeed == DriveSpeedEnum.Auto) {
             speed = 1;
+        } else if (driveSpeed == DriveSpeedEnum.SuperFast) {
+            speed = Constants.Drivetrain.superFast;
         }
 
         setWeightedDrivePower(new Pose2d(forward * speed, strafe * speed, turn * speed));

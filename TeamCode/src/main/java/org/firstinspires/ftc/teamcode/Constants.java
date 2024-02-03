@@ -136,6 +136,11 @@ public class Constants {
         public static final String leftRearHardwareMapName = "backLeft";
         public static final String rightFrontHardwareMapName = "frontRight";
         public static final String rightRearHardwareMapName = "backRight";
+
+        public static double superFast = 1;
+        public static double fast = 0.85;
+        public static double slow = 0.5;
+
     }
 
     @Config
