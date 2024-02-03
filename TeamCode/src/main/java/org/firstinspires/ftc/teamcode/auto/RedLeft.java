@@ -28,7 +28,7 @@ public class RedLeft extends LinearOpMode {
     static Vector2d placePositionTwo   = new Vector2d(51.5, -38.25);
     static Vector2d placePositionThree = new Vector2d(51.5, -42);
 
-    static Vector2d pickupSpecial = new Vector2d(-56,-11);
+    static Vector2d pickupSpecial = new Vector2d(-54.5,-10);
     static Vector2d pickupSpecial2 = new Vector2d(-54, -17);
 
 
@@ -169,12 +169,14 @@ public class RedLeft extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                    telemetry.addData("did see one", optionalPose.isPresent());
+                    telemetry.update();
                 })
                 .lineTo(finalPlaceLocation)
                 .addTemporalMarkerOffset(0.1,() -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .addTemporalMarkerOffset(0.25, () -> {
+                .addTemporalMarkerOffset(0.5, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(2, () -> {
@@ -187,6 +189,8 @@ public class RedLeft extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                    telemetry.addData("did see Two", optionalPose.isPresent());
+                    telemetry.update();
                 })
                 //Back For Another One**************************************
                 .setConstraints(
@@ -234,6 +238,8 @@ public class RedLeft extends LinearOpMode {
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                    telemetry.addData("did see Three", optionalPose.isPresent());
+                    telemetry.update();
                 })
                 .lineTo(finalPlaceLocation2)
                 .addTemporalMarker(() -> {

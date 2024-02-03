@@ -25,10 +25,10 @@ public class BlueRight extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne   = new Vector2d(52.5, 44);
     static Vector2d placePositionTwo   = new Vector2d(52.5, 36.5);
-    static Vector2d placePositionThree = new Vector2d(52.5, 31);
+    static Vector2d placePositionThree = new Vector2d(52.5, 31.5);
 
     static Vector2d pickupSpecial = new Vector2d(-54.5,12);
-    static Vector2d pickupSpecial2 = new Vector2d(-55, 21);
+    static Vector2d pickupSpecial2 = new Vector2d(-52.5, 19);
 
     static double timeForPixelPlacement = 0.1;
 
@@ -187,7 +187,7 @@ public class BlueRight extends LinearOpMode {
                 })
                 .waitSeconds(0.5)
                 .setReversed(false)
-                .splineTo(new Vector2d(36, 12), Math.toRadians(180))
+                .splineTo(new Vector2d(36, 9), Math.toRadians(180))
                 .addTemporalMarkerOffset(0.1, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
@@ -233,7 +233,7 @@ public class BlueRight extends LinearOpMode {
                 .resetConstraints()
                 .splineTo(new Vector2d(37.7, 19.5), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1, () -> {
-                    outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 600, Constants.Arm.placePos);
                     intake.setIntakePower(0, 0);
                 })
                 .addTemporalMarker(() -> {

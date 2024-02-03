@@ -182,10 +182,13 @@ public class Teleop extends OpMode {
         //CLIMBER
         if (climberUpBool) {
             climberPos = Constants.Climber.climb;
+            intakeLevel = 5;
         } else if (climberFireBool) {
             climberPos = Constants.Climber.climberFire;
         } else if (climberDownBool){
             climberPos = Constants.Climber.down;
+            intakeLevel = 6
+            ;
         }
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
