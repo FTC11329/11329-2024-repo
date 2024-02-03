@@ -62,14 +62,12 @@ public class Teleop extends OpMode {
 
         boolean overwriteBool = gamepad1.back;
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
-        boolean downSlidesBool = gamepad2.left_bumper;
-        boolean upSlidesBool = gamepad2.right_bumper;
 
         double armPower = gamepad2.left_stick_y;
 
-        int climberPos = 0;
-        boolean climberUpBool = gamepad1.y;
-        boolean climberFireBool = gamepad1.b;
+        boolean climberDownBool = gamepad2.a;
+        boolean climberUpBool = gamepad2.right_stick_button;
+        boolean climberFireBool = gamepad2.left_stick_button;
 
         boolean planeFire = gamepad2.back;
 
@@ -138,7 +136,6 @@ public class Teleop extends OpMode {
             intakeDebounce = false;
         }
 
-
         switch (intakeLevel) {
             case 6: {
                 specialIntake.setIntakeServo(Constants.SpecialIntake.up);
@@ -181,13 +178,12 @@ public class Teleop extends OpMode {
 
         //CLIMBER
         if (climberUpBool) {
-            climberPos = Constants.Climber.climb;
+            climber.setPos(Constants.Climber.climb);
         } else if (climberFireBool) {
-            climberPos = Constants.Climber.climberFire;
-        } else {
-            climberPos = Constants.Climber.down;
+            climber.setPos(Constants.Climber.climberFire);
+        } else if (climberDownBool){
+            climber.setPos(Constants.Climber.down);
         }
-        climber.setPos(climberPos);
 
         //PLANE
         if (planeFire) {

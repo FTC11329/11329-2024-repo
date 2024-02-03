@@ -19,9 +19,9 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Left 2 + 4 NOOOOOOOOOOOOOOOOOO Run", group = "Competition")
+@Autonomous(name = "Red Left 2 + 4 NOOOOOOOOOOO Run", group = "Competition")
 @Config
-public class RedLeft3 extends LinearOpMode {
+public class RedLeft4 extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
     static Vector2d placePositionOne   = new Vector2d(52, -31);
     static Vector2d placePositionTwo   = new Vector2d(52, -39);

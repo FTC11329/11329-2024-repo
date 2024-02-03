@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Left", group = "Competition")
+@Autonomous(name = "Red Left 3 + 2", group = "Competition")
 @Config
 public class RedLeft extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
@@ -28,8 +28,8 @@ public class RedLeft extends LinearOpMode {
     static Vector2d placePositionTwo   = new Vector2d(51.5, -38.25);
     static Vector2d placePositionThree = new Vector2d(51.5, -42);
 
-    static Vector2d pickupSpecial = new Vector2d(-55.5,-11);
-    static Vector2d pickupSpecial2 = new Vector2d(-53.5, -12);
+    static Vector2d pickupSpecial = new Vector2d(-56,-11);
+    static Vector2d pickupSpecial2 = new Vector2d(-54, -17);
 
 
     static double timeForPixelPlacement = 0.1;
@@ -113,16 +113,18 @@ public class RedLeft extends LinearOpMode {
         drivetrain.followTrajectorySequence(placeSpikeMark);
 
         Vector2d finalPlaceLocation = null;
-        Vector2d finalPlaceLocationWhite = null;
+        Vector2d finalPlaceLocation2 = null;
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation = placePositionOne;
+            finalPlaceLocation2 = placePositionTwo;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation = placePositionTwo;
-        } else {
+            finalPlaceLocation2 = placePositionOne;
+        } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
-        }
-        finalPlaceLocationWhite = finalPlaceLocation.plus(new Vector2d(0,-5));
+            finalPlaceLocation2 = placePositionOne;
+        } else return;
 
 
 
@@ -165,17 +167,9 @@ public class RedLeft extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
-                .lineTo(finalPlaceLocationWhite)
-                .addTemporalMarkerOffset(0.1, () -> {
-                    claw.setPower(-0.3);
-                })
-                .addTemporalMarkerOffset(0.2, () -> {
-                    claw.setPower(0);
-                })
-                .waitSeconds(0.25)
                 .lineTo(finalPlaceLocation)
                 .addTemporalMarkerOffset(0.1,() -> {
                     claw.setPower(Constants.Claw.outake);
@@ -191,7 +185,7 @@ public class RedLeft extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(36, -12), Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
                 //Back For Another One**************************************
@@ -216,7 +210,7 @@ public class RedLeft extends LinearOpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(1)
-//                .forward(2.5)
+                .forward(2.5)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
@@ -238,10 +232,10 @@ public class RedLeft extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
-                .lineTo(placePositionOne)
+                .lineTo(finalPlaceLocation2)
                 .addTemporalMarker(() -> {
                     claw.setPower(Constants.Claw.outake);
                 })

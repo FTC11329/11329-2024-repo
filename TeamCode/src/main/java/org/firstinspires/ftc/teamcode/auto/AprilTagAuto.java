@@ -15,7 +15,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import java.util.Optional;
 
-@Autonomous(name = "April Tag Auto", group = "Competition")
+@Autonomous(name = "April Tag Auto", group = "Testing")
 public class AprilTagAuto extends LinearOpMode {
     Drivetrain drivetrain;
     Cameras cameras;
