@@ -109,7 +109,7 @@ public class Constants {
         public static double placePos = 0.37;
         public static double weirdPlacePos = 0.475;
         public static double intakePos = 0;
-        public static double autoArmDrop = 0.03;
+        public static double autoArmDrop = 0.04;
     }
 
     @Config

@@ -126,14 +126,14 @@ public class RedLeft2 extends LinearOpMode {
             finalPlaceLocation2 = placePositionOne;
         } else return;
 
-
-
         drivetrain.followTrajectorySequence(drivetrain
                 .trajectorySequenceBuilder(placeSpikeMark.end())
                 .setReversed(true)
+
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(0);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(0, 0);
