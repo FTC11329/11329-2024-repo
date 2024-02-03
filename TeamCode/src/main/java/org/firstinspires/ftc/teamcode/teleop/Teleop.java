@@ -22,6 +22,8 @@ import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 public class Teleop extends OpMode {
     int intakeLevel = 6;
     boolean intakeDebounce = false;
+    int climberPos = 0;
+
 
     Claw claw;
     Plane plane;
@@ -65,6 +67,7 @@ public class Teleop extends OpMode {
 
         double armPower = gamepad2.left_stick_y;
 
+        double climberPower = gamepad2.right_stick_y;
         boolean climberDownBool = gamepad2.a;
         boolean climberUpBool = gamepad2.right_stick_button;
         boolean climberFireBool = gamepad2.left_stick_button;
@@ -178,12 +181,15 @@ public class Teleop extends OpMode {
 
         //CLIMBER
         if (climberUpBool) {
-            climber.setPos(Constants.Climber.climb);
+            climberPos = Constants.Climber.climb;
         } else if (climberFireBool) {
-            climber.setPos(Constants.Climber.climberFire);
+            climberPos = Constants.Climber.climberFire;
         } else if (climberDownBool){
-            climber.setPos(Constants.Climber.down);
+            climberPos = Constants.Climber.down;
         }
+        climberPos += climberPower * Constants.Climber.manualClimberPower;
+        climber.setPos(climberPos);
+        telemetry.addData("climber pos", climberPos);
 
         //PLANE
         if (planeFire) {
