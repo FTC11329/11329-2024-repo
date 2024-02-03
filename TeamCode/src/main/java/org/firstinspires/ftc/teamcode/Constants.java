@@ -61,8 +61,8 @@ public class Constants {
         public static double up = 0.0001;
         public static double down5 = 0.259;
         public static double down4 = 0.275;
-        public static double down3 = 0.3;
-        public static double down2 = 0.301;
+        public static double down3 = 0.291;
+        public static double down2 = 0.307;
         public static double down1 = 0.32;
 
     }

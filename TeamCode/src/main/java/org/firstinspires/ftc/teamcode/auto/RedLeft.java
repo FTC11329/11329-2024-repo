@@ -28,8 +28,8 @@ public class RedLeft extends LinearOpMode {
     static Vector2d placePositionTwo   = new Vector2d(51.5, -38.25);
     static Vector2d placePositionThree = new Vector2d(51.5, -42);
 
-    static Vector2d pickupSpecial = new Vector2d(-54.5,-10);
-    static Vector2d pickupSpecial2 = new Vector2d(-54, -17);
+    static Vector2d pickupSpecial = new Vector2d(-54.5,-9);
+    static Vector2d pickupSpecial2 = new Vector2d(-53.5, -17);
 
 
     static double timeForPixelPlacement = 0.1;
@@ -63,7 +63,7 @@ public class RedLeft extends LinearOpMode {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                         intake.setIntakePower(-0.5, 0);
                     })
-                    .splineTo(new Vector2d(-47, -15), Math.toRadians(90))
+                    .splineTo(new Vector2d(-47, -16), Math.toRadians(90))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -106,7 +106,7 @@ public class RedLeft extends LinearOpMode {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(timeForPixelPlacement)
-                    .lineTo(pickupSpecial)
+                    .lineTo(pickupSpecial.plus(new Vector2d(-2,-3)))
                     .build();
         }
 
@@ -172,7 +172,12 @@ public class RedLeft extends LinearOpMode {
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
                 })
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 20, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 20  //acc
+                )
                 .lineTo(finalPlaceLocation)
+                        .resetConstraints()
                 .addTemporalMarkerOffset(0.1,() -> {
                     claw.setPower(Constants.Claw.outake);
                 })
