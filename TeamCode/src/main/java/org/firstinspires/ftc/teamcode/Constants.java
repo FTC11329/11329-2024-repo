@@ -83,6 +83,7 @@ public class Constants {
     @Config
     public static class Slides {
         public static int manualSlidePower = 100;
+        public static double slowManualSlidePower = 0.2; //this times manual slide power is the actual speed
 
         public static int upAmount = 10;
 
@@ -106,10 +107,11 @@ public class Constants {
 
         public static double scaredPos = 0.05;
 
-        public static double placePos = 0.37;
+        public static double fixPos = 0.60;
         public static double weirdPlacePos = 0.475;
-        public static double intakePos = 0;
+        public static double placePos = 0.37;
         public static double autoArmDrop = 0.04;
+        public static double intakePos = 0;
     }
 
     @Config
@@ -140,6 +142,8 @@ public class Constants {
         public static double superFast = 1;
         public static double fast = 0.85;
         public static double slow = 0.5;
+        public static double fixSpeedStrafe = 0.75;
+        public static double fixSpeedForward = 0.25;
 
     }
 

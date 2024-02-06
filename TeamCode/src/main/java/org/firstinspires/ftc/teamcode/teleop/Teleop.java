@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
@@ -14,9 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
-import org.firstinspires.ftc.teamcode.subsystems.Slides;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
-import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
@@ -58,15 +54,21 @@ public class Teleop extends OpMode {
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
         double driveTurn = -gamepad1.right_stick_x;
+        boolean slowStrafeLeft = gamepad1.dpad_left;
+        boolean slowStrafeRight = gamepad1.dpad_right;
 
         boolean intakeBool = gamepad2.y;
         boolean clawOuttakeBool = gamepad2.b;
         boolean intakeOuttakeBool = gamepad2.x;
 
+        boolean SIntakeUp = gamepad2.left_bumper;
+        boolean SIntakeDown = gamepad2.right_bumper;
         boolean overwriteBool = gamepad1.back;
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
+        double slowSlidePower = gamepad1.right_trigger - gamepad1.left_trigger;
 
         double armPower = gamepad2.left_stick_y;
+        boolean armFix = gamepad1.a;
 
         double climberPower = gamepad2.right_stick_y;
         boolean climberDownBool = gamepad2.a;
@@ -115,7 +117,15 @@ public class Teleop extends OpMode {
         } else {
             driveSpeed = DriveSpeedEnum.Slow;
         }
+        if (slowStrafeLeft) {
+            driveStrafe -= Constants.Drivetrain.fixSpeedStrafe;
+            driveForward -= Constants.Drivetrain.fixSpeedForward;
+        } else if (slowStrafeRight) {
+            driveStrafe += Constants.Drivetrain.fixSpeedStrafe;
+            driveForward -= Constants.Drivetrain.fixSpeedForward;
+        }
         drivetrain.drive(driveForward, driveStrafe, driveTurn, driveSpeed);
+
 
         //INTAKE
         if (intakeBool) {
@@ -131,14 +141,14 @@ public class Teleop extends OpMode {
         }
 
         //SPECIAL INTAKE
-        if (gamepad2.left_bumper) {
+        if (SIntakeUp) {
             intakeLevel = 6;
         }
 
-        if (gamepad2.right_bumper && !intakeDebounce) {
+        if (SIntakeDown && !intakeDebounce) {
             intakeLevel --;
             intakeDebounce = true;
-        } else if (!gamepad2.right_bumper && intakeDebounce){
+        } else if (!SIntakeDown && intakeDebounce){
             intakeDebounce = false;
         }
 
@@ -171,15 +181,16 @@ public class Teleop extends OpMode {
 
 
         //SLIDES
+        slidePower = slidePower + (slowSlidePower * Constants.Slides.slowManualSlidePower);
         outtake.manualSlides(slidePower, overwriteBool);
-
-//        outtake.upSlide(Constants.Slides.upAmount, upSlidesBool);
-//        outtake.upSlide(-Constants.Slides.upAmount, downSlidesBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
         //ARM
         outtake.manualArm(armPower);
+        if (armFix) {
+            outtake.presetArm(Constants.Arm.fixPos);
+        }
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLIMBER
@@ -190,8 +201,7 @@ public class Teleop extends OpMode {
             climberPos = Constants.Climber.climberFire;
         } else if (climberDownBool){
             climberPos = Constants.Climber.down;
-            intakeLevel = 6
-            ;
+            intakeLevel = 6;
         }
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
@@ -212,9 +222,7 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.med, Constants.Arm.placePos);
         }
         if (lowPresetBool) {
-//            outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
-            outtake.presetSlides(Constants.Slides.low);
-            outtake.presetArm(Constants.Arm.placePos);
+            outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
         }
         if (intakePresetBool) {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
@@ -224,7 +232,7 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
-        telemetry.addData("special inake height", intakeLevel);
+        telemetry.addData("special intake height", intakeLevel);
     }
 
     @Override
