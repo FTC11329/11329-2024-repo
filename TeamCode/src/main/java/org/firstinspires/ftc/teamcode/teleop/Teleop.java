@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
@@ -13,9 +14,14 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
+    ElapsedTime elapsedTime = new ElapsedTime();
+    double skibidiOhioGyattRizz;
+    boolean climbed = false;
+    boolean climberDebounce = false;
     int intakeLevel = 6;
     boolean intakeDebounce = false;
     int climberPos = 0;
@@ -72,8 +78,8 @@ public class Teleop extends OpMode {
 
         double climberPower = gamepad2.right_stick_y;
         boolean climberDownBool = gamepad2.a;
-        boolean climberUpBool = gamepad2.right_stick_button;
-        boolean climberFireBool = gamepad2.left_stick_button;
+        boolean climberUpBool = gamepad2.left_stick_button;
+        boolean climberFireBool = gamepad2.right_stick_button;
 
         boolean planeFire = gamepad2.back;
 
@@ -194,9 +200,13 @@ public class Teleop extends OpMode {
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLIMBER
-        if (climberUpBool) {
-            climberPos = Constants.Climber.climb;
+        if (climberUpBool && !climberDebounce && !climbed) {
+            skibidiOhioGyattRizz = elapsedTime.milliseconds();
+            climberDebounce = true;
             intakeLevel = 5;
+        } else if (!climberUpBool && climbed) {
+            climberPos = Constants.Climber.climbButSlightlyDown;
+            climbed = false;
         } else if (climberFireBool) {
             climberPos = Constants.Climber.climberFire;
         } else if (climberDownBool){
@@ -206,6 +216,14 @@ public class Teleop extends OpMode {
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
         telemetry.addData("climber pos", climberPos);
+        //makes you have to hold the button in to make the climber go up
+        if (climberUpBool && (elapsedTime.milliseconds() - skibidiOhioGyattRizz > 700)) {
+            climberPos = Constants.Climber.climb;
+            climbed = true;
+        }
+        if (!climberUpBool) {
+            climberDebounce = false;
+        }
 
         //PLANE
         if (planeFire) {
@@ -217,15 +235,19 @@ public class Teleop extends OpMode {
         //PRE-SETS
         if (highPresetBool) {
             outtake.preset(Constants.Slides.high, Constants.Arm.weirdPlacePos);
+            intakeLevel = 6;
         }
         if (medPresetBool) {
             outtake.preset(Constants.Slides.med, Constants.Arm.placePos);
+            intakeLevel = 6;
         }
         if (lowPresetBool) {
             outtake.preset(Constants.Slides.low, Constants.Arm.placePos);
+            intakeLevel = 6;
         }
         if (intakePresetBool) {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
+            intakeLevel = 6;
         }
 
         //FINALE
