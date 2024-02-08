@@ -249,7 +249,6 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
             intakeLevel = 6;
         }
-
         //FINALE
         outtake.periodic();
 
