@@ -138,7 +138,7 @@ public class RedLeft4 extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
                 .lineTo(finalPlaceLocation)
@@ -154,7 +154,7 @@ public class RedLeft4 extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(36, -12), Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
                 .setConstraints(
@@ -198,7 +198,7 @@ public class RedLeft4 extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
                 .lineTo(placePositionOne)
@@ -214,7 +214,7 @@ public class RedLeft4 extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(36, -12), Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
                 .setConstraints(
@@ -258,7 +258,7 @@ public class RedLeft4 extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(4, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                 })
                 .lineTo(placePositionOne)

@@ -120,7 +120,7 @@ public class Constants {
 
         public static int down = 0;
         public static int climberFire = -1100;
-        public static int climbButSlightlyDown = -1300;
+        public static int climbButSlightlyDown = -1100;
         public static int climb = -1700;
     }
 

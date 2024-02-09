@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
@@ -14,12 +15,11 @@ import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
     ElapsedTime elapsedTime = new ElapsedTime();
-    double skibidiOhioGyattRizz;
+    double edwardSheran;
     boolean climbed = false;
     boolean climberDebounce = false;
     int intakeLevel = 6;
@@ -30,6 +30,7 @@ public class Teleop extends OpMode {
     Claw claw;
     Plane plane;
     Intake intake;
+    Cameras cameras;
     Climber climber;
     Outtake outtake;
     Drivetrain drivetrain;
@@ -45,6 +46,7 @@ public class Teleop extends OpMode {
         claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
+        cameras = new Cameras(hardwareMap);
         outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
@@ -201,7 +203,7 @@ public class Teleop extends OpMode {
 
         //CLIMBER
         if (climberUpBool && !climberDebounce && !climbed) {
-            skibidiOhioGyattRizz = elapsedTime.milliseconds();
+            edwardSheran = elapsedTime.milliseconds();
             climberDebounce = true;
             intakeLevel = 5;
         } else if (!climberUpBool && climbed) {
@@ -217,7 +219,7 @@ public class Teleop extends OpMode {
         climber.setPos(climberPos);
         telemetry.addData("climber pos", climberPos);
         //makes you have to hold the button in to make the climber go up
-        if (climberUpBool && (elapsedTime.milliseconds() - skibidiOhioGyattRizz > 700)) {
+        if (climberUpBool && (elapsedTime.milliseconds() - edwardSheran > 300)) {
             climberPos = Constants.Climber.climb;
             climbed = true;
         }
@@ -253,7 +255,12 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
+        telemetry.addData("is back", gamepad1.x);
+        telemetry.addData("cam", cameras.getRunnerPoseEstimate(0, true));
+        telemetry.addData("cam", cameras.getRunnerPoseEstimate(0, false));
         telemetry.addData("special intake height", intakeLevel);
+        telemetry.addData("FPS Back" , cameras.backCamera.getFps());
+        telemetry.addData("FPS Front", cameras.frontCamera.getFps());
     }
 
     @Override

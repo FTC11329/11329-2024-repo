@@ -167,7 +167,7 @@ public class RedLeft extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
@@ -192,7 +192,7 @@ public class RedLeft extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(36, -12), Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see Two", optionalPose.isPresent());
                     telemetry.update();
@@ -241,7 +241,7 @@ public class RedLeft extends LinearOpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see Three", optionalPose.isPresent());
                     telemetry.update();

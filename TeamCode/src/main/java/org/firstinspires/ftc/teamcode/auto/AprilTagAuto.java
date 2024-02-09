@@ -21,8 +21,7 @@ public class AprilTagAuto extends LinearOpMode {
     Cameras cameras;
 
     private boolean exactTolerance(int id) {
-        Optional<Pose2d> tag = cameras.getRunnerPoseEstimate(id);
-
+        Optional<Pose2d> tag = cameras.getRunnerPoseEstimate(id, true);
         if (!tag.isPresent()) return false;
 
         Pose2d tagPose = tag.get();

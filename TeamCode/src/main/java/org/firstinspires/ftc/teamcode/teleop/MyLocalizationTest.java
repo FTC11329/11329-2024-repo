@@ -41,7 +41,7 @@ public class MyLocalizationTest extends LinearOpMode {
 
             drive.update();
 
-            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
             optionalPose.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
 
             Pose2d poseEstimate = drive.getPoseEstimate();

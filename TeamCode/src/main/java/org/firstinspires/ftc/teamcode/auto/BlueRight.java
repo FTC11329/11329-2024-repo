@@ -45,6 +45,8 @@ public class BlueRight extends LinearOpMode {
         while (!opModeIsActive() && !isStopRequested()) {
             BarcodePosition barcodePosition = distanceSensors.getDirectionBlue();
             telemetry.addData("Barcode Position", barcodePosition);
+            telemetry.addData("FPS Back" , cameras.backCamera.getFps());
+            telemetry.addData("FPS Front", cameras.frontCamera.getFps());
             telemetry.update();
         }
         waitForStart();
@@ -168,7 +170,7 @@ public class BlueRight extends LinearOpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 25  //acc
                 )
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
@@ -189,7 +191,7 @@ public class BlueRight extends LinearOpMode {
                 .setReversed(false)
                 .splineTo(new Vector2d(36, 9), Math.toRadians(180))
                 .addTemporalMarkerOffset(0.1, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
@@ -237,7 +239,7 @@ public class BlueRight extends LinearOpMode {
                     intake.setIntakePower(0, 0);
                 })
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see three", optionalPose.isPresent());
                     telemetry.update();

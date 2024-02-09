@@ -25,30 +25,32 @@ public class Cameras {
     public VisionPortal frontCamera;
     public VisionPortal backCamera;
 
-    AprilTagProcessor aprilTag;
+    AprilTagProcessor aprilTagBack;
+    AprilTagProcessor aprilTagFront;
     public BarcodeProcessor barcodeProcessor = new BarcodeProcessor();
     DashboardCameraStreamProcessor dashboardCameraStreamProcessor = new DashboardCameraStreamProcessor();
 
     public Cameras(HardwareMap hardwareMap) {
-        aprilTag = AprilTagDetectionPipeline.createAprilTagProcessor();
+        aprilTagBack  = AprilTagDetectionPipeline.createAprilTagProcessor();
+        aprilTagFront = AprilTagDetectionPipeline.createAprilTagProcessor();
 
-//        frontCamera = new VisionPortal
-//                .Builder()
-//                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
-//                .setCameraResolution(new Size(1280, 720))
+
+        frontCamera = new VisionPortal
+                .Builder()
+                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
+                .setCameraResolution(new Size(1280, 720))
 //                .addProcessor(barcodeProcessor)
-////                .addProcessor(aprilTag)
-//                .addProcessor(dashboardCameraStreamProcessor)
-//                .enableLiveView(true)
-//                .build();
+                .addProcessor(aprilTagFront)
+                .enableLiveView(false)
+                .build();
 
         backCamera = new VisionPortal
                 .Builder()
                 .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.backWebcamName))
                 .setCameraResolution(new Size(1280, 720))
 //                .addProcessor(barcodeProcessor)
-                .addProcessor(aprilTag)
-                .enableLiveView(true)
+                .addProcessor(aprilTagBack)
+                .enableLiveView(false)
                 .build();
 
         FtcDashboard.getInstance().startCameraStream(dashboardCameraStreamProcessor, 30);
@@ -65,21 +67,37 @@ public class Cameras {
     }
 
     public ArrayList<AprilTagDetection> getAprilTagRecognitions() {
-        return aprilTag.getDetections();
+        return aprilTagBack.getDetections();
     }
 
-    public Optional<Pose2d> getRunnerPoseEstimate(int id) {
+    public Optional<Pose2d> getRunnerPoseEstimate(int id, boolean isBack) {
         Optional<AprilTagDetection> desiredTag = Optional.empty();
-        if (id == 0) {
-            //for cycling through all of them
-            for (int i = 1; i < 10; i++) {
-                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTag.getDetections(), i);
-                if (desiredTag.isPresent()) {
-                    break;
+        if (isBack) {
+            //Back cam
+            if (id == 0) {
+                //for cycling through all of them
+                for (int i = 1; i < 10; i++) {
+                    desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagBack.getDetections(), i);
+                    if (desiredTag.isPresent()) {
+                        break;
+                    }
                 }
+            } else {
+                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagBack.getDetections(), id);
             }
         } else {
-            desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTag.getDetections(), id);
+            //Front cam
+            if (id == 0) {
+                //for cycling through all of them
+                for (int i = 1; i < 10; i++) {
+                    desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagFront.getDetections(), i);
+                    if (desiredTag.isPresent()) {
+                        break;
+                    }
+                }
+            } else {
+                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagFront.getDetections(), id);
+            }
         }
 
         if (!desiredTag.isPresent()) return Optional.empty();

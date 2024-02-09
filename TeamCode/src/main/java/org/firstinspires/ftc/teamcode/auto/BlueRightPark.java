@@ -153,7 +153,7 @@ public class BlueRightPark extends LinearOpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 25  //acc
                 )
                 .addTemporalMarker(() -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0);
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
