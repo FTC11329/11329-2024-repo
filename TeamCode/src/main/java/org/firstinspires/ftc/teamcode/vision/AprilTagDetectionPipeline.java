@@ -42,7 +42,6 @@ public class AprilTagDetectionPipeline {
                 //for global shudder
                 .setLensIntrinsics(903.79, 903.79, 699.758, 372.872)
                 // ... these parameters are fx, fy, cx, cy.
-
                 .build();
 
         // Disable or re-enable the aprilTag processor at any time.
@@ -50,10 +49,10 @@ public class AprilTagDetectionPipeline {
     }
 
     //Idk what this function actually does but it makes the robot run smooth so ya it stays.
-    private static void setManualExposure(VisionPortal visionPortal, int exposureMS, int gain) {
+    private static void setManualExposure(VisionPortal visionPortal, VisionPortal visionPortal2, int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
 
-        if (visionPortal == null) {
+        if (visionPortal == null || visionPortal2 == null) {
             return;
         }
 

@@ -37,14 +37,16 @@ public class MyLocalizationTest extends LinearOpMode {
         waitForStart();
 
         while (!isStopRequested()) {
+            boolean isBack = gamepad1.y;
             drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * -0.7, gamepad1.left_stick_x * -0.7, gamepad1.right_stick_x * -0.7));
 
             drive.update();
 
-            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, isBack);
             optionalPose.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
 
             Pose2d poseEstimate = drive.getPoseEstimate();
+            telemetry.addData("is back", isBack);
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));

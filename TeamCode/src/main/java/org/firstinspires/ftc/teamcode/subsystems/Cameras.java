@@ -102,9 +102,7 @@ public class Cameras {
 
         if (!desiredTag.isPresent()) return Optional.empty();
 
-        Pose2d pose = AprilTagToRoadRunner.tagToRunner(desiredTag.get());
-        pose = pose.minus(new Pose2d(0,0,Math.toRadians(180)));
-
+        Pose2d pose = AprilTagToRoadRunner.tagToRunner(desiredTag.get(), isBack);
         return Optional.of(pose);
 
     }

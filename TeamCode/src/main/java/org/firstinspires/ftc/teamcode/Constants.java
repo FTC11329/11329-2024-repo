@@ -27,7 +27,9 @@ public class Constants {
         public static Scalar redNegMax = new Scalar(0, 0, 0);
         public static double percentThreshold = 5.0;
 
-        public static Pose2d camOffset = new Pose2d(3, -7.5, Math.toRadians(0));
+        public static Pose2d camOffsetBack = new Pose2d(3, -7.5, Math.toRadians(0));
+        public static Pose2d camOffsetFront = new Pose2d(-8.5, 5.25, Math.toRadians(0));
+
 
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(62,35.5,0);
@@ -171,8 +173,8 @@ public class Constants {
          * motor encoders or have elected not to use them for velocity control, these values should be
          * empirically tuned.
          */
-        public static double kV = 0.0165;
-        public static double kA = 0.0015;
+        public static double kV = 0.0143; //0.0165
+        public static double kA = 0.00248; //0.0015
         public static double kStatic = 0;
 
         /*

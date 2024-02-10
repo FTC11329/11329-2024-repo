@@ -6,16 +6,23 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public class AprilTagToRoadRunner {
-    public static Pose2d tagToRunner(AprilTagDetection tag) {
+    public static Pose2d tagToRunner(AprilTagDetection tag, boolean isBack) {
         double VxSign = 1;
 
         double Vx = tag.ftcPose.x;
         double Vy = tag.ftcPose.y;
         double Vh = Math.toRadians(90 - tag.ftcPose.yaw);
 
-        Vx -= Constants.Vision.camOffset.getX();
-        Vy -= Constants.Vision.camOffset.getY();
-        Vh -= Constants.Vision.camOffset.getHeading();
+        if (isBack) {
+            Vx -= Constants.Vision.camOffsetBack.getX();
+            Vy -= Constants.Vision.camOffsetBack.getY();
+            Vh -= Constants.Vision.camOffsetBack.getHeading();
+        } else {
+            Vx -= Constants.Vision.camOffsetFront.getX();
+            Vy -= Constants.Vision.camOffsetFront.getY();
+            Vh -= Constants.Vision.camOffsetFront.getHeading();
+
+        }
 
         double Rh = Vh;
 
@@ -74,7 +81,11 @@ public class AprilTagToRoadRunner {
             }
         }
         //to account for line 14
-        runnerPose = runnerPose.plus(new Pose2d(0,0,Math.toRadians(-90)));
+        if (isBack) {
+            runnerPose = runnerPose.plus(new Pose2d(0,0,Math.toRadians(90)));
+        } else {
+            runnerPose = runnerPose.plus(new Pose2d(0,0,Math.toRadians(-90)));
+        }
         return runnerPose;
     }
 }
