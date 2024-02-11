@@ -28,7 +28,7 @@ public class Constants {
         public static double percentThreshold = 5.0;
 
         public static Pose2d camOffsetBack = new Pose2d(3, -7.5, Math.toRadians(0));
-        public static Pose2d camOffsetFront = new Pose2d(-8.5, 5.25, Math.toRadians(0));
+        public static Pose2d camOffsetFront = new Pose2d(8.5, -5.25, Math.toRadians(0));
 
 
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
@@ -57,15 +57,15 @@ public class Constants {
     @Config
     public static class SpecialIntake {
         public static double min = 0;
-        public static double max = 0.33;
+        public static double max = 0.37;
 
         public static double ready = 0.22;
         public static double up = 0.0001;
-        public static double down5 = 0.259;
+        public static double down5 = 0.256;
         public static double down4 = 0.275;
-        public static double down3 = 0.291;
-        public static double down2 = 0.307;
-        public static double down1 = 0.32;
+        public static double down3 = 0.307;
+        public static double down2 = 0.32;
+        public static double down1 = 0.36;
 
     }
 
@@ -143,7 +143,7 @@ public class Constants {
         public static final String rightRearHardwareMapName = "backRight";
 
         public static double superFast = 1;
-        public static double fast = 0.85;
+        public static double fast = 0.9;
         public static double slow = 0.5;
         public static double fixSpeedStrafe = 0.75;
         public static double fixSpeedForward = 0.25;
@@ -184,8 +184,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 40;
-        public static double MAX_ACCEL = 40;
+        public static double MAX_VEL = 45;
+        public static double MAX_ACCEL = 45;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }
