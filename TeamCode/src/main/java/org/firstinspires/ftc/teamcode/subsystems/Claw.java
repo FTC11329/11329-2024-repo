@@ -10,7 +10,7 @@ public class Claw {
     public Claw(HardwareMap hardwareMap) {
         clawServo = hardwareMap.get(CRServo.class, "clawServo");
         //1 is intake -1 is outtake
-        clawServo.setDirection(DcMotorSimple.Direction.REVERSE);
+        clawServo.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
 

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
@@ -19,12 +20,14 @@ import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
     ElapsedTime elapsedTime = new ElapsedTime();
-    double edwardSheran;
+    double startClimb;
     boolean climbed = false;
     boolean climberDebounce = false;
     int intakeLevel = 6;
     boolean intakeDebounce = false;
     int climberPos = 0;
+
+    double temp1 = 0;
 
 
     Claw claw;
@@ -33,6 +36,7 @@ public class Teleop extends OpMode {
     Cameras cameras;
     Climber climber;
     Outtake outtake;
+    AutoServo autoServo;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
@@ -47,8 +51,9 @@ public class Teleop extends OpMode {
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        outtake = new Outtake(hardwareMap);
         climber = new Climber(hardwareMap);
+        outtake = new Outtake(hardwareMap);
+        autoServo = new AutoServo(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
@@ -203,7 +208,7 @@ public class Teleop extends OpMode {
 
         //CLIMBER
         if (climberUpBool && !climberDebounce && !climbed) {
-            edwardSheran = elapsedTime.milliseconds();
+            startClimb = elapsedTime.milliseconds();
             climberDebounce = true;
             intakeLevel = 5;
         } else if (!climberUpBool && climbed) {
@@ -218,8 +223,9 @@ public class Teleop extends OpMode {
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
         telemetry.addData("climber pos", climberPos);
+
         //makes you have to hold the button in to make the climber go up
-        if (climberUpBool && (elapsedTime.milliseconds() - edwardSheran > 300)) {
+        if (climberUpBool && (elapsedTime.milliseconds() - startClimb > 300)) {
             climberPos = Constants.Climber.climb;
             climbed = true;
         }
@@ -255,12 +261,10 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
-        telemetry.addData("is back", gamepad1.x);
-        telemetry.addData("cam", cameras.getRunnerPoseEstimate(0, true));
-        telemetry.addData("cam", cameras.getRunnerPoseEstimate(0, false));
-        telemetry.addData("special intake height", intakeLevel);
-        telemetry.addData("FPS Back" , cameras.backCamera.getFps());
-        telemetry.addData("FPS Front", cameras.frontCamera.getFps());
+        temp1 += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.1;
+        autoServo.setAutoServoR(temp1);
+        autoServo.setAutoServoL(temp1);
+        telemetry.addData("temp", temp1);
     }
 
     @Override

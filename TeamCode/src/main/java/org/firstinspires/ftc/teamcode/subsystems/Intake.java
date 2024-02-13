@@ -11,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 public class Intake {
-    Servo dropServo;
     DcMotor intakeMotor;
     Telemetry telemetry;
 
@@ -20,10 +19,6 @@ public class Intake {
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-    }
-
-    public void setDropServoPos(double servoPos) {
-        dropServo.setPosition(servoPos);
     }
 
     public void setIntakePower(double intakePower, int slidePos) {
