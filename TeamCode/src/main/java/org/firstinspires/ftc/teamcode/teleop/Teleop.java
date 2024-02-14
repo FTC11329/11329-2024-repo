@@ -33,7 +33,6 @@ public class Teleop extends OpMode {
     Claw claw;
     Plane plane;
     Intake intake;
-    Cameras cameras;
     Climber climber;
     Outtake outtake;
     AutoServo autoServo;
@@ -50,7 +49,6 @@ public class Teleop extends OpMode {
         claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
-        cameras = new Cameras(hardwareMap);
         climber = new Climber(hardwareMap);
         outtake = new Outtake(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
@@ -261,9 +259,13 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
-        temp1 += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.1;
+        temp1 += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.5;
         autoServo.setAutoServoR(temp1);
-        autoServo.setAutoServoL(temp1);
+        if (gamepad1.a) {
+            autoServo.setAutoServoL(0);
+        } else {
+            autoServo.setAutoServoL(temp1);
+        }
         telemetry.addData("temp", temp1);
     }
 
