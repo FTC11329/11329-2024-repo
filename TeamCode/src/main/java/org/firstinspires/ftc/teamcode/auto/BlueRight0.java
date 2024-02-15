@@ -67,7 +67,7 @@ public class BlueRight0 extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                         intake.setIntakePower(0, 0);
                     })
@@ -86,7 +86,7 @@ public class BlueRight0 extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                         intake.setIntakePower(0, 0);
                     })
@@ -101,7 +101,7 @@ public class BlueRight0 extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                     })
                     .waitSeconds(timeForPixelPlacement)
@@ -174,7 +174,7 @@ public class BlueRight0 extends LinearOpMode {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(2, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
                 .resetConstraints()

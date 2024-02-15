@@ -67,7 +67,7 @@ public class RedLeft4 extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                         intake.setIntakePower(0, 0);
                     })
@@ -86,7 +86,7 @@ public class RedLeft4 extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                         intake.setIntakePower(0, 0);
                     })
@@ -101,7 +101,7 @@ public class RedLeft4 extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                     })
                     .waitSeconds(timeForPixelPlacement)
@@ -146,7 +146,7 @@ public class RedLeft4 extends LinearOpMode {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(2, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
                 .waitSeconds(0.5)
@@ -208,7 +208,7 @@ public class RedLeft4 extends LinearOpMode {
                 .waitSeconds(0.5)
                 //ANOTHER ONE***********************************************************************
                 .addTemporalMarkerOffset(2, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
                 .setReversed(false)

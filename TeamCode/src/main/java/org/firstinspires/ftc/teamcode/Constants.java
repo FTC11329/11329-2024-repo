@@ -76,6 +76,11 @@ public class Constants {
     }
 
     @Config
+    public static class ClawSensor {
+        public static double distanceLimit = 0.57;
+    }
+
+    @Config
     public static class Plane {
         public static final String servoName = "planeServo";
         public static double hold = 0.1;
@@ -113,7 +118,7 @@ public class Constants {
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.37;
         public static double autoArmDrop = 0.04;
-        public static double intakePos = 0;
+        public static double intakePos = 0.015;
     }
 
     @Config

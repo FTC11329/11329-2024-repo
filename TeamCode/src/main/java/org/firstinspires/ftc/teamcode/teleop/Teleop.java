@@ -4,10 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.checkerframework.checker.units.qual.C;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
@@ -27,8 +30,6 @@ public class Teleop extends OpMode {
     boolean intakeDebounce = false;
     int climberPos = 0;
 
-    double temp1 = 0;
-
 
     Claw claw;
     Plane plane;
@@ -36,6 +37,7 @@ public class Teleop extends OpMode {
     Climber climber;
     Outtake outtake;
     AutoServo autoServo;
+    ClawSensor clawSensor;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
@@ -53,6 +55,7 @@ public class Teleop extends OpMode {
         outtake = new Outtake(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
+        clawSensor = new ClawSensor(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
     }
@@ -259,14 +262,14 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
-        temp1 += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.5;
-        autoServo.setAutoServoR(temp1);
-        if (gamepad1.a) {
-            autoServo.setAutoServoL(0);
-        } else {
-            autoServo.setAutoServoL(temp1);
-        }
-        telemetry.addData("temp", temp1);
+        telemetry.addData("Front dis", clawSensor.getFrontDistance(DistanceUnit.INCH));
+        telemetry.addData("Back  dis", clawSensor.getBackDistance(DistanceUnit.INCH));
+
+
+        telemetry.addData("Front", clawSensor.isFrontDistance());
+        telemetry.addData("Back ", clawSensor.isBackDistance());
+        telemetry.addData("Full ", clawSensor.isFull());
+        telemetry.addData("Empty ", clawSensor.isEmpty());
     }
 
     @Override

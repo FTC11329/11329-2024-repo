@@ -68,7 +68,7 @@ public class RedLeft extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                         intake.setIntakePower(0, 0);
                     })
@@ -87,7 +87,7 @@ public class RedLeft extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                         intake.setIntakePower(0, 0);
                     })
@@ -102,7 +102,7 @@ public class RedLeft extends LinearOpMode {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
-                        outtake.presetArm(0);
+                        outtake.presetArm(Constants.Arm.intakePos);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(timeForPixelPlacement)
