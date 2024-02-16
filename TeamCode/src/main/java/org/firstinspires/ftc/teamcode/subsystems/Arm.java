@@ -19,7 +19,7 @@ public class Arm {
         armServoL = hardwareMap.get(Servo.class, "leftArmServo");
         armServoR = hardwareMap.get(Servo.class, "rightArmServo");
 
-        setPosition(0);
+        setPosition(Constants.Arm.intakePos);
     }
 
     public double getCurrentPos() {

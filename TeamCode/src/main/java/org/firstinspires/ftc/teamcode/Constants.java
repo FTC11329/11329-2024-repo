@@ -63,7 +63,7 @@ public class Constants {
         public static double up = 0.0001;
         public static double down5 = 0.256;
         public static double down4 = 0.275;
-        public static double down3 = 0.307;
+        public static double down3 = 0.290;
         public static double down2 = 0.32;
         public static double down1 = 0.36;
 
@@ -117,7 +117,7 @@ public class Constants {
         public static double fixPos = 0.60;
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.37;
-        public static double autoArmDrop = 0.04;
+        public static double autoArmDrop = 0.06;
         public static double intakePos = 0.015;
     }
 

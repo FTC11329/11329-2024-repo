@@ -86,7 +86,7 @@ public class BlueRight extends LinearOpMode {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                         intake.setIntakePower(-0.9, 0);
                     })
-                    .lineTo(new Vector2d(-34, 12))
+                    .lineTo(new Vector2d(-31, 12))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -208,7 +208,7 @@ public class BlueRight extends LinearOpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
                 .splineTo(new Vector2d(36, 9), Math.toRadians(180))
-                .lineToLinearHeading(new Pose2d(-30, 14, Math.toRadians(125)))
+                .lineToLinearHeading(new Pose2d(-30, 10, Math.toRadians(125)))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);

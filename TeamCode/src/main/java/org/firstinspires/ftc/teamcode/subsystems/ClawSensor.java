@@ -36,7 +36,11 @@ public class ClawSensor {
         return colorSensorFront.alpha();
     }
     public double getFrontDistance(DistanceUnit distanceUnit) {
-        return colorSensorFront.getDistance(distanceUnit);
+        if (colorSensorFront.getDistance(DistanceUnit.INCH) == 0) {
+            return 10;
+        } else {
+            return colorSensorFront.getDistance(distanceUnit);
+        }
     }
 
     public Vector3D getBackColor() {

@@ -36,12 +36,22 @@ public class Lights {
     }
 
     //Dumb dump
+    //IMPORTANT ----- YOU HAVE TO USE setDumbLed BECAUSE THE POWER HAS TO BE *-1?
     public void setDumbLed(double power) {
         dumbLights.setPower(power);
     }
+    public void setDumbFlash(double time) {
+        if (elapsedTime.seconds() <= time) {
+            setDumbLed(0.5);
+        } else if (elapsedTime.seconds() >= time * 2) {
+            elapsedTime.reset();
+        } else {
+            setDumbLed(0);
+        }
+    }
     public void setDumbWave(double speed) {
         //Fancy math for wave
-        dumbLights.setPower(-0.5 * (Math.sin(speed * elapsedTime.seconds())) + 0.5);
+        setDumbLed(-0.5 * (Math.sin(speed * elapsedTime.seconds())) + 0.5);
     }
 
     public void stopLights() {

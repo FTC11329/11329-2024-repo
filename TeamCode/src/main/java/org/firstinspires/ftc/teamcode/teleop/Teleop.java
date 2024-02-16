@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Light;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.checkerframework.checker.units.qual.C;
@@ -16,6 +18,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lights;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
@@ -33,6 +36,7 @@ public class Teleop extends OpMode {
 
     Claw claw;
     Plane plane;
+    Lights lights;
     Intake intake;
     Climber climber;
     Outtake outtake;
@@ -51,6 +55,7 @@ public class Teleop extends OpMode {
         claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
+        lights = new Lights(hardwareMap);
         climber = new Climber(hardwareMap);
         outtake = new Outtake(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
@@ -142,9 +147,11 @@ public class Teleop extends OpMode {
 
 
         //INTAKE
-        if (intakeBool) {
+        if (intakeBool && !clawSensor.isFull()) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
+        } else if (intakeBool && clawSensor.isFull()) {
+            intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
         } else if (clawOuttakeBool) {
             claw.setPower(Constants.Claw.outake);
         } else if (intakeOuttakeBool) {
@@ -258,18 +265,20 @@ public class Teleop extends OpMode {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
             intakeLevel = 6;
         }
+
+        //LIGHTS
+        if (clawSensor.isFull()) {
+            lights.setDumbWave(7);
+        } else if (!clawSensor.isEmpty()) {
+            lights.setDumbFlash(0.2);
+        } else {
+            lights.setDumbLed(0);
+        }
+
         //FINALE
         outtake.periodic();
 
         //TEMPORARY
-        telemetry.addData("Front dis", clawSensor.getFrontDistance(DistanceUnit.INCH));
-        telemetry.addData("Back  dis", clawSensor.getBackDistance(DistanceUnit.INCH));
-
-
-        telemetry.addData("Front", clawSensor.isFrontDistance());
-        telemetry.addData("Back ", clawSensor.isBackDistance());
-        telemetry.addData("Full ", clawSensor.isFull());
-        telemetry.addData("Empty ", clawSensor.isEmpty());
     }
 
     @Override
