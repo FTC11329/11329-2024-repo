@@ -39,8 +39,9 @@ public class BlueRight extends LinearOpMode {
         Intake intake = new Intake(hardwareMap);
         Outtake outtake = new Outtake(hardwareMap);
         Cameras cameras = new Cameras(hardwareMap);
-        SpecialIntake specialIntake = new SpecialIntake(hardwareMap);
         Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry);
+        SpecialIntake specialIntake = new SpecialIntake(hardwareMap);
+
         DistanceSensors distanceSensors = new DistanceSensors(hardwareMap);
 
         while (!opModeIsActive() && !isStopRequested()) {

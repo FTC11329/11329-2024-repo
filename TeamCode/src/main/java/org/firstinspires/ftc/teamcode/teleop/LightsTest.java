@@ -18,11 +18,7 @@ public class LightsTest extends OpMode {
 
     @Override
     public void loop() {
-        if (gamepad1.a) {
-            lights.setDumbWave(7);
-        } else {
-            lights.setDumbFlash(0.4);
-        }
+        lights.setDumbWave(7, 0, 1);
     }
 
     @Override

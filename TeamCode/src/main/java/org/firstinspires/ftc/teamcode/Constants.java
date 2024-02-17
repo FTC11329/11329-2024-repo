@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.checkerframework.checker.compilermsgs.qual.CompilerMessageKey;
+import org.checkerframework.checker.units.qual.C;
 import org.opencv.core.Scalar;
 
 /**
@@ -72,7 +73,7 @@ public class Constants {
     @Config
     public static class Claw {
         public static double intake = 1;
-        public static double outake = -0.6;
+        public static double outake = -0.45;
     }
 
     @Config
@@ -98,12 +99,12 @@ public class Constants {
         public static int superLow = 450;
         public static int low = 900;
         public static int med = 1600;
-        public static int high = 1900;
+        public static int high = 1950;
 
         public static int groundPinchMin = 130;
         public static int groundPinchMax = 400;
 
-        public static int slideMax = 1950;
+        public static int slideMax = 2000;
         public static int slideMin = 0;
     }
 
@@ -134,6 +135,11 @@ public class Constants {
     @Config
     public static class DistanceSensors {
         public static int tolerance = 60;
+    }
+    @Config
+    public static class AutoServo {
+        public static double downLeft = 1;
+        public static double downRight = 1;
     }
 
     @Config

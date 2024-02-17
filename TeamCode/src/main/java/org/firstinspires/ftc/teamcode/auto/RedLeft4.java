@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Constants;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
-
+@Disabled
 @Autonomous(name = "Red Left 2 + 4 NOOOOOOOOOOO Run", group = "Competition")
 @Config
 public class RedLeft4 extends LinearOpMode {

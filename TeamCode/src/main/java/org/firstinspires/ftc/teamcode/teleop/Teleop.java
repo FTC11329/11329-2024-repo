@@ -32,6 +32,7 @@ public class Teleop extends OpMode {
     int intakeLevel = 6;
     boolean intakeDebounce = false;
     int climberPos = 0;
+    double temp = 0;
 
 
     Claw claw;
@@ -66,6 +67,11 @@ public class Teleop extends OpMode {
     }
 
     @Override
+    public void start() {
+        outtake.presetArm(Constants.Arm.intakePos);
+    }
+
+    @Override
     public void loop() {
         //INPUTS
         boolean superFastSpeed = gamepad1.left_bumper;
@@ -76,7 +82,7 @@ public class Teleop extends OpMode {
         boolean slowStrafeLeft = gamepad1.dpad_left;
         boolean slowStrafeRight = gamepad1.dpad_right;
 
-        boolean intakeBool = gamepad2.y;
+        boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
         boolean clawOuttakeBool = gamepad2.b;
         boolean intakeOuttakeBool = gamepad2.x;
 
@@ -86,7 +92,7 @@ public class Teleop extends OpMode {
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
         double slowSlidePower = gamepad1.right_trigger - gamepad1.left_trigger;
 
-        double armPower = gamepad2.left_stick_y;
+        double armPower = -gamepad2.left_stick_y;
         boolean armFix = gamepad1.a;
 
         double climberPower = gamepad2.right_stick_y;
@@ -268,17 +274,24 @@ public class Teleop extends OpMode {
 
         //LIGHTS
         if (clawSensor.isFull()) {
-            lights.setDumbWave(7);
+            lights.setDumbWave(0.75,0.5, 0.5);
         } else if (!clawSensor.isEmpty()) {
             lights.setDumbFlash(0.2);
         } else {
-            lights.setDumbLed(0);
+            lights.setDumbWave(0.75,0, 0.25);
         }
 
         //FINALE
         outtake.periodic();
 
         //TEMPORARY
+        if (gamepad1.x) {
+            autoServo.DropLeft();
+        } else if (gamepad1.b) {
+            autoServo.DropRight();
+        } else {
+            autoServo.upBoth();
+        }
     }
 
     @Override

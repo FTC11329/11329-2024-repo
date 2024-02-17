@@ -12,14 +12,11 @@ public class Arm {
     public int slidesPos;
     public double currentPos;
 
-    public Boolean sadArm = false;
-
 
     public Arm(HardwareMap hardwareMap) {
         armServoL = hardwareMap.get(Servo.class, "leftArmServo");
         armServoR = hardwareMap.get(Servo.class, "rightArmServo");
-
-        setPosition(Constants.Arm.intakePos);
+        setPosition(0);
     }
 
     public double getCurrentPos() {

@@ -49,9 +49,12 @@ public class Lights {
             setDumbLed(0);
         }
     }
-    public void setDumbWave(double speed) {
+    public void setDumbWave(double speed, double min, double max) {
         //Fancy math for wave
-        setDumbLed(-0.5 * (Math.sin(speed * elapsedTime.seconds())) + 0.5);
+        max = max / 2;
+        min = min + max;
+        speed = speed * 2 * Math.PI;
+        setDumbLed(-max * (Math.cos(speed * elapsedTime.seconds())) + min);
     }
 
     public void stopLights() {

@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 public class Slides {
     boolean overwrite = false;
     DcMotor slideMotor;
-    double manualChangeD;
+    double manualChangeD; //DEZZ NUTS OHHHHHHHHHHHHHHH
     int manualChangeI;
 
     public Slides(HardwareMap hardwareMap) {
