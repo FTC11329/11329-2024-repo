@@ -286,12 +286,11 @@ public class Teleop extends OpMode {
 
         //TEMPORARY
         if (gamepad1.x) {
-            autoServo.DropLeft();
+            temp += 0.01;
         } else if (gamepad1.b) {
-            autoServo.DropRight();
-        } else {
-            autoServo.upBoth();
+            temp -= 0.01;
         }
+        telemetry.addData("temp", temp);
     }
 
     @Override

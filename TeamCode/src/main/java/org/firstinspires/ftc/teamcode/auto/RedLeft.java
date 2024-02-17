@@ -24,12 +24,12 @@ import java.util.Optional;
 @Config
 public class RedLeft extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
-    static Vector2d placePositionOne   = new Vector2d(52, -31);
+    static Vector2d placePositionOne   = new Vector2d(52.5, -31);
     static Vector2d placePositionTwo   = new Vector2d(52, -38.25);
     static Vector2d placePositionThree = new Vector2d(52, -42);
 
-    static Vector2d pickupSpecial = new Vector2d(-55,-11);
-    static Vector2d pickupSpecial2 = new Vector2d(-57, -8);
+    static Vector2d pickupSpecial = new Vector2d(-56,-11);
+    static Vector2d pickupSpecial2 = new Vector2d(-56.5, -6);
 
 
     static double timeForPixelPlacement = 0.15;
@@ -69,7 +69,7 @@ public class RedLeft extends LinearOpMode {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                         intake.setIntakePower(-0.5, 0);
                     })
-                    .splineTo(new Vector2d(-48, -14), Math.toRadians(90))
+                    .splineTo(new Vector2d(-48, -10), Math.toRadians(90))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -111,7 +111,7 @@ public class RedLeft extends LinearOpMode {
                             (displacement, pose, derivative, baseRobotVelocity) -> 50, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 50  //acc
                     )
-                    .lineToLinearHeading(new Pose2d(-36, -31, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-35, -36, Math.toRadians(180)))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -189,15 +189,15 @@ public class RedLeft extends LinearOpMode {
                 })
                 .resetConstraints()
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 25, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 25  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
-                .addTemporalMarkerOffset(0.1,() -> {
+                .addTemporalMarkerOffset(0,() -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .addTemporalMarkerOffset(0.5, () -> {
+                .addTemporalMarkerOffset(0.4, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(2, () -> {
@@ -207,11 +207,11 @@ public class RedLeft extends LinearOpMode {
                 .waitSeconds(0.5)
                 .setReversed(false)
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineTo(new Vector2d(36, -7), Math.toRadians(180))
-                .lineToLinearHeading(new Pose2d(-30, -7, Math.toRadians(210)))
+                .lineTo(new Vector2d(36, -10))
+                .lineToLinearHeading(new Pose2d(-30, -9, Math.toRadians(195)))
                 .waitSeconds(0.25)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
@@ -255,9 +255,9 @@ public class RedLeft extends LinearOpMode {
                 )
                 .splineTo(new Vector2d(-11, -12), Math.toRadians(0))
                 .splineTo(new Vector2d(25, -10), Math.toRadians(0))
-                .splineTo(new Vector2d(30, -31), Math.toRadians(0))
+                .splineTo(new Vector2d(33, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.med - 600, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 800, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
