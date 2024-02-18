@@ -29,7 +29,7 @@ public class BlueRight extends LinearOpMode {
     static Vector2d placePositionThree = new Vector2d(52.5, 31.5);
 
     static Vector2d pickupSpecial = new Vector2d(-53.25,11);
-    static Vector2d pickupSpecial2 = new Vector2d(-52.5, 14);
+    static Vector2d pickupSpecial2 = new Vector2d(-52, 14);
 
     static double timeForPixelPlacement = 0.1;
 
@@ -131,10 +131,10 @@ public class BlueRight extends LinearOpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation = placePositionOne;
-            finalPlaceLocation2 = placePositionThree;
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0,1));
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation = placePositionTwo;
-            finalPlaceLocation2 = placePositionThree;
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0,1));
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
             finalPlaceLocation2 = placePositionTwo;
@@ -147,7 +147,6 @@ public class BlueRight extends LinearOpMode {
                 .addTemporalMarkerOffset(-1, () -> {
                     intake.setIntakePower(1, 0);
                     claw.setPower(Constants.Claw.intake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .addTemporalMarkerOffset(0, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -175,7 +174,7 @@ public class BlueRight extends LinearOpMode {
                 .splineTo(new Vector2d(-11, 7), Math.toRadians(0))
                 .splineTo(new Vector2d(25, 5), Math.toRadians(0))
                 .resetConstraints()
-                .splineTo(new Vector2d(37, 21), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(37, 21), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1,() -> {
                     outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
                 })
@@ -251,7 +250,7 @@ public class BlueRight extends LinearOpMode {
                 .splineTo(new Vector2d(-11, 12), Math.toRadians(0))
                 .splineTo(new Vector2d(25, 10), Math.toRadians(0))
                 .resetConstraints()
-                .splineTo(new Vector2d(37.7, 19.5), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(37.7, 19.5), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1, () -> {
                     outtake.preset(Constants.Slides.med - 600, Constants.Arm.placePos);
                     intake.setIntakePower(0, 0);

@@ -156,12 +156,20 @@ public class Teleop extends OpMode {
         if (intakeBool && !clawSensor.isFull()) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
+
         } else if (intakeBool && clawSensor.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
+
         } else if (clawOuttakeBool) {
             claw.setPower(Constants.Claw.outake);
-        } else if (intakeOuttakeBool) {
+
+        } else if (intakeOuttakeBool && clawSensor.isFull()) {
+            claw.setPower(Constants.Claw.intake);
+            intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
+
+        } else if (intakeOuttakeBool && !clawSensor.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
+
         } else {
             claw.setPower(0);
             intake.setIntakePower(0, outtake.getSlideTargetPosition());
@@ -285,12 +293,19 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
+//        if (gamepad1.x) {
+//            temp += 0.01;
+//        } else if (gamepad1.b) {
+//            temp -= 0.01;
+//        }
+//        telemetry.addData("temp", temp);
         if (gamepad1.x) {
-            temp += 0.01;
+            autoServo.DropLeft();
         } else if (gamepad1.b) {
-            temp -= 0.01;
+            autoServo.DropRight();
+        } else {
+            autoServo.upBoth();
         }
-        telemetry.addData("temp", temp);
     }
 
     @Override

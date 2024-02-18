@@ -62,9 +62,9 @@ public class Constants {
 
         public static double ready = 0.22;
         public static double up = 0.0001;
-        public static double down5 = 0.25;
+        public static double down5 = 0.24;
         public static double down4 = 0.265;
-        public static double down3 = 0.29;
+        public static double down3 = 0.285;
         public static double down2 = 0.305;
         public static double down1 = 0.32;
 
@@ -96,7 +96,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 450;
+        public static int superLow = 450;//800
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1950;
@@ -119,7 +119,7 @@ public class Constants {
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.37;
         public static double autoArmDrop = 0.06;
-        public static double intakePos = 0.015;
+        public static double intakePos = 0.0;
     }
 
     @Config
@@ -140,6 +140,9 @@ public class Constants {
     public static class AutoServo {
         public static double downLeft = 1;
         public static double downRight = 1;
+
+        public static double upLeft = 0;
+        public static double upRight = 0;
     }
 
     @Config

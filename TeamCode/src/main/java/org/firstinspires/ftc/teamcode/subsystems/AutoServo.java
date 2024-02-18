@@ -15,20 +15,20 @@ public class AutoServo {
 
         AutoServoR.setDirection(Servo.Direction.REVERSE);
         AutoServoL.setDirection(Servo.Direction.FORWARD);
-        setAutoServoL(0);
-        setAutoServoR(0);
+        upBoth();
     }
+
     //Pre-sets
     public void DropLeft() {
-        AutoServoR.setPosition(Constants.AutoServo.downRight);
+        AutoServoL.setPosition(Constants.AutoServo.downLeft);
     }
     public void DropRight() {
-        AutoServoL.setPosition(Constants.AutoServo.downLeft);
+        AutoServoR.setPosition(Constants.AutoServo.downRight);
     }
 
     public void upBoth(){
-        AutoServoL.setPosition(0);
-        AutoServoR.setPosition(0);
+        AutoServoL.setPosition(Constants.AutoServo.upLeft);
+        AutoServoR.setPosition(Constants.AutoServo.upRight);
     }
 
     public void setAutoServoL(double pos) {
