@@ -29,7 +29,7 @@ public class RedLeft2 extends LinearOpMode {
     static Vector2d placePositionThree = new Vector2d(51.5, -42);
 
     static Vector2d pickupSpecial = new Vector2d(-54.5,-9);
-    static Vector2d pickupSpecial2 = new Vector2d(-53.5, -17);
+    static Vector2d pickupSpecial2 = new Vector2d(-53.5, -14);
 
 
     static double timeForPixelPlacement = 0.1;
@@ -221,7 +221,7 @@ public class RedLeft2 extends LinearOpMode {
                 .resetConstraints()
                 .splineTo(new Vector2d(37, -29), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 600, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
@@ -242,5 +242,7 @@ public class RedLeft2 extends LinearOpMode {
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .build());
+
+        cameras.kill();
     }
 }

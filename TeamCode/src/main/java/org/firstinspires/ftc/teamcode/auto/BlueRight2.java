@@ -23,12 +23,12 @@ import java.util.Optional;
 @Config
 public class BlueRight2 extends LinearOpMode {
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
-    static Vector2d placePositionOne   = new Vector2d(52.5, 44);
-    static Vector2d placePositionTwo   = new Vector2d(52.5, 36.5);
-    static Vector2d placePositionThree = new Vector2d(52.5, 31.5);
+    static Vector2d placePositionOne   = new Vector2d(53, 44);
+    static Vector2d placePositionTwo   = new Vector2d(53, 36.5);
+    static Vector2d placePositionThree = new Vector2d(53, 31.5);
 
     static Vector2d pickupSpecial = new Vector2d(-54.5,12);
-    static Vector2d pickupSpecial2 = new Vector2d(-52.5, 19);
+    static Vector2d pickupSpecial2 = new Vector2d(-52.5, 11);
 
     static double timeForPixelPlacement = 0.1;
 
@@ -63,7 +63,7 @@ public class BlueRight2 extends LinearOpMode {
                     })
                     .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                         outtake.presetArm(Constants.Arm.intakePos);
-                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                     })
                     .waitSeconds(timeForPixelPlacement)
                     .lineTo(pickupSpecial.plus(new Vector2d(-1.25,0)))
@@ -172,12 +172,6 @@ public class BlueRight2 extends LinearOpMode {
                 .waitSeconds(0.5)
                 .setReversed(false)
                 .splineTo(new Vector2d(36, 9), Math.toRadians(180))
-                .addTemporalMarkerOffset(0.1, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
-                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("did see two", optionalPose.isPresent());
-                    telemetry.update();
-                })
 
                 //Back For Another One**************************************
 
@@ -190,13 +184,13 @@ public class BlueRight2 extends LinearOpMode {
                 .addTemporalMarkerOffset(-1, () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .addTemporalMarkerOffset(0, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .addTemporalMarkerOffset(0.5, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                 })
                 .addTemporalMarkerOffset(1, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);

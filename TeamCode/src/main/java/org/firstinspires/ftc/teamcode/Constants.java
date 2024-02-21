@@ -50,7 +50,7 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.75;
-        public static double outake = -1;
+        public static double outake = -0.8;
 
         public static double autoVomitSpeed = -0.2;
     }
@@ -63,7 +63,7 @@ public class Constants {
         public static double ready = 0.22;
         public static double up = 0.0001;
         public static double down5 = 0.24;
-        public static double down4 = 0.265;
+        public static double down4 = 0.26;
         public static double down3 = 0.285;
         public static double down2 = 0.305;
         public static double down1 = 0.32;
@@ -90,7 +90,7 @@ public class Constants {
 
     @Config
     public static class Slides {
-        public static int manualSlidePower = 100;
+        public static int manualSlidePower = 70;
         public static double slowManualSlidePower = 0.2; //this times manual slide power is the actual speed
 
         public static int upAmount = 10;
@@ -128,7 +128,7 @@ public class Constants {
 
         public static int down = 0;
         public static int climberFire = -1100;
-        public static int climbButSlightlyDown = -1100;
+        public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }
 

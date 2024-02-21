@@ -70,6 +70,11 @@ public class Cameras {
         return aprilTagBack.getDetections();
     }
 
+    public void kill() {
+        frontCamera.close();
+        backCamera.close();
+    }
+
     public Optional<Pose2d> getRunnerPoseEstimate(int id, boolean isBack) {
         Optional<AprilTagDetection> desiredTag = Optional.empty();
         if (isBack) {

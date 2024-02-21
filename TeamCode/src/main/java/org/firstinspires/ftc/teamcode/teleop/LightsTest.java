@@ -18,7 +18,7 @@ public class LightsTest extends OpMode {
 
     @Override
     public void loop() {
-        lights.setDumbWave(7, 0, 1);
+        lights.setDumbWave(0.5, 0, 1);
     }
 
     @Override

@@ -34,7 +34,7 @@ public class RedLeft extends OpMode {
     static Vector2d placePositionLeft = new Vector2d(52.5, -35);
 
     static Vector2d pickupSpecial = new Vector2d(-56, -12);
-    static Vector2d pickupSpecial2 = new Vector2d(-56.5, -6);
+    static Vector2d pickupSpecial2 = new Vector2d(-57, -6);
 
     static double timeForPixelPlacement = 0.15;
 
@@ -129,7 +129,7 @@ public class RedLeft extends OpMode {
                         intake.setIntakePower(0, 0);
                     })
                     .waitSeconds(timeForPixelPlacement)
-                    .splineTo(pickupSpecial.plus(new Vector2d(1,0)), Math.toRadians(180))
+                    .splineTo(pickupSpecial.plus(new Vector2d(1.5,0)), Math.toRadians(180))
                     .build();
 
         } else if (barcodePosition == BarcodePosition.Three) {
@@ -287,6 +287,7 @@ public class RedLeft extends OpMode {
                 })
                 .waitSeconds(1)
                 .forward(2.5)
+                .waitSeconds(1)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.25, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
