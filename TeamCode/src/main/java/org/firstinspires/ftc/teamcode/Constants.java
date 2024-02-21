@@ -61,11 +61,11 @@ public class Constants {
         public static double max = 0.37;
 
         public static double ready = 0.22;
-        public static double up = 0.0001;
-        public static double down5 = 0.24;
+        public static double up = 0.0000001;
+        public static double down5 = 0.235;
         public static double down4 = 0.26;
-        public static double down3 = 0.285;
-        public static double down2 = 0.305;
+        public static double down3 = 0.28;
+        public static double down2 = 0.295;
         public static double down1 = 0.32;
 
     }
