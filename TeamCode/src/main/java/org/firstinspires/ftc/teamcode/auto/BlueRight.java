@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
@@ -45,10 +44,13 @@ public class BlueRight extends LinearOpMode {
         DistanceSensors distanceSensors = new DistanceSensors(hardwareMap);
 
         while (!opModeIsActive() && !isStopRequested()) {
-            BarcodePosition barcodePosition = distanceSensors.getDirectionBlue();
+            boolean isBack = gamepad1.a;
+            cameras.setCameraSide(gamepad1.a);
+
+            BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
             telemetry.addData("Barcode Position", barcodePosition);
-            telemetry.addData("FPS Back" , cameras.backCamera.getFps());
-            telemetry.addData("FPS Front", cameras.frontCamera.getFps());
+            telemetry.addData("FPS", cameras.switchingCamera.getFps());
+            telemetry.addData("Is back", isBack);
             telemetry.update();
         }
         waitForStart();

@@ -6,6 +6,8 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.PtzControl;
 import org.firstinspires.ftc.teamcode.Constants;
@@ -22,94 +24,80 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 public class Cameras {
-    public VisionPortal frontCamera;
-    public VisionPortal backCamera;
+    boolean wasBack = true;
 
-    AprilTagProcessor aprilTagBack;
-    AprilTagProcessor aprilTagFront;
+    public VisionPortal switchingCamera;
+
+    WebcamName backWebcam;
+    WebcamName frontWebcam;
+
+    AprilTagProcessor aprilTagProcessor;
     public BarcodeProcessor barcodeProcessor = new BarcodeProcessor();
     DashboardCameraStreamProcessor dashboardCameraStreamProcessor = new DashboardCameraStreamProcessor();
 
     public Cameras(HardwareMap hardwareMap) {
-        aprilTagBack  = AprilTagDetectionPipeline.createAprilTagProcessor();
-        aprilTagFront = AprilTagDetectionPipeline.createAprilTagProcessor();
+        backWebcam  = hardwareMap.get(WebcamName.class, Constants.Vision.backWebcamName);
+        frontWebcam = hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName);
 
+        CameraName switchableCameraName = ClassFactory.getInstance()
+                .getCameraManager().nameForSwitchableCamera(backWebcam, frontWebcam);
 
-        frontCamera = new VisionPortal
+        aprilTagProcessor = AprilTagDetectionPipeline.createAprilTagProcessor();
+
+        switchingCamera = new VisionPortal
                 .Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.frontWebcamName))
+                .setCamera(switchableCameraName)
                 .setCameraResolution(new Size(1280, 720))
 //                .addProcessor(barcodeProcessor)
-                .addProcessor(aprilTagFront)
-                .enableLiveView(false)
-                .build();
-
-        backCamera = new VisionPortal
-                .Builder()
-                .setCamera(hardwareMap.get(WebcamName.class, Constants.Vision.backWebcamName))
-                .setCameraResolution(new Size(1280, 720))
-//                .addProcessor(barcodeProcessor)
-                .addProcessor(aprilTagBack)
+                .addProcessor(aprilTagProcessor)
                 .enableLiveView(false)
                 .build();
 
         FtcDashboard.getInstance().startCameraStream(dashboardCameraStreamProcessor, 30);
+
+        switchingCamera.setActiveCamera(backWebcam);
     }
 
-    public boolean isZoomCorrectionLegal() {
-        return frontCamera.getCameraState() == VisionPortal.CameraState.STREAMING;
-    }
-
-    public void correctZoom() {
-        PtzControl frontWebcamControl = frontCamera.getCameraControl(PtzControl.class);
-
-        frontWebcamControl.setZoom(frontWebcamControl.getMinZoom());
-    }
 
     public ArrayList<AprilTagDetection> getAprilTagRecognitions() {
-        return aprilTagBack.getDetections();
+        return aprilTagProcessor.getDetections();
     }
 
     public void kill() {
-        frontCamera.close();
-        backCamera.close();
+        switchingCamera.close();
+    }
+
+    public void setCameraSide(boolean setBack) {
+        if (switchingCamera.getCameraState() == VisionPortal.CameraState.STREAMING) {
+            if (setBack && !wasBack) {
+                switchingCamera.setActiveCamera(backWebcam);
+            } else if (!setBack && wasBack) {
+                switchingCamera.setActiveCamera(frontWebcam);
+            }
+            wasBack = setBack;
+        }
     }
 
     public Optional<Pose2d> getRunnerPoseEstimate(int id, boolean isBack) {
+        isBack = switchingCamera.getActiveCamera().equals(backWebcam);
+
         Optional<AprilTagDetection> desiredTag = Optional.empty();
-        if (isBack) {
-            //Back cam
-            if (id == 0) {
-                //for cycling through all of them
-                for (int i = 1; i < 10; i++) {
-                    desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagBack.getDetections(), i);
-                    if (desiredTag.isPresent()) {
-                        break;
-                    }
+        if (id == 0) {
+            //for cycling through all of them
+            for (int i = 1; i < 10; i++) {
+                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagProcessor.getDetections(), i);
+                if (desiredTag.isPresent()) {
+                    break;
                 }
-            } else {
-                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagBack.getDetections(), id);
             }
         } else {
-            //Front cam
-            if (id == 0) {
-                //for cycling through all of them
-                for (int i = 1; i < 10; i++) {
-                    desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagFront.getDetections(), i);
-                    if (desiredTag.isPresent()) {
-                        break;
-                    }
-                }
-            } else {
-                desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagFront.getDetections(), id);
-            }
+            desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagProcessor.getDetections(), id);
         }
 
         if (!desiredTag.isPresent()) return Optional.empty();
 
         Pose2d pose = AprilTagToRoadRunner.tagToRunner(desiredTag.get(), isBack);
         return Optional.of(pose);
-
     }
 
     public Optional<BarcodePosition> getBarcodePosition() {

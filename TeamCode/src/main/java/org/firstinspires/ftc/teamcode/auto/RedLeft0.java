@@ -43,8 +43,13 @@ public class RedLeft0 extends LinearOpMode {
         DistanceSensors distanceSensors = new DistanceSensors(hardwareMap);
 
         while (!opModeIsActive() && !isStopRequested()) {
+            boolean isBack = gamepad1.a;
+            cameras.setCameraSide(gamepad1.a);
+
             BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
             telemetry.addData("Barcode Position", barcodePosition);
+            telemetry.addData("FPS", cameras.switchingCamera.getFps());
+            telemetry.addData("Is back", isBack);
             telemetry.update();
         }
         waitForStart();

@@ -62,15 +62,19 @@ public class RedLeft5 extends OpMode {
 
     @Override
     public void init_loop() {
+        boolean isBack = gamepad1.a;
+        cameras.setCameraSide(gamepad1.a);
+
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
         telemetry.addData("Barcode Position", barcodePosition);
-        telemetry.addData("FPS Back", cameras.backCamera.getFps());
-        telemetry.addData("FPS Front", cameras.frontCamera.getFps());
+        telemetry.addData("FPS", cameras.switchingCamera.getFps());
+        telemetry.addData("Is back", isBack);
         telemetry.update();
     }
 
     @Override
     public void start() {
+        cameras.setCameraSide(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
 
         drivetrain.setPoseEstimate(startingPose);
@@ -192,6 +196,7 @@ public class RedLeft5 extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
+                    cameras.setCameraSide(false);
                 })
                 .resetConstraints()
                 .setConstraints(
@@ -239,6 +244,7 @@ public class RedLeft5 extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
+                    cameras.setCameraSide(true);
                 })
 
                 //Back For Another One**************************************
@@ -286,6 +292,7 @@ public class RedLeft5 extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see Three", optionalPose.isPresent());
                     telemetry.update();
+                    cameras.kill();
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 35, //vel
@@ -308,6 +315,6 @@ public class RedLeft5 extends OpMode {
 
     @Override
     public void loop() {
-
+        stop();
     }
 }
