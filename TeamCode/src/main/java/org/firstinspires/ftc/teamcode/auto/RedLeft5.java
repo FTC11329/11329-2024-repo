@@ -65,7 +65,7 @@ public class RedLeft5 extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(gamepad1.a);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
@@ -75,7 +75,7 @@ public class RedLeft5 extends OpMode {
     @Override
     public void start() {
         cameras.setCameraSide(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);
 

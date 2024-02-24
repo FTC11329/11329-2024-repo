@@ -48,7 +48,7 @@ public class RedLeft2 extends LinearOpMode {
             boolean isBack = gamepad1.a;
             cameras.setCameraSide(gamepad1.a);
 
-            BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
+            BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
             telemetry.addData("Barcode Position", barcodePosition);
             telemetry.addData("FPS", cameras.switchingCamera.getFps());
             telemetry.addData("Is back", isBack);
@@ -56,7 +56,7 @@ public class RedLeft2 extends LinearOpMode {
         }
         waitForStart();
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed();
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);
 
