@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.checkerframework.checker.compilermsgs.qual.CompilerMessageKey;
 import org.checkerframework.checker.units.qual.C;
 import org.opencv.core.Scalar;
@@ -78,7 +79,17 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double distanceLimit = 0.57;
+        public static double distanceLimit = 0.5;
+
+        public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
+        public static Vector3D whiteBack   = new Vector3D(1425, 2950, 3600);
+        public static Vector3D yellowFront = new Vector3D(1000, 1600,  564);
+        public static Vector3D yellowBack  = new Vector3D( 771, 1265,  390);
+        public static Vector3D greenFront  = new Vector3D( 360, 1155,  565);
+        public static Vector3D greenBack   = new Vector3D( 217,  845,  372);
+        public static Vector3D purpleFront = new Vector3D( 600, 980, 1985);
+        public static Vector3D purpleBack  = new Vector3D(650, 1110, 1990);
+
     }
 
     @Config

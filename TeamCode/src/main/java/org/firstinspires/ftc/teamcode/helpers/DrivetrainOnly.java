@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.helpers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
+import org.firstinspires.ftc.teamcode.utility.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 
 @TeleOp(name = "Drivetrain Only", group = "Helpers")

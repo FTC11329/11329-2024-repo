@@ -63,6 +63,14 @@ public class Cameras {
         return aprilTagProcessor.getDetections();
     }
 
+    public void resumeStreaming() {
+        switchingCamera.resumeStreaming();
+    }
+
+    public void stopStreaming() {
+        switchingCamera.stopStreaming();
+    }
+
     public void kill() {
         switchingCamera.close();
     }

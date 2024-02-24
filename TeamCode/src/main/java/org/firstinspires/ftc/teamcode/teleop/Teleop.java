@@ -2,12 +2,8 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Light;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.checkerframework.checker.units.qual.C;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
@@ -15,13 +11,14 @@ import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
-import org.firstinspires.ftc.teamcode.subsystems.DriveSpeedEnum;
+import org.firstinspires.ftc.teamcode.utility.DriveSpeedEnum;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
 import org.firstinspires.ftc.teamcode.subsystems.Lights;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
@@ -32,8 +29,6 @@ public class Teleop extends OpMode {
     int intakeLevel = 6;
     boolean intakeDebounce = false;
     int climberPos = 0;
-    double temp = 0;
-
 
     Claw claw;
     Plane plane;
@@ -41,6 +36,7 @@ public class Teleop extends OpMode {
     Intake intake;
     Climber climber;
     Outtake outtake;
+    Cameras cameras;
     AutoServo autoServo;
     ClawSensor clawSensor;
     Drivetrain drivetrain;
@@ -59,6 +55,7 @@ public class Teleop extends OpMode {
         lights = new Lights(hardwareMap);
         climber = new Climber(hardwareMap);
         outtake = new Outtake(hardwareMap);
+        cameras = new Cameras(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         clawSensor = new ClawSensor(hardwareMap);
@@ -69,6 +66,8 @@ public class Teleop extends OpMode {
     @Override
     public void start() {
         outtake.presetArm(Constants.Arm.intakePos);
+        cameras.setCameraSide(false);
+        cameras.stopStreaming();
     }
 
     @Override
@@ -282,23 +281,17 @@ public class Teleop extends OpMode {
 
         //LIGHTS
         if (clawSensor.isFull()) {
-            lights.setDumbWave(0.75,0.5, 0.5);
+            lights.setDumbLed(0.5);
         } else if (!clawSensor.isEmpty()) {
             lights.setDumbFlash(0.2);
         } else {
-            lights.setDumbWave(0.75,0, 0.25);
+            lights.setDumbWave(1,0, 1);
         }
 
         //FINALE
         outtake.periodic();
 
         //TEMPORARY
-//        if (gamepad1.x) {
-//            temp += 0.01;
-//        } else if (gamepad1.b) {
-//            temp -= 0.01;
-//        }
-//        telemetry.addData("temp", temp);
         if (gamepad1.x) {
             autoServo.DropLeft();
         } else if (gamepad1.b) {
@@ -306,11 +299,20 @@ public class Teleop extends OpMode {
         } else {
             autoServo.upBoth();
         }
+
+        if (climberFireBool) {
+            cameras.resumeStreaming();
+        } else if (climberUpBool) {
+            cameras.stopStreaming();
+        }
+        telemetry.addData("front", clawSensor.getFrontColor());
+        telemetry.addData("back" , clawSensor.getBackColor());
     }
 
     @Override
     public void stop() {
         claw.stopClaw();
+        cameras.kill();
         intake.stopIntake();
         outtake.stopOuttake();
         drivetrain.stopDrive();

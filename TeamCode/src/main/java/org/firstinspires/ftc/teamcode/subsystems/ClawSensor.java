@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.utility.ColorEnum;
 
 public class ClawSensor {
     RevColorSensorV3 colorSensorFront;
@@ -28,7 +29,8 @@ public class ClawSensor {
         colorSensorFront.enableLed(true);
         colorSensorBack .enableLed(true);
     }
-    public Vector3D getFrontColor() {
+    //colors sensors
+    public Vector3D getFrontColorNumbers() {
         colorFront = new Vector3D(colorSensorFront.red(), colorSensorFront.green(), colorSensorFront.blue());
         return colorFront;
     }
@@ -43,7 +45,7 @@ public class ClawSensor {
         }
     }
 
-    public Vector3D getBackColor() {
+    public Vector3D getBackColorNumbers() {
         colorBack = new Vector3D(colorSensorBack.red(), colorSensorBack.green(), colorSensorBack.blue());
         return colorBack;
     }
@@ -54,6 +56,72 @@ public class ClawSensor {
         return colorSensorBack.getDistance(distanceUnit);
     }
 
+    //colors
+    public ColorEnum getBackColor() {
+        Vector3D color;
+        double white;
+        double yellow;
+        double green;
+        double purple;
+
+        if (isBackDistance()) {
+            color = getBackColorNumbers();
+
+            white  = color.distance(Constants.ClawSensor.whiteBack);
+            yellow = color.distance(Constants.ClawSensor.yellowBack);
+            green  = color.distance(Constants.ClawSensor.greenBack);
+            purple = color.distance(Constants.ClawSensor.purpleBack);
+
+        } else {
+            //!don't not no see nothing
+            return ColorEnum.Empty;
+        }
+
+        if (white < yellow && white < green && white < purple) {
+            return ColorEnum.White;
+        } else if (yellow < white && yellow < green && yellow < purple) {
+            return ColorEnum.Yellow;
+        } else if (green < white && green < yellow && green < purple) {
+            return ColorEnum.Green;
+        } else if (purple < white && purple < yellow && purple < green) {
+            return ColorEnum.Purple;
+        }
+        return ColorEnum.Empty;
+    }
+    public ColorEnum getFrontColor() {
+        Vector3D color;
+        double white;
+        double yellow;
+        double green;
+        double purple;
+
+        if (isFrontDistance()) {
+            color = getFrontColorNumbers();
+
+            white  = color.distance(Constants.ClawSensor.whiteFront);
+            yellow = color.distance(Constants.ClawSensor.yellowFront);
+            green  = color.distance(Constants.ClawSensor.greenFront);
+            purple = color.distance(Constants.ClawSensor.purpleFront);
+
+        } else {
+            //!don't not no see nothing
+            return ColorEnum.Empty;
+        }
+
+        if (white < yellow && white < green && white < purple) {
+            return ColorEnum.White;
+        } else if (yellow < white && yellow < green && yellow < purple) {
+            return ColorEnum.Yellow;
+        } else if (green < white && green < yellow && green < purple) {
+            return ColorEnum.Green;
+        } else if (purple < white && purple < yellow && purple < green) {
+            return ColorEnum.Purple;
+        }
+        return ColorEnum.Empty;
+    }
+
+
+    //Distances
     public boolean isFrontDistance() {
         return (colorSensorFront.getDistance(DistanceUnit.INCH) <= Constants.ClawSensor.distanceLimit);
     }
