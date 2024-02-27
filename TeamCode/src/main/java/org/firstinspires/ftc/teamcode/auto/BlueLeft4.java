@@ -25,14 +25,14 @@ import java.util.Optional;
 @Config
 public class BlueLeft4 extends OpMode {
     boolean yellowLeft;
-    static Pose2d startingPose = new Pose2d(18, 60, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52.5, 31.5);
+    static Pose2d startingPose = new Pose2d(18, 60, Math.toRadians(-90));
+    static Vector2d placePositionOne = new Vector2d(50, 31.5); //change to 3
     static Vector2d placePositionTwo = new Vector2d(52, 38.25);
-    static Vector2d placePositionThree = new Vector2d(52, 43.75);
+    static Vector2d placePositionThree = new Vector2d(50, 43.75);
 
-    static Vector2d placePositionLeft = new Vector2d(52.5, 32);
+    static Vector2d placePositionLeft = new Vector2d(50, 32);
     static Vector2d parkPositionCenter = new Vector2d(35, 35);
-    static Vector2d placePositionRight = new Vector2d(52.5, 41);
+    static Vector2d placePositionRight = new Vector2d(50, 41);
 
 
     static Vector2d pickupSpecial = new Vector2d(-56, 12);
@@ -67,17 +67,18 @@ public class BlueLeft4 extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(gamepad1.a);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
+        telemetry.addData("stete", cameras.switchingCamera.getCameraState());
         telemetry.update();
     }
 
     @Override
     public void start() {
         cameras.setCameraSide(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
 
         drivetrain.setPoseEstimate(startingPose);
 
@@ -85,7 +86,7 @@ public class BlueLeft4 extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
-                    .lineToLinearHeading(new Pose2d(8, 31, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(30.5, 36, Math.toRadians(0)))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -95,7 +96,6 @@ public class BlueLeft4 extends OpMode {
                     .waitSeconds(timeForPixelPlacement)
                     .lineToLinearHeading(new Pose2d(parkPositionCenter.getX(), parkPositionCenter.getY(), Math.toRadians(180)))
                     .build();
-
         } else if (barcodePosition == BarcodePosition.Two) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
                     .lineToLinearHeading(new Pose2d(26, 25, Math.toRadians(0)))
@@ -111,7 +111,7 @@ public class BlueLeft4 extends OpMode {
 
         } else if (barcodePosition == BarcodePosition.Three) {
             placeSpikeMark = drivetrain.trajectorySequenceBuilder(startingPose)
-                    .lineToLinearHeading(new Pose2d(30.5, 36, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(12, 31, Math.toRadians(0)))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -158,8 +158,8 @@ public class BlueLeft4 extends OpMode {
                     cameras.setCameraSide(false);
                 })
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 10, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 10  //acc
                 )
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
@@ -194,7 +194,7 @@ public class BlueLeft4 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
                 .splineToConstantHeading(new Vector2d(36, 10), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(-30, 9, Math.toRadians(195)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-30, 9, Math.toRadians(-195)), Math.toRadians(180))
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));

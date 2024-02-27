@@ -61,13 +61,13 @@ public class Constants {
         public static double min = 0;
         public static double max = 0.37;
 
-        public static double ready = 0.22;
-        public static double up = 0.0000001;
-        public static double down5 = 0.235;
-        public static double down4 = 0.26;
-        public static double down3 = 0.28;
-        public static double down2 = 0.295;
-        public static double down1 = 0.32;
+        public static double ready = 0.235;
+        public static double up = 0.05;
+        public static double down5 = 0.265;
+        public static double down4 = 0.29;
+        public static double down3 = 0.31;
+        public static double down2 = 0.325;
+        public static double down1 = 0.35;
 
     }
 
@@ -102,12 +102,12 @@ public class Constants {
     @Config
     public static class Slides {
         public static int manualSlidePower = 70;
-        public static double slowManualSlidePower = 0.2; //this times manual slide power is the actual speed
+        public static double slowManualSlidePower = 0.4; //this times manual slide power is the actual speed
 
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 450;//800
+        public static int superLow = 700;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1950;
@@ -115,7 +115,7 @@ public class Constants {
         public static int groundPinchMin = 130;
         public static int groundPinchMax = 400;
 
-        public static int slideMax = 2000;
+        public static int slideMax = 1850;
         public static int slideMin = 0;
     }
 
@@ -149,8 +149,8 @@ public class Constants {
     }
     @Config
     public static class AutoServo {
-        public static double downLeft = 1;
-        public static double downRight = 1;
+        public static double downLeft = 0.92;
+        public static double downRight = 0.91;
 
         public static double upLeft = 0;
         public static double upRight = 0;

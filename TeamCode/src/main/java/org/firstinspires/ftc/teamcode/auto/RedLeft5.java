@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Left 5 + 2", group = "Competition")
+@Autonomous(name = "Red Left 5 + 2", group = " Testing")
 @Config
 public class RedLeft5 extends OpMode {
     boolean goLeft;
@@ -87,7 +87,8 @@ public class RedLeft5 extends OpMode {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                         intake.setIntakePower(-0.5, 0);
                     })
-                    .splineTo(new Vector2d(-47, -16), Math.toRadians(90))
+                    .lineTo(new Vector2d(-49, -50))
+                    .lineTo(new Vector2d(-47, -16))
                     .addTemporalMarker(() -> {
                         outtake.presetArm(Constants.Arm.autoArmDrop);
                     })
@@ -206,26 +207,38 @@ public class RedLeft5 extends OpMode {
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
                 .addTemporalMarkerOffset(-0.4, () -> {
-//                    if (hasTwo) {
-//                        if (goLeft) {
-//                            autoServo.DropLeft();
-//                        } else {
-//                            autoServo.DropRight();
-//                        }
-//                    }
+                    if (goLeft && !hasTwo) {
+                        autoServo.DropLeft();
+                    } else if (!goLeft && !hasTwo) {
+                        autoServo.DropRight();
+                    } else if (goLeft && hasTwo) {
+                        autoServo.DropRight();
+                    } else if (!goLeft && hasTwo) {
+                        autoServo.DropLeft();
+                    }
                 })
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.1, () -> {
                     claw.setPower(0);
-                    autoServo.upBoth();
+                    if (goLeft && !hasTwo) {
+                        autoServo.DropRight();
+                    } else if (!goLeft && !hasTwo) {
+                        autoServo.DropLeft();
+                    } else if (goLeft && hasTwo) {
+                        autoServo.DropLeft();
+                    } else if (!goLeft && hasTwo) {
+                        autoServo.DropRight();
+                    }
                 })
+
                 .addTemporalMarkerOffset(0.3, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.4, () -> {
                     outtake.presetSlides(Constants.Slides.low);
+                    autoServo.upBoth();
                 })
                 .addTemporalMarkerOffset(1.5, () -> {
                     outtake.preset(Constants.Slides.intake, 0);

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -20,6 +21,8 @@ import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+import java.util.Optional;
+
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
     ElapsedTime elapsedTime = new ElapsedTime();
@@ -29,6 +32,9 @@ public class Teleop extends OpMode {
     int intakeLevel = 6;
     boolean intakeDebounce = false;
     int climberPos = 0;
+    double temp1 = 0;
+    double photoTime = 0;
+    Optional<Pose2d> optionalPose = Optional.empty();
 
     Claw claw;
     Plane plane;
@@ -36,7 +42,6 @@ public class Teleop extends OpMode {
     Intake intake;
     Climber climber;
     Outtake outtake;
-    Cameras cameras;
     AutoServo autoServo;
     ClawSensor clawSensor;
     Drivetrain drivetrain;
@@ -55,7 +60,6 @@ public class Teleop extends OpMode {
         lights = new Lights(hardwareMap);
         climber = new Climber(hardwareMap);
         outtake = new Outtake(hardwareMap);
-        cameras = new Cameras(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         clawSensor = new ClawSensor(hardwareMap);
@@ -66,8 +70,6 @@ public class Teleop extends OpMode {
     @Override
     public void start() {
         outtake.presetArm(Constants.Arm.intakePos);
-        cameras.setCameraSide(false);
-        cameras.stopStreaming();
     }
 
     @Override
@@ -292,6 +294,7 @@ public class Teleop extends OpMode {
         outtake.periodic();
 
         //TEMPORARY
+        //for auto servo
         if (gamepad1.x) {
             autoServo.DropLeft();
         } else if (gamepad1.b) {
@@ -299,20 +302,11 @@ public class Teleop extends OpMode {
         } else {
             autoServo.upBoth();
         }
-
-        if (climberFireBool) {
-            cameras.resumeStreaming();
-        } else if (climberUpBool) {
-            cameras.stopStreaming();
-        }
-        telemetry.addData("front", clawSensor.getFrontColor());
-        telemetry.addData("back" , clawSensor.getBackColor());
     }
 
     @Override
     public void stop() {
         claw.stopClaw();
-        cameras.kill();
         intake.stopIntake();
         outtake.stopOuttake();
         drivetrain.stopDrive();
