@@ -65,7 +65,7 @@ public class Constants {
         public static double up = 0.05;
         public static double down5 = 0.265;
         public static double down4 = 0.29;
-        public static double down3 = 0.31;
+        public static double down3 = 0.305;
         public static double down2 = 0.325;
         public static double down1 = 0.35;
 
@@ -75,11 +75,12 @@ public class Constants {
     public static class Claw {
         public static double intake = 1;
         public static double outake = -0.45;
+        public static double slowOutake = -0.2;
     }
 
     @Config
     public static class ClawSensor {
-        public static double distanceLimit = 0.5;
+        public static double distanceLimit = 0.65;
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
         public static Vector3D whiteBack   = new Vector3D(1425, 2950, 3600);
@@ -107,7 +108,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 700;
+        public static int superLow = 700; //450
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1950;
@@ -126,7 +127,7 @@ public class Constants {
 
         public static double scaredPos = 0.05;
 
-        public static double fixPos = 0.60;
+        public static double fixPos = 0.524;
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.37;
         public static double autoArmDrop = 0.06;

@@ -21,9 +21,11 @@ public class AutoServo {
     //Pre-sets
     public void DropLeft() {
         AutoServoL.setPosition(Constants.AutoServo.downLeft);
+        AutoServoR.setPosition(Constants.AutoServo.upRight);
     }
     public void DropRight() {
         AutoServoR.setPosition(Constants.AutoServo.downRight);
+        AutoServoL.setPosition(Constants.AutoServo.upLeft);
     }
 
     public void upBoth(){
