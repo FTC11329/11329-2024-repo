@@ -63,9 +63,9 @@ public class Constants {
 
         public static double ready = 0.235;
         public static double up = 0.05;
-        public static double down5 = 0.265;
-        public static double down4 = 0.29;
-        public static double down3 = 0.305;
+        public static double down5 = 0.27;
+        public static double down4 = 0.295;
+        public static double down3 = 0.31;
         public static double down2 = 0.325;
         public static double down1 = 0.35;
 
@@ -131,7 +131,7 @@ public class Constants {
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.37;
         public static double autoArmDrop = 0.06;
-        public static double intakePos = 0.0;
+        public static double intakePos = 0.015;
     }
 
     @Config
@@ -169,11 +169,10 @@ public class Constants {
         public static final String rightRearHardwareMapName = "backRight";
 
         public static double superFast = 1;
-        public static double fast = 0.9;
+        public static double fast = 0.95;
         public static double slow = 0.5;
         public static double fixSpeedStrafe = 0.75;
         public static double fixSpeedForward = 0.25;
-
     }
 
     @Config
