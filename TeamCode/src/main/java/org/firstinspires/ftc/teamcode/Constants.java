@@ -51,7 +51,7 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.75;
-        public static double outake = -0.8;
+        public static double outake = -0.41;
 
         public static double autoVomitSpeed = -0.2;
     }
@@ -62,12 +62,12 @@ public class Constants {
         public static double max = 0.37;
 
         public static double ready = 0.235;
-        public static double up = 0.05;
-        public static double down5 = 0.27;
+        public static double up = 0.0666666666666666666666;
+        public static double down5 = 0.275;
         public static double down4 = 0.295;
-        public static double down3 = 0.31;
+        public static double down3 = 0.315;
         public static double down2 = 0.325;
-        public static double down1 = 0.35;
+        public static double down1 = 0.365;
 
     }
 
