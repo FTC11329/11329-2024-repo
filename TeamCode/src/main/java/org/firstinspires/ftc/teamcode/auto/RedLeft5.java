@@ -77,7 +77,7 @@ public class RedLeft5 extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-3,2)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-4,2)))
                 .build();
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -155,15 +155,15 @@ public class RedLeft5 extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
 //            finalPlaceLocation = placePositionLeft;
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,2));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,-2));
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,3));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0.5,0));
             whiteLeft = true;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,2));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0.5,2));
             whiteLeft = true;
         } else return;
 

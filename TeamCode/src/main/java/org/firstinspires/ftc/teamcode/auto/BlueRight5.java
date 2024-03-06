@@ -29,7 +29,7 @@ public class BlueRight5 extends OpMode {
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(52, 40.5);
     static Vector2d placePositionTwo = new Vector2d(52, 34);
-    static Vector2d placePositionThree = new Vector2d(52, 32.5);
+    static Vector2d placePositionThree = new Vector2d(52, 32);
 
     static Vector2d pickupSpecial = new Vector2d(-53, 12);
     static Vector2d pickupSpecial2 = new Vector2d(-54,15);
@@ -76,7 +76,7 @@ public class BlueRight5 extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-2,-3)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-3,-3)))
                 .build();
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -93,7 +93,7 @@ public class BlueRight5 extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-3,-2)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-2.5,-2)))
                 .build();
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -155,7 +155,7 @@ public class BlueRight5 extends OpMode {
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,0));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,1.5));
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
@@ -255,7 +255,7 @@ public class BlueRight5 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
                 )
                 .splineToConstantHeading(new Vector2d(36, 10), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(-30, 9, Math.toRadians(-215)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-30, 7, Math.toRadians(-215)), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(-0.5,() -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
