@@ -30,7 +30,7 @@ public class Arm {
     }
 
     public void manualPosition(double armPower) {
-        currentPos += (armPower * 0.03);
+        currentPos += (armPower * Constants.Arm.manualPosition);
         if (currentPos > Constants.Arm.armMax) {
             currentPos = Constants.Arm.armMax;
         }

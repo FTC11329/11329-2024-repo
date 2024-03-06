@@ -25,4 +25,9 @@ public class SpecialIntake {
             intakeServo.setPosition(servoPos);
         }
     }
+
+    public void manualHeight(double powerTemp) {
+        double power = powerTemp * Constants.SpecialIntake.manualPosition;
+        setIntakeServo(power);
+    }
 }

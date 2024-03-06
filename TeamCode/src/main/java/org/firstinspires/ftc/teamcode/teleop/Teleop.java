@@ -32,9 +32,8 @@ public class Teleop extends OpMode {
     int intakeLevel = 6;
     boolean intakeDebounce = false;
     int climberPos = 0;
-    double temp1 = 0;
-    double photoTime = 0;
-    Optional<Pose2d> optionalPose = Optional.empty();
+    double SIntakeStart = 0;
+    boolean SIntakeDebounce = true;
 
     Claw claw;
     Plane plane;
@@ -51,8 +50,6 @@ public class Teleop extends OpMode {
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
-
-        //VARIABLES
 
         claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
@@ -89,6 +86,8 @@ public class Teleop extends OpMode {
 
         boolean SIntakeUp = gamepad2.left_bumper;
         boolean SIntakeDown = gamepad2.right_bumper;
+        double SIntakePower = gamepad2.right_stick_x;
+
         boolean overwriteBool = gamepad1.back;
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
         double slowSlidePower = gamepad1.right_trigger - gamepad1.left_trigger;
@@ -177,8 +176,17 @@ public class Teleop extends OpMode {
         }
 
         //SPECIAL INTAKE
-        if (SIntakeUp) {
+        if (SIntakeUp && SIntakeDebounce) {
             intakeLevel = 6;
+            SIntakeStart = elapsedTime.milliseconds();
+            SIntakeDebounce = false;
+        }
+        if (SIntakeUp && elapsedTime.milliseconds() - SIntakeStart > 150) {
+            intakeLevel = 3;
+        }
+
+        if (!SIntakeUp) {
+            SIntakeDebounce = true;
         }
 
         if (SIntakeDown && !intakeDebounce) {
@@ -214,7 +222,7 @@ public class Teleop extends OpMode {
                 break;
             }
         }
-
+        telemetry.addData("inake levl", intakeLevel);
 
         //SLIDES
         slidePower = slidePower + (slowSlidePower * Constants.Slides.slowManualSlidePower);

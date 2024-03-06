@@ -69,6 +69,7 @@ public class Constants {
         public static double down2 = 0.325;
         public static double down1 = 0.365;
 
+        public static double manualPosition = 0.04;
     }
 
     @Config
@@ -132,6 +133,8 @@ public class Constants {
         public static double placePos = 0.37;
         public static double autoArmDrop = 0.06;
         public static double intakePos = 0.015;
+
+        public static double manualPosition = 0.03;
     }
 
     @Config
@@ -139,7 +142,7 @@ public class Constants {
         public static double manualClimberPower = 50;
 
         public static int down = 0;
-        public static int climberFire = -1100;
+        public static int climberFire = -1250;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }
@@ -172,7 +175,7 @@ public class Constants {
         public static double fast = 1;
         public static double slow = 0.5;
         public static double fixSpeedStrafe = 0.75;
-        public static double fixSpeedForward = 0.25;
+        public static double fixSpeedForward = 0.15;
     }
 
     @Config

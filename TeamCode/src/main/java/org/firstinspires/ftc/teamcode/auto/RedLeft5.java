@@ -27,7 +27,7 @@ public class RedLeft5 extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52, -34);
+    static Vector2d placePositionOne = new Vector2d(52, -33.5);
     static Vector2d placePositionTwo = new Vector2d(52, -35.5);
     static Vector2d placePositionThree = new Vector2d(52, -41);
     
@@ -113,9 +113,6 @@ public class RedLeft5 extends OpMode {
                 .waitSeconds(timeForPixelPlacement)
                 .lineTo(pickupSpecial.plus(new Vector2d(-4,-1)))
                 .build();
-
-
-
     }
 
     @Override
@@ -153,9 +150,8 @@ public class RedLeft5 extends OpMode {
         Vector2d finalPlaceLocation2 = null;
 
         if (barcodePosition == BarcodePosition.One) {
-//            finalPlaceLocation = placePositionLeft;
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,-2));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0.5,-1));
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
@@ -163,7 +159,7 @@ public class RedLeft5 extends OpMode {
             whiteLeft = true;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0.5,2));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1,4));
             whiteLeft = true;
         } else return;
 
@@ -190,13 +186,15 @@ public class RedLeft5 extends OpMode {
                 )
                 .forward(4)
                 .setReversed(true)
-                .addTemporalMarkerOffset(0.5, () -> {
-                    intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
-                })
                 .addTemporalMarkerOffset(2, () -> {
-                    intake.setIntakePower(0, 0);
+                    intake.setIntakePower(Constants.Intake.outake, 0);
+                    claw.setPower(Constants.Claw.intake);
                     hasTwo = clawSensor.isFull();
+                    telemetry.addData("now", true);
+                })
+                .addTemporalMarkerOffset(3, () -> {
+                    claw.setPower(0);
+                    intake.setIntakePower(0, 0);
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
@@ -273,33 +271,34 @@ public class RedLeft5 extends OpMode {
 
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(pickupSpecial2.getX(), pickupSpecial2.getY(), Math.toRadians(180)))
-                .addTemporalMarkerOffset(-1, () -> {
+                .addTemporalMarkerOffset(-1.5, () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
                     if (hasTwo) {
-                        specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                     } else {
-                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                     }
                 })
-                .addTemporalMarkerOffset(0, () -> {
+
+                .addTemporalMarkerOffset(0.25, () -> {
                     if (hasTwo) {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                     } else {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                     }
                 })
-                .addTemporalMarkerOffset(0.25, () -> {
+                .addTemporalMarkerOffset(0.75, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
-                .waitSeconds(0.25)
+                .waitSeconds(0.75)
                 .forward(2.5)
                 .setReversed(true)
-                .addTemporalMarkerOffset(0.5, () -> {
+                .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(0);
                 })
-                .addTemporalMarkerOffset(2, () -> {
+                .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
                 })
                 .setConstraints(
@@ -310,7 +309,7 @@ public class RedLeft5 extends OpMode {
                 .splineTo(new Vector2d(25, -10), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(37, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.med - 800, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 700, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
