@@ -156,20 +156,16 @@ public class Teleop extends OpMode {
         if (intakeBool && !clawSensor.isFull()) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
-
         } else if (intakeBool && clawSensor.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
-
+            claw.setPower(0);
         } else if (clawOuttakeBool) {
             claw.setPower(Constants.Claw.outake);
-
         } else if (intakeOuttakeBool && clawSensor.isFull()) {
             claw.setPower(Constants.Claw.intake);
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
-
         } else if (intakeOuttakeBool && !clawSensor.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
-
         } else {
             claw.setPower(0);
             intake.setIntakePower(0, outtake.getSlideTargetPosition());

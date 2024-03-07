@@ -75,7 +75,7 @@ public class Constants {
     @Config
     public static class Claw {
         public static double intake = 1;
-        public static double outake = -0.45;
+        public static double outake = -0.4;
         public static double slowOutake = -0.2;
     }
 
@@ -109,7 +109,7 @@ public class Constants {
         public static int upAmount = 10;
 
         public static int intake = 0;
-        public static int superLow = 700; //450
+        public static int superLow = 500; //450
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1950;

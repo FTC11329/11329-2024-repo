@@ -32,7 +32,7 @@ public class RedLeft5 extends OpMode {
     static Vector2d placePositionThree = new Vector2d(52, -41);
     
     static Vector2d pickupSpecial = new Vector2d(-53, -12);
-    static Vector2d pickupSpecial2 = new Vector2d(-57,-4.5);
+    static Vector2d pickupSpecial2 = new Vector2d(-56.75,-4.5);
 
     static double timeForPixelPlacement = 0.15;
 
@@ -76,8 +76,8 @@ public class RedLeft5 extends OpMode {
                     outtake.presetArm(Constants.Arm.intakePos);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
-                .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-4,2)))
+                    .waitSeconds(timeForPixelPlacement)
+                .lineTo(pickupSpecial.plus(new Vector2d(-3.5,2)))
                 .build();
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -85,7 +85,7 @@ public class RedLeft5 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(-53, -22, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-53, -21.5, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
@@ -181,14 +181,14 @@ public class RedLeft5 extends OpMode {
                 })
                 .waitSeconds(0.5)
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
                 )
                 .forward(4)
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(Constants.Claw.intake);
+                    claw.setPower(0);
                     hasTwo = clawSensor.isFull();
                     telemetry.addData("now", true);
                 })
@@ -234,10 +234,10 @@ public class RedLeft5 extends OpMode {
                         claw.setPower(Constants.Claw.slowOutake);
                     }
                 })
-                .addTemporalMarkerOffset(0.1, () -> {
+                .addTemporalMarkerOffset(0.12, () -> {
                     claw.setPower(0);
                     autoServo.upBoth();
-                    outtake.presetSlides(Constants.Slides.superLow - 200);
+                    outtake.presetSlides(Constants.Slides.superLow - 100);
                 })
 
                 .addTemporalMarkerOffset(0.6, () -> {
@@ -250,7 +250,7 @@ public class RedLeft5 extends OpMode {
                     outtake.preset(Constants.Slides.intake, 0);
                     claw.setPower(0);
                 })
-                .waitSeconds(0.8)
+                .waitSeconds(1)
                 .setReversed(false)
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
@@ -309,7 +309,7 @@ public class RedLeft5 extends OpMode {
                 .splineTo(new Vector2d(25, -10), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(37, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.med - 700, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
@@ -327,6 +327,7 @@ public class RedLeft5 extends OpMode {
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
+                .waitSeconds(0.5)
                 .forward(10)
                 .addTemporalMarkerOffset(-0.5, () -> {
                     claw.setPower(0);

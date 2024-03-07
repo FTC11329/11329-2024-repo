@@ -93,7 +93,7 @@ public class BlueRight5 extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-2.5,-2)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-2.5,-1.5)))
                 .build();
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -159,7 +159,7 @@ public class BlueRight5 extends OpMode {
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0.5,1));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(0.5,1.5));
             whiteLeft = true;
         } else return;
 
@@ -189,10 +189,10 @@ public class BlueRight5 extends OpMode {
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(0);
+                    hasTwo = clawSensor.isFull();
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
-                    hasTwo = clawSensor.isFull();
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
@@ -232,7 +232,7 @@ public class BlueRight5 extends OpMode {
                         claw.setPower(Constants.Claw.slowOutake);
                     }
                 })
-                .addTemporalMarkerOffset(0.1, () -> {
+                .addTemporalMarkerOffset(0.07, () -> {
                     claw.setPower(0);
                     autoServo.upBoth();
                     outtake.presetSlides(Constants.Slides.superLow - 200);
@@ -248,7 +248,7 @@ public class BlueRight5 extends OpMode {
                     outtake.preset(Constants.Slides.intake, 0);
                     claw.setPower(0);
                 })
-                .waitSeconds(0.8)
+                .waitSeconds(1)
                 .setReversed(false)
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
