@@ -122,7 +122,7 @@ public class RedLeft5 extends OpMode {
 
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
         telemetry.addData("Barcode Position", barcodePosition);
-        telemetry.addData("FPS", cameras.switchingCamera.getFps());
+//        telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
         telemetry.update();
     }

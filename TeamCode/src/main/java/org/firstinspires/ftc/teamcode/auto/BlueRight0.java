@@ -49,7 +49,7 @@ public class BlueRight0 extends LinearOpMode {
 
             BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(true);
             telemetry.addData("Barcode Position", barcodePosition);
-            telemetry.addData("FPS", cameras.switchingCamera.getFps());
+//            telemetry.addData("FPS", cameras.switchingCamera.getFps());
             telemetry.addData("Is back", isBack);
             telemetry.update();
         }

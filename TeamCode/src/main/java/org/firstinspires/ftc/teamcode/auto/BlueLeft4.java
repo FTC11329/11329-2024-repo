@@ -69,9 +69,9 @@ public class BlueLeft4 extends OpMode {
 
         BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
         telemetry.addData("Barcode Position", barcodePosition);
-        telemetry.addData("FPS", cameras.switchingCamera.getFps());
+//        telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
-        telemetry.addData("stete", cameras.switchingCamera.getCameraState());
+//        telemetry.addData("stete", cameras.switchingCamera.getCameraState());
         telemetry.update();
     }
 

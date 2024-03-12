@@ -24,11 +24,11 @@ public class VisionTest extends OpMode {
     @Override
     public void loop() {
         if (gamepad1.a) {
-            cameras.barcodeProcessor.setSide(RobotSide.Blue);
+//            cameras.barcodeProcessor.setSide(RobotSide.Blue);
         } else if (gamepad1.b) {
-            cameras.barcodeProcessor.setSide(RobotSide.Red);
+//            cameras.barcodeProcessor.setSide(RobotSide.Red);
         }
-        telemetry.addData("Current side, use A and B to switch", cameras.barcodeProcessor.side);
+//        telemetry.addData("Current side, use A and B to switch", cameras.barcodeProcessor.side);
         telemetry.addData("Barcode Position", cameras.getBarcodePosition());
         // Pose2d finalUpdatePose = new Pose2d(0, 0, 0);
         // drivetrain.setPoseEstimate(finalUpdatePose)
