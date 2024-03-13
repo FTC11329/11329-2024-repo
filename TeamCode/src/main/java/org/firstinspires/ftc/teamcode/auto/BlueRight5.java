@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Blue Right 5 + 2", group = " Testing")
+@Autonomous(name = "Blue Right 5 + 2", group = " Working")
 @Config
 public class BlueRight5 extends OpMode {
     boolean whiteLeft;

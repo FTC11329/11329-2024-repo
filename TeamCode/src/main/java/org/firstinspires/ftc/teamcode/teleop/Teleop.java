@@ -81,12 +81,11 @@ public class Teleop extends OpMode {
         boolean slowStrafeRight = gamepad1.dpad_right;
 
         boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
-        boolean clawOuttakeBool = gamepad2.b;
+        boolean clawOuttakeBool = gamepad2.b || gamepad1.y;
         boolean intakeOuttakeBool = gamepad2.x;
 
         boolean SIntakeUp = gamepad2.left_bumper;
         boolean SIntakeDown = gamepad2.right_bumper;
-        double SIntakePower = gamepad2.right_stick_x;
 
         boolean overwriteBool = gamepad1.back;
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;

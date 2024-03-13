@@ -21,16 +21,16 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Left 5 + 2", group = " Working")
+@Autonomous(name = "Red Left Test", group = " Testing")
 @Config
-public class RedLeft5 extends OpMode {
+public class RedLeftTest extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
     static Vector2d placePositionOne = new Vector2d(52, -33.5);
     static Vector2d placePositionTwo = new Vector2d(52, -35.5);
     static Vector2d placePositionThree = new Vector2d(52, -40.5);
-    
+
     static Vector2d pickupSpecial = new Vector2d(-52.5, -12);
     static Vector2d pickupSpecial2 = new Vector2d(-56.75,-4.5);
 
@@ -76,7 +76,7 @@ public class RedLeft5 extends OpMode {
                     outtake.presetArm(Constants.Arm.intakePos);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
-                    .waitSeconds(timeForPixelPlacement)
+                .waitSeconds(timeForPixelPlacement)
                 .lineTo(pickupSpecial.plus(new Vector2d(-3.5,2)))
                 .build();
         //2**************************************************************************
@@ -165,7 +165,7 @@ public class RedLeft5 extends OpMode {
 
 
         drivetrain.followTrajectorySequence(drivetrain
-                .trajectorySequenceBuilder(placeSpikeMark2.end())
+                .trajectorySequenceBuilder(placeSpikeMarkActual.end())
                 .resetConstraints()
                 .setReversed(true)
                 .addTemporalMarkerOffset(0, () -> {
@@ -194,6 +194,7 @@ public class RedLeft5 extends OpMode {
                     claw.setPower(0);
                     hasTwo = clawSensor.isFull();
                     telemetry.addData("now", true);
+                    telemetry.update();
                     intake.setIntakePower(0, 0);
                 })
                 .setConstraints(
@@ -205,7 +206,6 @@ public class RedLeft5 extends OpMode {
                 .addTemporalMarker(() -> {
                     outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
                 })
-                .waitSeconds(0.5)
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
@@ -219,7 +219,8 @@ public class RedLeft5 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
+                .splineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)), Math.toRadians(180))
+                //Should spline
                 .resetConstraints()
                 .addTemporalMarkerOffset(-0.4, () -> {
                     if (whiteLeft) {
