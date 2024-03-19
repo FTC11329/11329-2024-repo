@@ -24,11 +24,9 @@ import java.util.Optional;
 @Autonomous(name = "Red Right 2 + 2", group = " Testing")
 @Config
 public class RedRight2 extends OpMode {
-    boolean whiteLeft;
-    boolean hasTwo;
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
     static Vector2d placePositionOne = new Vector2d(52.5, -30.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, -37.5);
+    static Vector2d placePositionTwo = new Vector2d(52.5, -38.5);
     static Vector2d placePositionThree = new Vector2d(52.5, -40.5);
 
     static Pose2d pickupSpecial = new Pose2d(-54.5,-34, Math.toRadians(-195));
@@ -44,8 +42,6 @@ public class RedRight2 extends OpMode {
     Intake intake;
     Outtake outtake;
     Cameras cameras;
-    AutoServo autoServo;
-    ClawSensor clawSensor;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
@@ -55,8 +51,6 @@ public class RedRight2 extends OpMode {
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        autoServo = new AutoServo(hardwareMap);
-        clawSensor = new ClawSensor(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
@@ -86,7 +80,7 @@ public class RedRight2 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(24, -25, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(27, -25, Math.toRadians(0)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
@@ -159,15 +153,12 @@ public class RedRight2 extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
             finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,-1));
-            whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,-3));
-            whiteLeft = false;
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,0));
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
             finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,-3));
-            whiteLeft = true;
         } else return;
 
 
@@ -178,7 +169,6 @@ public class RedRight2 extends OpMode {
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("has two", hasTwo);
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
                     cameras.setCameraSide(false);
@@ -188,24 +178,24 @@ public class RedRight2 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .waitSeconds(0.5)
+                .waitSeconds(0.4)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
-                .addTemporalMarkerOffset(0.3, () -> {
+                .addTemporalMarkerOffset(0.1, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .addTemporalMarkerOffset(0.7, () -> {
+                .addTemporalMarkerOffset(0.4, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
-                .addTemporalMarkerOffset(1.3, () -> {
+                .addTemporalMarkerOffset(1, () -> {
                     outtake.preset(Constants.Slides.intake, 0);
                     claw.setPower(0);
                 })
-                .waitSeconds(0.7)
+                .waitSeconds(0.4)
                 .setReversed(false)
 
-                .splineToConstantHeading(new Vector2d(16, -59), Math.toRadians(180))
-                .splineTo(new Vector2d(-25, -58), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(16, -62), Math.toRadians(180))
+                .splineTo(new Vector2d(-25, -61), Math.toRadians(180))
                 .splineTo(new Vector2d(-40, -53), Math.toRadians(160))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
@@ -248,11 +238,10 @@ public class RedRight2 extends OpMode {
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
                 })
-
-                .splineTo(new Vector2d(-35, -59), Math.toRadians(0))
-                .splineTo(new Vector2d(16, -60), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-35, -54.5, Math.toRadians(180)), Math.toRadians(0))
+                .splineTo(new Vector2d(16, -55.5), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 10, finalPlaceLocation2.getY()), Math.toRadians(0))
-                .addTemporalMarker(() -> {
+                .addTemporalMarkerOffset(-1, () -> {
                     outtake.preset(Constants.Slides.med - 900, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.1)
@@ -279,9 +268,9 @@ public class RedRight2 extends OpMode {
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 //actual
-//                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
-                //lineup
-                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
+                //re-lineup
+//                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
                 .build());
     }
 
