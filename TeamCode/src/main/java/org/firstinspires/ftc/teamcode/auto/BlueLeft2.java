@@ -28,7 +28,7 @@ public class BlueLeft2 extends OpMode {
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(17, 64, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(52.5, 40.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, 37);
+    static Vector2d placePositionTwo = new Vector2d(52.5, 37.5);
     static Vector2d placePositionThree = new Vector2d(52.5, 30.5);
 
     static Pose2d pickupSpecial = new Pose2d(-57.5,44, Math.toRadians(195));
@@ -106,7 +106,7 @@ public class BlueLeft2 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(37, 36, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(34, 30, Math.toRadians(0)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
@@ -162,11 +162,11 @@ public class BlueLeft2 extends OpMode {
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,4));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,3));
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,4));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,3));
             whiteLeft = true;
         } else return;
 
@@ -188,7 +188,7 @@ public class BlueLeft2 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
                 .addTemporalMarkerOffset(0.3, () -> {
@@ -205,7 +205,7 @@ public class BlueLeft2 extends OpMode {
                 .setReversed(false)
 
                 .splineToConstantHeading(new Vector2d(16, 59), Math.toRadians(180))
-                .splineTo(new Vector2d(-30, 58), Math.toRadians(180))
+                .splineTo(new Vector2d(-25, 58), Math.toRadians(180))
                 .splineTo(new Vector2d(-40, 53), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
@@ -218,7 +218,7 @@ public class BlueLeft2 extends OpMode {
                 })
 
                 //Back For Another One**************************************
-                .waitSeconds(1)
+                .waitSeconds(0.5)
                 .lineToLinearHeading(pickupSpecial,
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
@@ -251,7 +251,7 @@ public class BlueLeft2 extends OpMode {
 
                 .splineTo(new Vector2d(-35, 60), Math.toRadians(0))
                 .splineTo(new Vector2d(16, 62), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 15, finalPlaceLocation2.getY()), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 10, finalPlaceLocation2.getY()), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     outtake.preset(Constants.Slides.med - 900, Constants.Arm.placePos);
                 })
@@ -278,7 +278,10 @@ public class BlueLeft2 extends OpMode {
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
-                .lineToLinearHeading(new Pose2d(49,66, Math.toRadians(180)))
+                //actual
+//                .lineToLinearHeading(new Pose2d(49,66, Math.toRadians(180)))
+                //lineup
+                .lineToLinearHeading(new Pose2d(15, 55, Math.toRadians(-90)))
                 .build());
     }
 
