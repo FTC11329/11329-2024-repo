@@ -156,25 +156,25 @@ public class RedLeft5 extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(3, -1));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1));
             } else {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(3, -5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -5));
             }
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(3,-0.5));
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-0.5));
             } else {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(3,-1.5));
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-1.5));
             }
             whiteLeft = true;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(3, 4));
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 4));
             } else {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(3, 2));
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 2));
             }
             whiteLeft = true;
         } else return;
@@ -274,8 +274,8 @@ public class RedLeft5 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineToConstantHeading(new Vector2d(36, -8), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(-30, -8.5, Math.toRadians(195)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
