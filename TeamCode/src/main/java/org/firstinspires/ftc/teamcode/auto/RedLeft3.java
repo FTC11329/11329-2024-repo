@@ -21,24 +21,28 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Blue Left 2 + 2", group = "Competition")
+@Autonomous(name = "Red Left 3 + 2", group = "Competition")
 @Config
-public class BlueLeft2 extends OpMode {
+public class RedLeft3 extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
-    static Pose2d startingPose = new Pose2d(17, 64, Math.toRadians(-90));
-    static Vector2d placePositionOne = new Vector2d(52.5, 40.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, 37.5);
-    static Vector2d placePositionThree = new Vector2d(52.5, 30.5);
-
-    static Pose2d pickupSpecial = new Pose2d(-57.5,44, Math.toRadians(195));
+    static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
+    static Vector2d placePositionOne = new Vector2d(52, -33.5);
+    static Vector2d placePositionTwo = new Vector2d(52, -35.5);
+    static Vector2d placePositionThree = new Vector2d(52, -40.5);
+    
+    static Vector2d pickupSpecial = new Vector2d(-52.5, -12);
+    static Vector2d pickupSpecial2 = new Vector2d(-56.5,-4.5);
 
     static double timeForPixelPlacement = 0.15;
+
+    static boolean doWeCare = true;
 
     TrajectorySequence placeSpikeMark1 = null;
     TrajectorySequence placeSpikeMark2 = null;
     TrajectorySequence placeSpikeMark3 = null;
 
+    TrajectorySequence restOfIt = null;
 
     Claw claw;
     Intake intake;
@@ -60,25 +64,22 @@ public class BlueLeft2 extends OpMode {
         drivetrain = new Drivetrain(hardwareMap, telemetry);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
-        //3**************************************************************************
-        placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose)
+        //1**************************************************************************
+        placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose)
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(13, 36, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-59, -31, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
                 .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                     outtake.presetArm(Constants.Arm.intakePos);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .addTemporalMarkerOffset(0.5, () -> {
-                    outtake.preset(Constants.Slides.superLow - 100, Constants.Arm.placePos);
-                })
-                .resetConstraints()
-                .lineToLinearHeading(new Pose2d(40, 36, Math.toRadians(180)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-3.75,2)))
                 .build();
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -86,39 +87,33 @@ public class BlueLeft2 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(24, 25, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-53, -21.5, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
                 .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                     outtake.presetArm(Constants.Arm.intakePos);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .addTemporalMarkerOffset(0.5, () -> {
-                    outtake.preset(Constants.Slides.superLow - 100, Constants.Arm.placePos);
-                })
-                .resetConstraints()
-                .lineToLinearHeading(new Pose2d(40, 36, Math.toRadians(181)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-3.5,2)))
                 .build();
-        //1**************************************************************************
-        placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose)
+        //3**************************************************************************
+        placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose)
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(34, 30, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-36, -32, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
                 .addTemporalMarkerOffset(timeForPixelPlacement, () -> {
                     outtake.presetArm(Constants.Arm.intakePos);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .addTemporalMarkerOffset(0.5, () -> {
-                    outtake.preset(Constants.Slides.superLow - 100, Constants.Arm.placePos);
-                })
-                .resetConstraints()
-                .lineToLinearHeading(new Pose2d(40, 36, Math.toRadians(181)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-4,-1)))
                 .build();
     }
 
@@ -127,17 +122,19 @@ public class BlueLeft2 extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(gamepad1.a);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
+        telemetry.addData("Front color", clawSensor.getFrontColor());
+        telemetry.addData("Back Color" , clawSensor.getBackColor());
         telemetry.update();
     }
 
     @Override
     public void start() {
         cameras.setCameraSide(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);
 
@@ -158,15 +155,27 @@ public class BlueLeft2 extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,1));
+            if (doWeCare) {
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1));
+            } else {
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -5));
+            }
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,3));
-            whiteLeft = false;
+            if (doWeCare) {
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-0.5));
+            } else {
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-1.5));
+            }
+            whiteLeft = true;
         } else if (barcodePosition == BarcodePosition.Three) {
-            finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,3));
+            finalPlaceLocation = placePositionThree;
+            if (doWeCare) {
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 4));
+            } else {
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 2));
+            }
             whiteLeft = true;
         } else return;
 
@@ -175,38 +184,98 @@ public class BlueLeft2 extends OpMode {
                 .trajectorySequenceBuilder(placeSpikeMark2.end())
                 .resetConstraints()
                 .setReversed(true)
+                .addTemporalMarkerOffset(0, () -> {
+                    outtake.presetArm(Constants.Arm.intakePos);
+                    intake.setIntakePower(Constants.Intake.intake, 0);
+                    claw.setPower(Constants.Claw.intake);
+                })
+                .addTemporalMarkerOffset(0.1, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                })
+                .addTemporalMarkerOffset(0.6, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                })
+                .waitSeconds(0.5)
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
+                )
+                .forward(4)
+                .setReversed(true)
+                .addTemporalMarkerOffset(2, () -> {
+                    intake.setIntakePower(Constants.Intake.outake, 0);
+                    claw.setPower(Constants.Intake.intake);
+                })
+                .addTemporalMarkerOffset(2.5, () -> {
+                    claw.setPower(0);
+                    hasTwo = clawSensor.isFull();
+                    telemetry.addData("now", true);
+                    telemetry.update();
+                    intake.setIntakePower(0, 0);
+                })
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 65, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
+                )
+                .splineTo(new Vector2d(-5,-7), Math.toRadians(0))
+                .splineTo(new Vector2d(25, -11), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40, -21), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
+                })
+                .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("has two", hasTwo);
+                    telemetry.addData("has two"/*reminder*/, hasTwo);
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
                     cameras.setCameraSide(false);
                 })
+                .waitSeconds(0.3)
                 .resetConstraints()
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .waitSeconds(0.5)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
-                .addTemporalMarkerOffset(0.3, () -> {
+                .addTemporalMarkerOffset(-0.4, () -> {
+                    if (whiteLeft) {
+                        autoServo.DropLeft();
+                    } else {
+                        autoServo.DropRight();
+                    }
+                })
+                .addTemporalMarkerOffset(-0.05, () -> {
+                    if (hasTwo) {
+                        claw.setPower(Constants.Claw.slowOutake);
+                    }
+                })
+                .addTemporalMarkerOffset(0.12, () -> {
+                    claw.setPower(0);
+                    autoServo.upBoth();
+                    outtake.presetSlides(Constants.Slides.superLow - 100);
+                })
+
+                .addTemporalMarkerOffset(0.6, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .addTemporalMarkerOffset(0.7, () -> {
+                .addTemporalMarkerOffset(0.9, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
-                .addTemporalMarkerOffset(1.3, () -> {
+                .addTemporalMarkerOffset(1.5, () -> {
                     outtake.preset(Constants.Slides.intake, 0);
                     claw.setPower(0);
                 })
-                .waitSeconds(0.7)
+                .waitSeconds(0.9)
                 .setReversed(false)
-
-                .splineToConstantHeading(new Vector2d(16, 59), Math.toRadians(180))
-                .splineTo(new Vector2d(-25, 58), Math.toRadians(180))
-                .splineTo(new Vector2d(-40, 53), Math.toRadians(180))
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
+                )
+                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
@@ -214,31 +283,34 @@ public class BlueLeft2 extends OpMode {
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
                     cameras.setCameraSide(true);
-//                    cameras.kill();
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
 
                 //Back For Another One**************************************
-                .waitSeconds(0.5)
-                .lineToLinearHeading(pickupSpecial,
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
-                )
-                .addTemporalMarkerOffset(-0.5, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
-                })
-                .addTemporalMarkerOffset(0, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(pickupSpecial2.getX(), pickupSpecial2.getY(), Math.toRadians(180)))
+                .addTemporalMarkerOffset(-1.5, () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
-                    outtake.presetArm(Constants.Arm.intakePos);
+                    if (hasTwo) {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                    } else {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                    }
                 })
-                .addTemporalMarkerOffset(0.25, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+
+                .addTemporalMarkerOffset(0, () -> {
+                    if (hasTwo) {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
+                    } else {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                    }
                 })
-                .addTemporalMarkerOffset(0.75, () -> {
+                .addTemporalMarkerOffset(0.3, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
-                .waitSeconds(0.75)
+                .waitSeconds(0.3)
                 .forward(2.5)
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
@@ -248,12 +320,19 @@ public class BlueLeft2 extends OpMode {
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
                 })
-
-                .splineTo(new Vector2d(-35, 60), Math.toRadians(0))
-                .splineTo(new Vector2d(16, 62), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 10, finalPlaceLocation2.getY()), Math.toRadians(0))
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                )
+                .splineTo(new Vector2d(0,-7), Math.toRadians(0))
+                .splineTo(new Vector2d(25, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(35, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.med - 900, Constants.Arm.placePos);
+                    if (doWeCare) {
+                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
+                    } else {
+                        outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                    }
                 })
                 .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
@@ -267,21 +346,17 @@ public class BlueLeft2 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .lineTo(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()))
+                .lineToLinearHeading(new Pose2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY(), Math.toRadians(180)))
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .resetConstraints()
+                .waitSeconds(0.4)
                 .forward(10)
                 .addTemporalMarkerOffset(-0.5, () -> {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
-                //actual
-//                .lineToLinearHeading(new Pose2d(49,66, Math.toRadians(180)))
-                //lineup
-                .lineToLinearHeading(new Pose2d(15, 55, Math.toRadians(-90)))
                 .build());
     }
 
