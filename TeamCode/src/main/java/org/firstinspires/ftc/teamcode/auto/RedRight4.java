@@ -36,6 +36,9 @@ public class RedRight4 extends OpMode {
     TrajectorySequence placeSpikeMark1 = null;
     TrajectorySequence placeSpikeMark2 = null;
     TrajectorySequence placeSpikeMark3 = null;
+    TrajectorySequence grabFirstPixels = null;
+    TrajectorySequence grabSecondPixels= null;
+
 
     static boolean doWeCare = true;
 
@@ -115,6 +118,138 @@ public class RedRight4 extends OpMode {
                 .resetConstraints()
                 .lineToLinearHeading(new Pose2d(40, -36, Math.toRadians(181)))
                 .build();
+
+        //START**********************************************************************
+        grabFirstPixels = drivetrain.trajectorySequenceBuilder(new Pose2d (placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
+                .addTemporalMarkerOffset(0, () -> {
+                    claw.setPower(Constants.Claw.outake);
+                })
+                .addTemporalMarkerOffset(0.2, () -> {
+                    outtake.presetSlides(Constants.Slides.low);
+                })
+                .addTemporalMarkerOffset(0.7, () -> {
+                    outtake.preset(Constants.Slides.intake, 0);
+                    claw.setPower(0);
+                })
+                .waitSeconds(0.2)
+                .setReversed(false)
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
+                )
+                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
+                .waitSeconds(0.1)
+                .addTemporalMarkerOffset(0, () -> {
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                    telemetry.addData("did see two", optionalPose.isPresent());
+                    telemetry.update();
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                })
+
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
+                .addTemporalMarkerOffset(-1.5, () -> {
+                    intake.setIntakePower(Constants.Intake.intake, 0);
+                    claw.setPower(Constants.Claw.intake);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                })
+
+                .addTemporalMarkerOffset(-0.2, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                })
+                .addTemporalMarkerOffset(0, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                })
+                .forward(2.5)
+                .setReversed(true)
+                .addTemporalMarkerOffset(2, () -> {
+                    intake.setIntakePower(Constants.Intake.outake, 0);
+                    claw.setPower(0);
+                })
+                .addTemporalMarkerOffset(3, () -> {
+                    intake.setIntakePower(0, 0);
+                })
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                )
+                .splineToConstantHeading(new Vector2d(0,-7), Math.toRadians(0))
+                .splineTo(new Vector2d(35, -10), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    if (doWeCare) {
+                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
+                    } else {
+                        outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                    }
+                })
+                .build();
+        //AFTER 2ND PLACE GOING TO THIRD*********************************************
+        grabSecondPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
+                .waitSeconds(0.4)
+                //Back For Another Two**************************************
+                .setReversed(false)
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
+                )
+                .addTemporalMarkerOffset(0.5, () -> {
+                    claw.setPower(0);
+                    outtake.presetSlides(Constants.Slides.intake);
+                    outtake.presetArm(Constants.Arm.intakePos);
+                })
+                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
+                .waitSeconds(0.1)
+                .addTemporalMarkerOffset(0, () -> {
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                    telemetry.addData("did see three", optionalPose.isPresent());
+                    telemetry.update();
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                    cameras.kill();
+                })
+
+                .resetConstraints()
+                .lineToLinearHeading(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
+                .addTemporalMarkerOffset(-1.5, () -> {
+                    intake.setIntakePower(Constants.Intake.intake, 0);
+                    claw.setPower(Constants.Claw.intake);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
+                })
+
+                .addTemporalMarkerOffset(-0.2, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
+                })
+                .addTemporalMarkerOffset(0, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                })
+                .forward(2.5)
+                .setReversed(true)
+                .addTemporalMarkerOffset(2, () -> {
+                    intake.setIntakePower(Constants.Intake.outake, 0);
+                    claw.setPower(0);
+                })
+                .addTemporalMarkerOffset(3, () -> {
+                    intake.setIntakePower(0, 0);
+                })
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                )
+                .splineToConstantHeading(new Vector2d(0,-7), Math.toRadians(0))
+                .splineTo(new Vector2d(25, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(35, -31), Math.toRadians(0))
+                .addTemporalMarker(() -> {
+                    if (doWeCare) {
+                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
+                    } else {
+                        outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                    }
+                })
+                .build();
+
         cameras.setCameraSide(false);
     }
 
@@ -183,141 +318,28 @@ public class RedRight4 extends OpMode {
                 .waitSeconds(0.4)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
-                .addTemporalMarkerOffset(0, () -> {
-                    claw.setPower(Constants.Claw.outake);
-                })
-                .addTemporalMarkerOffset(0.3, () -> {
-                    outtake.presetSlides(Constants.Slides.low);
-                })
-                .addTemporalMarkerOffset(0.9, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
-                    claw.setPower(0);
-                })
-                .waitSeconds(0.3)
+                .build()
                 //Back For Another One**************************************
-
-                .setReversed(false)
-                .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
-                )
-                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
-                .waitSeconds(0.1)
-                .addTemporalMarkerOffset(0, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("did see two", optionalPose.isPresent());
-                    telemetry.update();
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
-                })
-
-                .resetConstraints()
-                .lineToLinearHeading(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
-                .addTemporalMarkerOffset(-1.5, () -> {
-                    intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
-                })
-
-                .addTemporalMarkerOffset(-0.2, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
-                })
-                .addTemporalMarkerOffset(0, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
-                })
-                .forward(2.5)
-                .setReversed(true)
-                .addTemporalMarkerOffset(2, () -> {
-                    intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
-                })
-                .addTemporalMarkerOffset(3, () -> {
-                    intake.setIntakePower(0, 0);
-                })
-                .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
-                )
-                .splineToConstantHeading(new Vector2d(0,-7), Math.toRadians(0))
-                .splineTo(new Vector2d(35, -10), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    if (doWeCare) {
-                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
-                    } else {
-                        outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
-                    }
-                })
+        );
+        //FIRST PIXELS***************************************************************
+        drivetrain.followTrajectorySequence(grabFirstPixels);
+        drivetrain.followTrajectorySequence(drivetrain
+                .trajectorySequenceBuilder(grabFirstPixels.end())
                 .waitSeconds(0.1)
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 40, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 40  //acc
                 )
                 .splineToLinearHeading(new Pose2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY(), Math.toRadians(180)), Math.toRadians(0))
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .waitSeconds(0.4)
-                //Back For Another Two**************************************
-                .setReversed(false)
-                .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
-                )
-                .addTemporalMarkerOffset(0.5, () -> {
-                    claw.setPower(0);
-                    outtake.presetSlides(Constants.Slides.intake);
-                    outtake.presetArm(Constants.Arm.intakePos);
-                })
-                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
-                .waitSeconds(0.1)
-                .addTemporalMarkerOffset(0, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("did see three", optionalPose.isPresent());
-                    telemetry.update();
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
-                    cameras.kill();
-                })
-
-                .resetConstraints()
-                .lineToLinearHeading(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
-                .addTemporalMarkerOffset(-1.5, () -> {
-                    intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
-                })
-
-                .addTemporalMarkerOffset(-0.2, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
-                })
-                .addTemporalMarkerOffset(0, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
-                })
-                .forward(2.5)
-                .setReversed(true)
-                .addTemporalMarkerOffset(2, () -> {
-                    intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
-                })
-                .addTemporalMarkerOffset(3, () -> {
-                    intake.setIntakePower(0, 0);
-                })
-                .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
-                )
-                .splineToConstantHeading(new Vector2d(0,-7), Math.toRadians(0))
-                .splineTo(new Vector2d(25, -10), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(35, -31), Math.toRadians(0))
-                .addTemporalMarker(() -> {
-                    if (doWeCare) {
-                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
-                    } else {
-                        outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
-                    }
-                })
+                .build()
+        );
+        //SECOND PIXELS**************************************************************
+        drivetrain.followTrajectorySequence(grabSecondPixels);
+        drivetrain.followTrajectorySequence(drivetrain
+                .trajectorySequenceBuilder(grabSecondPixels.end())
                 .waitSeconds(0.1)
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
@@ -337,7 +359,7 @@ public class RedRight4 extends OpMode {
                 //actual
                 .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
                 //re-lineup
-                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
+//                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
                 .build());
     }
 
