@@ -139,7 +139,7 @@ public class Drivetrain extends MecanumDrive {
         } else if (driveSpeed == DriveSpeedEnum.Auto) {
             speed = 1;
         } else if (driveSpeed == DriveSpeedEnum.SuperFast) {
-            speed = Constants.Drivetrain.superFast;
+            speed = 0.3;
         }
 
         setWeightedDrivePower(new Pose2d(forward * speed, strafe * speed, turn * speed));

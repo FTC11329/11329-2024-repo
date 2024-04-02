@@ -1,29 +1,30 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 
 public class Slides {
     boolean overwrite = false;
-    DcMotor slideMotor;
+    DcMotorEx slideMotor;
     double manualChangeD; //DEZZ NUTS OHHHHHHHHHHHHHHH
     int manualChangeI;
 
     public Slides(HardwareMap hardwareMap) {
-        slideMotor = hardwareMap.get(DcMotor.class, "slide");
-        slideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slideMotor = hardwareMap.get(DcMotorEx.class, "slide");
+        slideMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         slideMotor.setTargetPosition(0);
 
         //sets max power
         slideMotor.setPower(1);
 
-        slideMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        slideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-        slideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        slideMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        slideMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        slideMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     }
 
     public void setPower(double power) {
@@ -55,6 +56,11 @@ public class Slides {
         slideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         slideMotor.setPower(0);
+    }
+
+    public double getCurrent(CurrentUnit currentUnit) {
+
+        return slideMotor.getCurrent(currentUnit);
     }
 
     public void slidesPeriodic() {

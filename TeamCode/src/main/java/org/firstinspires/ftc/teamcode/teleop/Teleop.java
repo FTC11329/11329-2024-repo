@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
@@ -81,7 +82,7 @@ public class Teleop extends OpMode {
         boolean slowStrafeRight = gamepad1.dpad_right;
 
         boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
-        boolean clawOuttakeBool = gamepad2.b || gamepad1.y;
+        boolean clawOuttakeBool = gamepad2.b || gamepad1.b;//here
         boolean intakeOuttakeBool = gamepad2.x;
 
         boolean SIntakeUp = gamepad2.left_bumper;
@@ -97,9 +98,9 @@ public class Teleop extends OpMode {
         double climberPower = gamepad2.right_stick_y;
         boolean climberDownBool = gamepad2.a;
         boolean climberUpBool = gamepad2.left_stick_button;
-        boolean climberFireBool = gamepad2.right_stick_button;
+        boolean climberFireBool = gamepad2.right_stick_button || gamepad1.x;
 
-        boolean planeFire = gamepad2.back;
+        boolean planeFire = gamepad1.y;
 
         boolean highPresetBool = gamepad2.dpad_up;
         boolean medPresetBool = gamepad2.dpad_right;
@@ -286,7 +287,7 @@ public class Teleop extends OpMode {
 
         //LIGHTS
         if (clawSensor.isFull()) {
-            lights.setDumbLed(0.5);
+            lights.setDumbLed(1);
         } else if (!clawSensor.isEmpty()) {
             lights.setDumbFlash(0.2);
         } else {
@@ -298,13 +299,15 @@ public class Teleop extends OpMode {
 
         //TEMPORARY
         //for auto servo
-        if (gamepad1.x) {
-            autoServo.DropLeft();
-        } else if (gamepad1.b) {
-            autoServo.DropRight();
-        } else {
-            autoServo.upBoth();
-        }
+//        if (gamepad1.x) {
+//            autoServo.DropLeft();
+//        } else if (gamepad1.b) {
+//            autoServo.DropRight();
+//        } else {
+//            autoServo.upBoth();
+//        }
+        telemetry.addData("Volts", hardwareMap.voltageSensor.iterator().next().getVoltage());
+        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
     }
 
     @Override

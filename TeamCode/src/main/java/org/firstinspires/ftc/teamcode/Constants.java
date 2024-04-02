@@ -112,7 +112,7 @@ public class Constants {
         public static int superLow = 500; //450
         public static int low = 900;
         public static int med = 1600;
-        public static int high = 1950;
+        public static int high = 1850;
 
         public static int groundPinchMin = 130;
         public static int groundPinchMax = 400;
@@ -142,7 +142,7 @@ public class Constants {
         public static double manualClimberPower = 50;
 
         public static int down = 0;
-        public static int climberFire = -1123;
+        public static int climberFire = -1275;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

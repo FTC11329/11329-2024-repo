@@ -184,10 +184,11 @@ public class RedRight4 extends OpMode {
                         outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
                     }
                 })
+                .waitSeconds(0.5)
                 .build();
         //AFTER 2ND PLACE GOING TO THIRD*********************************************
         grabSecondPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
-                .waitSeconds(0.4)
+                .waitSeconds(0.3)
                 //Back For Another Two**************************************
                 .setReversed(false)
                 .setConstraints(
@@ -248,6 +249,7 @@ public class RedRight4 extends OpMode {
                         outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
                     }
                 })
+                .waitSeconds(0.5)
                 .build();
 
         cameras.setCameraSide(false);

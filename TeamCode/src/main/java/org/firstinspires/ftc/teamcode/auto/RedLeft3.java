@@ -27,7 +27,7 @@ public class RedLeft3 extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52, -33.5);
+    static Vector2d placePositionOne = new Vector2d(52, - 33.25);
     static Vector2d placePositionTwo = new Vector2d(52, -35.5);
     static Vector2d placePositionThree = new Vector2d(52, -40.5);
     
@@ -156,7 +156,7 @@ public class RedLeft3 extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1.5));
             } else {
                 finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -5));
             }
@@ -221,7 +221,7 @@ public class RedLeft3 extends OpMode {
                 .splineTo(new Vector2d(25, -11), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(40, -21), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.superLow, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.superLow + 100, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
@@ -329,7 +329,7 @@ public class RedLeft3 extends OpMode {
                 .splineToConstantHeading(new Vector2d(35, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     if (doWeCare) {
-                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
+                        outtake.preset(Constants.Slides.med - 800, Constants.Arm.placePos);
                     } else {
                         outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
                     }
