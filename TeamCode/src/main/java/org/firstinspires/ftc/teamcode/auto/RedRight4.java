@@ -36,6 +36,8 @@ public class RedRight4 extends OpMode {
     TrajectorySequence placeSpikeMark1 = null;
     TrajectorySequence placeSpikeMark2 = null;
     TrajectorySequence placeSpikeMark3 = null;
+    TrajectorySequence placeSpikeMarkActual = null;
+
     TrajectorySequence grabFirstPixels = null;
     TrajectorySequence grabSecondPixels= null;
 
@@ -120,7 +122,7 @@ public class RedRight4 extends OpMode {
                 .build();
 
         //START**********************************************************************
-        grabFirstPixels = drivetrain.trajectorySequenceBuilder(new Pose2d (placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
+        grabFirstPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
@@ -187,7 +189,7 @@ public class RedRight4 extends OpMode {
                 .waitSeconds(0.5)
                 .build();
         //AFTER 2ND PLACE GOING TO THIRD*********************************************
-        grabSecondPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
+        grabSecondPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
                 .waitSeconds(0.3)
                 //Back For Another Two**************************************
                 .setReversed(false)
@@ -274,8 +276,6 @@ public class RedRight4 extends OpMode {
 
         drivetrain.setPoseEstimate(startingPose);
 
-        TrajectorySequence placeSpikeMarkActual = null;
-
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMarkActual = placeSpikeMark1;
         } else if (barcodePosition == BarcodePosition.Two) {
@@ -300,7 +300,7 @@ public class RedRight4 extends OpMode {
             finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,0));
         } else return;
 
-
+        //after purple going to place yellow
         drivetrain.followTrajectorySequence(drivetrain
                 .trajectorySequenceBuilder(placeSpikeMark2.end())
                 .resetConstraints()
@@ -323,7 +323,7 @@ public class RedRight4 extends OpMode {
                 .build()
                 //Back For Another One**************************************
         );
-        //FIRST PIXELS***************************************************************
+        //FIRST WHITE PIXELS*********************************************************
         drivetrain.followTrajectorySequence(grabFirstPixels);
         drivetrain.followTrajectorySequence(drivetrain
                 .trajectorySequenceBuilder(grabFirstPixels.end())
@@ -332,7 +332,7 @@ public class RedRight4 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 40, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 40  //acc
                 )
-                .splineToLinearHeading(new Pose2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY(), Math.toRadians(180)), Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY(), Math.toRadians(180)))
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
@@ -359,9 +359,9 @@ public class RedRight4 extends OpMode {
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 //actual
-                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
+//                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
                 //re-lineup
-//                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
                 .build());
     }
 

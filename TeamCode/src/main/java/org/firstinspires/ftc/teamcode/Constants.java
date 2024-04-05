@@ -98,7 +98,7 @@ public class Constants {
     public static class Plane {
         public static final String servoName = "planeServo";
         public static double hold = 0.1;
-        public static double fire = 0.7;
+        public static double fire = 0.45;
     }
 
     @Config
@@ -142,7 +142,7 @@ public class Constants {
         public static double manualClimberPower = 50;
 
         public static int down = 0;
-        public static int climberFire = -1275;
+        public static int climberFire = -1111;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

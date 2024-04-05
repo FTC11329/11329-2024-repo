@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utility.ColorEnum;
 
 public class ClawSensor {
+    boolean runInAuto = false;
     RevColorSensorV3 colorSensorFront;
     RevColorSensorV3 colorSensorBack;
     Vector3D colorFront;
@@ -134,5 +135,18 @@ public class ClawSensor {
     }
     public boolean isFull() {
         return (isFrontDistance() && isBackDistance());
+    }
+
+    //Auto
+    public void setRunInAuto(boolean run) {
+        runInAuto = run;
+    }
+
+    public boolean autoSense() {
+        if (runInAuto) {
+            return isFull();
+        } else {
+            return false;
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
@@ -24,6 +25,7 @@ import java.util.Optional;
 @Autonomous(name = "Red Left 3 + 2", group = "Competition")
 @Config
 public class RedLeft3 extends OpMode {
+    ElapsedTime elapsedTime = new ElapsedTime();
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
@@ -180,11 +182,12 @@ public class RedLeft3 extends OpMode {
         } else return;
 
 
-        drivetrain.followTrajectorySequence(drivetrain
+        drivetrain.followTrajectorySequenceAsync(drivetrain
                 .trajectorySequenceBuilder(placeSpikeMark2.end())
                 .resetConstraints()
                 .setReversed(true)
                 .addTemporalMarkerOffset(0, () -> {
+                    clawSensor.setRunInAuto(true);
                     outtake.presetArm(Constants.Arm.intakePos);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
@@ -202,12 +205,13 @@ public class RedLeft3 extends OpMode {
                 )
                 .forward(4)
                 .setReversed(true)
-                .addTemporalMarkerOffset(2, () -> {
+                .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(Constants.Intake.intake);
                 })
-                .addTemporalMarkerOffset(2.5, () -> {
+                .addTemporalMarkerOffset(2, () -> {
                     claw.setPower(0);
+                    clawSensor.setRunInAuto(false);
                     hasTwo = clawSensor.isFull();
                     telemetry.addData("now", true);
                     telemetry.update();
@@ -329,7 +333,7 @@ public class RedLeft3 extends OpMode {
                 .splineToConstantHeading(new Vector2d(35, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     if (doWeCare) {
-                        outtake.preset(Constants.Slides.med - 800, Constants.Arm.placePos);
+                        outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
                     } else {
                         outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
                     }
@@ -362,6 +366,11 @@ public class RedLeft3 extends OpMode {
 
     @Override
     public void loop() {
-        stop();
+        drivetrain.update();
+        telemetry.addData("time", elapsedTime.seconds());
+        if (clawSensor.autoSense()) {
+            intake.setIntakePower(Constants.Intake.outake, 0);
+            claw.setPower(0);
+        }
     }
 }
