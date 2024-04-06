@@ -8,10 +8,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
 import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -29,17 +27,22 @@ public class RedRight4 extends OpMode {
     static Vector2d placePositionTwo = new Vector2d(52.5, -38.5);
     static Vector2d placePositionThree = new Vector2d(52.5, -40.5);
 
-    static Pose2d pickupSpecial = new Pose2d(-56.5,-4.5, Math.toRadians(180));
+    static Pose2d pickupSpecial = new Pose2d(-58,-4.5, Math.toRadians(180));
 
     static double timeForPixelPlacement = 0.15;
 
+    //in order of the auto
     TrajectorySequence placeSpikeMark1 = null;
     TrajectorySequence placeSpikeMark2 = null;
     TrajectorySequence placeSpikeMark3 = null;
     TrajectorySequence placeSpikeMarkActual = null;
 
-    TrajectorySequence grabFirstPixels = null;
-    TrajectorySequence grabSecondPixels= null;
+    TrajectorySequence placeYellow = null;
+    TrajectorySequence grabFirstWhitePixels = null;
+    TrajectorySequence placeFirstWhitePixels = null;
+    TrajectorySequence grabSecondWhitePixels = null;
+    TrajectorySequence placeSecondWhitePixels = null;
+
 
 
     static boolean doWeCare = true;
@@ -106,7 +109,7 @@ public class RedRight4 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(34, -38, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(34, -37, Math.toRadians(0)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
@@ -122,7 +125,7 @@ public class RedRight4 extends OpMode {
                 .build();
 
         //START**********************************************************************
-        grabFirstPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
+        grabFirstWhitePixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
                 .addTemporalMarkerOffset(0, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
@@ -139,8 +142,9 @@ public class RedRight4 extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(36, -8), Math.toRadians(180))
+                .splineTo(new Vector2d(-30, -7.5), Math.toRadians(180))
+//                .splineToSplineHeading(new Pose2d(-30, -7.5, Math.toRadians(195)), Math.toRadians(180))
                 .waitSeconds(0.1)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
@@ -189,7 +193,7 @@ public class RedRight4 extends OpMode {
                 .waitSeconds(0.5)
                 .build();
         //AFTER 2ND PLACE GOING TO THIRD*********************************************
-        grabSecondPixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
+        grabSecondWhitePixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
                 .waitSeconds(0.3)
                 //Back For Another Two**************************************
                 .setReversed(false)
@@ -283,7 +287,7 @@ public class RedRight4 extends OpMode {
         } else if (barcodePosition == BarcodePosition.Three) {
             placeSpikeMarkActual = placeSpikeMark3;
         }
-
+        //FIRST MOVEMENT HERE********************************************************
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
 
         Vector2d finalPlaceLocation = null;
@@ -301,11 +305,10 @@ public class RedRight4 extends OpMode {
         } else return;
 
         //after purple going to place yellow
-        drivetrain.followTrajectorySequence(drivetrain
+        placeYellow = drivetrain
                 .trajectorySequenceBuilder(placeSpikeMark2.end())
-                .resetConstraints()
                 .setReversed(true)
-                .addTemporalMarker(() -> {
+                .addTemporalMarkerOffset(0.1, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
@@ -320,29 +323,24 @@ public class RedRight4 extends OpMode {
                 .waitSeconds(0.4)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
-                .build()
-                //Back For Another One**************************************
-        );
+                .build();
         //FIRST WHITE PIXELS*********************************************************
-        drivetrain.followTrajectorySequence(grabFirstPixels);
-        drivetrain.followTrajectorySequence(drivetrain
-                .trajectorySequenceBuilder(grabFirstPixels.end())
+        placeFirstWhitePixels = drivetrain
+                .trajectorySequenceBuilder(grabFirstWhitePixels.end())
                 .waitSeconds(0.1)
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 40, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 40  //acc
                 )
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY(), Math.toRadians(180)))
-                .addTemporalMarkerOffset(0, () -> {
+                .addTemporalMarkerOffset(-0.05, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .build()
-        );
+                .build();
         //SECOND PIXELS**************************************************************
-        drivetrain.followTrajectorySequence(grabSecondPixels);
-        drivetrain.followTrajectorySequence(drivetrain
-                .trajectorySequenceBuilder(grabSecondPixels.end())
-                .waitSeconds(0.1)
+        //in backdrop
+        placeSecondWhitePixels = drivetrain
+                .trajectorySequenceBuilder(grabSecondWhitePixels.end())
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
@@ -362,7 +360,40 @@ public class RedRight4 extends OpMode {
 //                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
                 //re-lineup
                 .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
-                .build());
+                .build();
+        //in backstage
+        /*
+        placeSecondWhitePixels = drivetrain
+                .trajectorySequenceBuilder(grabSecondWhitePixels.end())
+                .addTemporalMarkerOffset(0, () -> {
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.fixPos);
+                })
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
+                )
+                .lineTo(new Vector2d(50, -31))
+                .addTemporalMarkerOffset(0, () -> {
+                    claw.setPower(Constants.Claw.outake);
+                })
+
+                .waitSeconds(0.4)
+                .forward(10)
+                .addTemporalMarkerOffset(-0.5, () -> {
+                    claw.setPower(0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
+                })
+                .build();
+         */
+
+        //Actually running the auto
+        drivetrain.followTrajectorySequence(placeYellow);
+        //FIRST WHITE PIXELS*********************************************************
+        drivetrain.followTrajectorySequence(grabFirstWhitePixels);
+        drivetrain.followTrajectorySequence(placeFirstWhitePixels);
+        //SECOND PIXELS**************************************************************
+        drivetrain.followTrajectorySequence(grabSecondWhitePixels);
+        drivetrain.followTrajectorySequence(placeSecondWhitePixels);
     }
 
     @Override
