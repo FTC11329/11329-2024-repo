@@ -245,7 +245,7 @@ public class BlueRight3 extends OpMode {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(1.5, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
                 .waitSeconds(1)

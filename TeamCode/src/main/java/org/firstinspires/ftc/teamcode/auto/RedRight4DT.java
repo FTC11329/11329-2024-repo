@@ -19,9 +19,9 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Right 4 + 2", group = " Testing")
+@Autonomous(name = "(WIP) Red Right 4 + 2 D T", group = " Testing")
 @Config
-public class RedRight4 extends OpMode {
+public class RedRight4DT extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
     static Vector2d placePositionOne = new Vector2d(52.5, -30.5);
     static Vector2d placePositionTwo = new Vector2d(52.5, -38.5);
@@ -133,7 +133,7 @@ public class RedRight4 extends OpMode {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(0.7, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
                 .waitSeconds(0.2)
@@ -338,7 +338,6 @@ public class RedRight4 extends OpMode {
                 })
                 .build();
         //SECOND PIXELS**************************************************************
-        //in backdrop
         placeSecondWhitePixels = drivetrain
                 .trajectorySequenceBuilder(grabSecondWhitePixels.end())
                 .setConstraints(
@@ -361,30 +360,6 @@ public class RedRight4 extends OpMode {
                 //re-lineup
                 .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
                 .build();
-        //in backstage
-        /*
-        placeSecondWhitePixels = drivetrain
-                .trajectorySequenceBuilder(grabSecondWhitePixels.end())
-                .addTemporalMarkerOffset(0, () -> {
-                    outtake.preset(Constants.Slides.intake, Constants.Arm.fixPos);
-                })
-                .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
-                )
-                .lineTo(new Vector2d(50, -31))
-                .addTemporalMarkerOffset(0, () -> {
-                    claw.setPower(Constants.Claw.outake);
-                })
-
-                .waitSeconds(0.4)
-                .forward(10)
-                .addTemporalMarkerOffset(-0.5, () -> {
-                    claw.setPower(0);
-                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                })
-                .build();
-         */
 
         //Actually running the auto
         drivetrain.followTrajectorySequence(placeYellow);

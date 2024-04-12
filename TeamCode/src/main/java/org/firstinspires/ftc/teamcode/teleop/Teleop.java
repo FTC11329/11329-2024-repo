@@ -103,9 +103,9 @@ public class Teleop extends OpMode {
         boolean planeFire = gamepad1.y;
 
         boolean highPresetBool = gamepad2.dpad_up;
-        boolean medPresetBool = gamepad2.dpad_right;
+        boolean medPresetBool = gamepad2.dpad_right || gamepad1.dpad_up;
         boolean lowPresetBool = gamepad2.dpad_down;
-        boolean intakePresetBool = gamepad2.dpad_left;
+        boolean intakePresetBool = gamepad2.dpad_left || gamepad1.dpad_down;
 
         //DRIVETRAIN
         //Testing wheels

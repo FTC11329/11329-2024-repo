@@ -21,9 +21,9 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Right 2 + 2", group = "Competition")
+@Autonomous(name = "Red Right 2 + 2 D W", group = "Competition")
 @Config
-public class RedRight2 extends OpMode {
+public class RedRight2DW extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
     static Vector2d placePositionOne = new Vector2d(52.5, -30.5);
     static Vector2d placePositionTwo = new Vector2d(52.5, -38.5);
@@ -188,7 +188,7 @@ public class RedRight2 extends OpMode {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(1, () -> {
-                    outtake.preset(Constants.Slides.intake, 0);
+                    outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
                 .waitSeconds(0.4)
