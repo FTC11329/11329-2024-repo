@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Right 2 + 2 D T", group = " Testing")
+@Autonomous(name = "(WIP) Red Right 2 + 2 D T", group = "Competition")
 @Config
 public class RedRight2DT extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
@@ -213,7 +213,7 @@ public class RedRight2DT extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
         drivetrain.setPoseEstimate(startingPose);

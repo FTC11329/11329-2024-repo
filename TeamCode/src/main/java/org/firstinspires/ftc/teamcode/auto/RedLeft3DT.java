@@ -29,8 +29,8 @@ public class RedLeft3DT extends OpMode {
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
     static Vector2d placePositionOne = new Vector2d(52, - 33.25);
-    static Vector2d placePositionTwo = new Vector2d(52, -35.5);
-    static Vector2d placePositionThree = new Vector2d(52, -40.5);
+    static Vector2d placePositionTwo = new Vector2d(52, -36);
+    static Vector2d placePositionThree = new Vector2d(52, -41.5);
     
     static Vector2d pickupSpecial = new Vector2d(-52.5, -12);
     static Vector2d pickupSpecial2 = new Vector2d(-56.5,-4.5);
@@ -114,7 +114,7 @@ public class RedLeft3DT extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-4,-1)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-4.75,-1)))
                 .build();
     }
 
@@ -134,7 +134,7 @@ public class RedLeft3DT extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);
@@ -165,9 +165,9 @@ public class RedLeft3DT extends OpMode {
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-0.5));
-            } else {
                 finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-1.5));
+            } else {
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-2.0));
             }
             whiteLeft = true;
         } else if (barcodePosition == BarcodePosition.Three) {
@@ -233,9 +233,8 @@ public class RedLeft3DT extends OpMode {
                     telemetry.addData("has two"/*reminder*/, hasTwo);
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(false);
+                    cameras.setCameraSideThreaded(false);
                 })
-                .waitSeconds(0.3)
                 .resetConstraints()
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
@@ -279,13 +278,13 @@ public class RedLeft3DT extends OpMode {
                 )
                 .splineToConstantHeading(new Vector2d(36, -9.5), Math.toRadians(180))
                 .splineToLinearHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
-                .waitSeconds(0.5)
+                .waitSeconds(0.2)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(true);
+                    cameras.setCameraSideThreaded(true);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
 

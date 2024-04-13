@@ -258,7 +258,7 @@ public class RedRight4DT extends OpMode {
                 .waitSeconds(0.5)
                 .build();
 
-        cameras.setCameraSide(false);
+        cameras.setCameraSideThreaded(false);
     }
 
     @Override
@@ -275,7 +275,7 @@ public class RedRight4DT extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
         drivetrain.setPoseEstimate(startingPose);
@@ -313,7 +313,7 @@ public class RedRight4DT extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(false);
+                    cameras.setCameraSideThreaded(false);
                 })
                 .resetConstraints()
                 .setConstraints(

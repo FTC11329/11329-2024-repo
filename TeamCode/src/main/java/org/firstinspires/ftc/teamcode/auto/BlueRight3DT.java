@@ -22,18 +22,18 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Blue Right 3 + 2 D T", group = "Competition")
+@Autonomous(name = "Blue Right 3 + 2 D T", group = " Testing")
 @Config
 public class BlueRight3DT extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
-    static Vector2d placePositionOne = new Vector2d(52, 33.25);
-    static Vector2d placePositionTwo = new Vector2d(52, 35.5);
-    static Vector2d placePositionThree = new Vector2d(52, 40.5);
+    static Vector2d placePositionOne = new Vector2d(52.5, 41.5);
+    static Vector2d placePositionTwo = new Vector2d(52.5, 35.5);
+    static Vector2d placePositionThree = new Vector2d(52.5, 30);
 
     static Vector2d pickupSpecial = new Vector2d(-52.5, 12);
-    static Vector2d pickupSpecial2 = new Vector2d(-56.25,4.5);
+    static Vector2d pickupSpecial2 = new Vector2d(-55.75,17.5);
 
     static double timeForPixelPlacement = 0.15;
 
@@ -80,7 +80,7 @@ public class BlueRight3DT extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-4,1)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-4,0)))
                 .build();
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose)
@@ -134,7 +134,7 @@ public class BlueRight3DT extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(true);
 
         drivetrain.setPoseEstimate(startingPose);
@@ -157,25 +157,25 @@ public class BlueRight3DT extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, 1.5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -3));
             } else {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, 5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -5));
             }
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,0.5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,1));
             } else {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,1.5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,3));
             }
-            whiteLeft = true;
+            whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, -4));
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 6));
             } else {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, -2));
+                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 8));
             }
             whiteLeft = true;
         } else return;
@@ -186,10 +186,10 @@ public class BlueRight3DT extends OpMode {
                 .resetConstraints()
                 .setReversed(true)
                 .addTemporalMarkerOffset(0, () -> {
-                    clawSensor.setRunInAuto(true);
                     outtake.presetArm(Constants.Arm.intakePos);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
+                    clawSensor.setRunInAuto(true);
                 })
                 .addTemporalMarkerOffset(0.1, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -222,9 +222,9 @@ public class BlueRight3DT extends OpMode {
                 )
                 .splineTo(new Vector2d(-5,7), Math.toRadians(0))
                 .splineTo(new Vector2d(25, 11), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(40, 21), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40, 31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.superLow + 100, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.superLow + 250, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
@@ -261,10 +261,10 @@ public class BlueRight3DT extends OpMode {
                     outtake.presetSlides(Constants.Slides.superLow - 100);
                 })
 
-                .addTemporalMarkerOffset(0.6, () -> {
+                .addTemporalMarkerOffset(0.5, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
-                .addTemporalMarkerOffset(0.9, () -> {
+                .addTemporalMarkerOffset(0.7, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(1.5, () -> {
@@ -277,8 +277,8 @@ public class BlueRight3DT extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineToConstantHeading(new Vector2d(36, 9.5), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(-30, 9, Math.toRadians(-195)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(36, 10), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-28, 11, Math.toRadians(-205)), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
@@ -296,7 +296,6 @@ public class BlueRight3DT extends OpMode {
                 .addTemporalMarkerOffset(-1.5, () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
-                    clawSensor.setRunInAuto(true);
                     if (hasTwo) {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                     } else {
@@ -313,9 +312,10 @@ public class BlueRight3DT extends OpMode {
                 })
                 .addTemporalMarkerOffset(0.3, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                    clawSensor.setRunInAuto(true);
                 })
                 .waitSeconds(0.3)
-                .forward(2.5)
+                .forward(3)
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     clawSensor.setRunInAuto(false);
@@ -329,14 +329,14 @@ public class BlueRight3DT extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .splineTo(new Vector2d(0,7), Math.toRadians(0))
-                .splineTo(new Vector2d(25, 10), Math.toRadians(0))
+                .splineTo(new Vector2d(0,12), Math.toRadians(0))
+                .splineTo(new Vector2d(25, 14), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(35, 31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     if (doWeCare) {
                         outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
                     } else {
-                        outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
+                        outtake.preset(Constants.Slides.med - 500, Constants.Arm.placePos);
                     }
                 })
                 .waitSeconds(0.1)
@@ -357,7 +357,7 @@ public class BlueRight3DT extends OpMode {
                 })
                 .waitSeconds(0.4)
                 .forward(10)
-                .addTemporalMarkerOffset(-0.5, () -> {
+                .addTemporalMarkerOffset(-0.25, () -> {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);

@@ -78,12 +78,17 @@ public class Cameras {
     public void setCameraSide(boolean setBack) {
         if (switchingCamera.getCameraState() == VisionPortal.CameraState.STREAMING) {
             if (setBack && !wasBack) {
+
                 switchingCamera.setActiveCamera(backWebcam);
             } else if (!setBack && wasBack) {
                 switchingCamera.setActiveCamera(frontWebcam);
             }
             wasBack = setBack;
         }
+    }
+
+    public void setCameraSideThreaded(boolean setBack) {
+        new CameraSwitchingThread(this, setBack).start();
     }
 
     public Optional<Pose2d> getRunnerPoseEstimate(int id, boolean isBack) {
@@ -110,5 +115,22 @@ public class Cameras {
 
     public Optional<BarcodePosition> getBarcodePosition() {
         return barcodeProcessor.getLastKnownPosition();
+    }
+}
+
+
+class CameraSwitchingThread extends Thread {
+    Cameras cameras;
+    boolean sideToSwitchTo;
+
+    public CameraSwitchingThread(Cameras cameras, boolean sideToSwitchTo) {
+        super();
+        this.cameras = cameras;
+        this.sideToSwitchTo = sideToSwitchTo;
+    }
+
+    @Override
+    public void run() {
+        cameras.setCameraSide(sideToSwitchTo);
     }
 }

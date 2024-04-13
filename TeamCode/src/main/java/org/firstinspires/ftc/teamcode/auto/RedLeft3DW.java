@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Left 3 + 2 D W", group = " Testing")
+@Autonomous(name = "Red Left 3 + 2 D W", group = "Competition")
 @Config
 public class RedLeft3DW extends OpMode {
     boolean whiteLeft;
@@ -127,7 +127,7 @@ public class RedLeft3DW extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);

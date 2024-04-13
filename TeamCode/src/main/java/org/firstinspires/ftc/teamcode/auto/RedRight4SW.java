@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Right 4 + 2 S W", group = " Testing")
+@Autonomous(name = "Red Right 4 + 2 S W", group = "Competition")
 @Config
 public class RedRight4SW extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
@@ -30,6 +30,7 @@ public class RedRight4SW extends OpMode {
     static Vector2d placePositionThree = new Vector2d(52.5, -40.5);
 
     static Pose2d pickupSpecial = new Pose2d(-54.5,-34, Math.toRadians(-195));
+    static Pose2d pickupSpecial2 = new Pose2d(-53.75,-34.25, Math.toRadians(-195));
 
     static double timeForPixelPlacement = 0.15;
 
@@ -127,7 +128,7 @@ public class RedRight4SW extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
         drivetrain.setPoseEstimate(startingPose);
@@ -145,7 +146,7 @@ public class RedRight4SW extends OpMode {
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
 
         Vector2d finalPlaceLocation = null;
-        Vector2d finalPlaceLocation2 = new Vector2d(32, -54.5);
+        Vector2d finalPlaceLocation2 = new Vector2d(32, -56);
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
@@ -165,7 +166,7 @@ public class RedRight4SW extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(false);
+                    cameras.setCameraSideThreaded(false);
                 })
                 .resetConstraints()
                 .setConstraints(
@@ -198,8 +199,7 @@ public class RedRight4SW extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(true);
-//                    cameras.kill();
+                    cameras.setCameraSideThreaded(true);
                 })
 
                 //Back For Another One**************************************
@@ -240,7 +240,7 @@ public class RedRight4SW extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see Three", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(false);
+                    cameras.setCameraSideThreaded(false);
                 })
                 .addTemporalMarkerOffset(-1, () -> {
                     outtake.preset(Constants.Slides.low, Constants.Arm.armMax);
@@ -255,7 +255,8 @@ public class RedRight4SW extends OpMode {
                 })
                 .resetConstraints()
                 .setReversed(false)
-                .splineTo(new Vector2d(-25, -61), Math.toRadians(180))
+                .splineTo(new Vector2d(15, -59), Math.toRadians(180))
+                .splineTo(new Vector2d(-25, -59), Math.toRadians(180))
                 .splineTo(new Vector2d(-43, -50), Math.toRadians(160))
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
@@ -265,26 +266,26 @@ public class RedRight4SW extends OpMode {
                     cameras.kill();
                 })
                 //Back For Another One**************************************
-                .lineToLinearHeading(pickupSpecial,
+                .lineToLinearHeading(pickupSpecial2,
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .addTemporalMarkerOffset(-0.5, () -> {
+                .addTemporalMarkerOffset(-0.75, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                 })
-                .addTemporalMarkerOffset(-0.25, () -> {
+                .addTemporalMarkerOffset(-0.5, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
-                .addTemporalMarkerOffset(0, () -> {
+                .addTemporalMarkerOffset(-0.1, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
                 })
-                .addTemporalMarkerOffset(0.5, () -> {
+                .addTemporalMarkerOffset(0.3, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
-                .waitSeconds(0.5)
+                .waitSeconds(0.3)
                 .forward(2.5)
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
@@ -295,16 +296,16 @@ public class RedRight4SW extends OpMode {
                     intake.setIntakePower(0, 0);
                 })
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 35, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 35  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                 )
                 .splineTo(new Vector2d(-35, -54.5), Math.toRadians(0))
                 .splineTo(new Vector2d(19, -55.5), Math.toRadians(0))
-                .splineTo(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()), Math.toRadians(0))
+                .splineTo(new Vector2d(52,-60), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1, () -> {
                     outtake.presetArm(Constants.Arm.fixPos);
                 })
-                .addTemporalMarkerOffset(-0.25, () -> {
+                .addTemporalMarkerOffset(-0.75, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .forward(10)
@@ -312,11 +313,6 @@ public class RedRight4SW extends OpMode {
                     claw.setPower(0);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
-                //actual
-                .lineToLinearHeading(new Pose2d(49,-60, Math.toRadians(180)))
-                .lineToLinearHeading(new Pose2d(57,-60, Math.toRadians(180)))
-                //re-lineup
-//                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
                 .build());
     }
 

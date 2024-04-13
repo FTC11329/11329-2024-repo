@@ -25,9 +25,9 @@ import java.util.Optional;
 @Config
 public class RedRight2DW extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52.5, -30.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, -38.5);
-    static Vector2d placePositionThree = new Vector2d(52.5, -40.5);
+    static Vector2d placePositionOne = new Vector2d(52, -30.5);
+    static Vector2d placePositionTwo = new Vector2d(52, -38.5);
+    static Vector2d placePositionThree = new Vector2d(52, -40);
 
     static Pose2d pickupSpecial = new Pose2d(-54.5,-34, Math.toRadians(-195));
 
@@ -71,7 +71,6 @@ public class RedRight2DW extends OpMode {
                 .addTemporalMarkerOffset(0.5, () -> {
                     outtake.preset(Constants.Slides.superLow - 100, Constants.Arm.placePos);
                 })
-                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(40, -36, Math.toRadians(180)))
                 .build();
         //2**************************************************************************
@@ -91,7 +90,6 @@ public class RedRight2DW extends OpMode {
                 .addTemporalMarkerOffset(0.5, () -> {
                     outtake.preset(Constants.Slides.superLow - 100, Constants.Arm.placePos);
                 })
-                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(40, -36, Math.toRadians(181)))
                 .build();
         //3**************************************************************************
@@ -111,7 +109,6 @@ public class RedRight2DW extends OpMode {
                 .addTemporalMarkerOffset(0.5, () -> {
                     outtake.preset(Constants.Slides.superLow - 100, Constants.Arm.placePos);
                 })
-                .resetConstraints()
                 .lineToLinearHeading(new Pose2d(40, -36, Math.toRadians(181)))
                 .build();
     }
@@ -130,7 +127,7 @@ public class RedRight2DW extends OpMode {
 
     @Override
     public void start() {
-        cameras.setCameraSide(true);
+        cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
         drivetrain.setPoseEstimate(startingPose);
@@ -171,7 +168,7 @@ public class RedRight2DW extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(false);
+                    cameras.setCameraSideThreaded(false);
                 })
                 .resetConstraints()
                 .setConstraints(
@@ -203,7 +200,7 @@ public class RedRight2DW extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(true);
+                    cameras.setCameraSideThreaded(true);
 //                    cameras.kill();
                 })
 
