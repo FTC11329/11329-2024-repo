@@ -19,13 +19,13 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "(ALLEN HERE) Red Right 2 + 2 D T", group = " Testing")
+@Autonomous(name = "Red Right 2 + 2 D T", group = " Testing")
 @Config
 public class RedRight2DT extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52.5, -30.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, -38.5);
-    static Vector2d placePositionThree = new Vector2d(52.5, -40.5);
+    static Vector2d placePositionOne = new Vector2d(52.25, -30.5);
+    static Vector2d placePositionTwo = new Vector2d(52.25, -38.5);
+    static Vector2d placePositionThree = new Vector2d(52.25, -40.5);
 
     static Pose2d pickupSpecial = new Pose2d(-58,-4.5, Math.toRadians(180));
 
@@ -107,7 +107,7 @@ public class RedRight2DT extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(34, -37, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(34, -35.25, Math.toRadians(0)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
@@ -124,9 +124,6 @@ public class RedRight2DT extends OpMode {
 
         //START**********************************************************************
         grabFirstWhitePixels = drivetrain.trajectorySequenceBuilder(new Pose2d(placePositionTwo.getX(), placePositionTwo.getY(), Math.toRadians(180)))
-                .addTemporalMarkerOffset(0, () -> {
-                    claw.setPower(Constants.Claw.outake);
-                })
                 .addTemporalMarkerOffset(0.2, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
@@ -149,6 +146,7 @@ public class RedRight2DT extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
+                    cameras.setCameraSide(true);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
 
@@ -166,7 +164,7 @@ public class RedRight2DT extends OpMode {
                 .addTemporalMarkerOffset(0, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
-                .forward(2.5)
+                .forward(1.73)
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
@@ -187,6 +185,13 @@ public class RedRight2DT extends OpMode {
                     } else {
                         outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
                     }
+                })
+                .addTemporalMarkerOffset(0, () -> {
+                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
+                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                    telemetry.addData("did see three", optionalPose.isPresent());
+                    telemetry.update();
+                    cameras.kill();
                 })
                 .waitSeconds(0.5)
                 .build();
@@ -256,8 +261,12 @@ public class RedRight2DT extends OpMode {
                 .waitSeconds(0.4)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
+                .addTemporalMarkerOffset(0.1, () -> {
+                    claw.setPower(Constants.Claw.outake);
+                })
+                .waitSeconds(0.2)
                 .build();
-        //FIRST WHITE PIXELS*********************************************************
+        //PLACE FIRST WHITE PIXELS***************************************************
         placeFirstWhitePixels = drivetrain
                 .trajectorySequenceBuilder(grabFirstWhitePixels.end())
                 .waitSeconds(0.1)
@@ -276,10 +285,12 @@ public class RedRight2DT extends OpMode {
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
-                //actual
-                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
-                //re-lineup
-//                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
+                //Park Right
+//                .lineToLinearHeading(new Pose2d(49,-56, Math.toRadians(180)))
+//                .lineToLinearHeading(new Pose2d(60,-56, Math.toRadians(180)))
+                //Park Left
+                .lineToLinearHeading(new Pose2d(49,-7, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(60,-7, Math.toRadians(180)))
                 .build();
 
         //Actually running the auto

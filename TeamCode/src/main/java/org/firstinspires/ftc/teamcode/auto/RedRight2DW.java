@@ -152,13 +152,13 @@ public class RedRight2DW extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,-1));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1,-1));
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,0));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1,0));
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,-3));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1,-3));
         } else return;
 
 
@@ -268,7 +268,8 @@ public class RedRight2DW extends OpMode {
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 //actual
-                .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(49,-60, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(57,-60, Math.toRadians(180)))
                 //re-lineup
 //                .lineToLinearHeading(new Pose2d(15, -55, Math.toRadians(90)))
                 .build());

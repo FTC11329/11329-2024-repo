@@ -27,12 +27,12 @@ public class RedLeft3DW extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52.5, - 33.25);
-    static Vector2d placePositionTwo = new Vector2d(52.5, -35.5);
+    static Vector2d placePositionOne = new Vector2d(52.5, -33);
+    static Vector2d placePositionTwo = new Vector2d(52.5, -35.25);
     static Vector2d placePositionThree = new Vector2d(52.5, -40.5);
 
     static Pose2d pickupSpecial  = new Pose2d(-55,-36, Math.toRadians(180));
-    static Pose2d pickupSpecial2 = new Pose2d(-54.5,-34, Math.toRadians(-195));
+    static Pose2d pickupSpecial2 = new Pose2d(-54.25,-34.25, Math.toRadians(-204));
 
     static double timeForPixelPlacement = 0.15;
 
@@ -149,13 +149,16 @@ public class RedLeft3DW extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1,-1));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,-1));
+            whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1,0));
+            finalPlaceLocation2 = placePositionThree.plus(new Vector2d(1.5,-3));
+            whiteLeft = true;
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1,-3));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,-3));
+            whiteLeft = true;
         } else return;
 
 
@@ -164,7 +167,6 @@ public class RedLeft3DW extends OpMode {
                 .resetConstraints()
                 .setReversed(true)
                 .addTemporalMarkerOffset(0, () -> {
-                    clawSensor.setRunInAuto(true);
                     outtake.presetArm(Constants.Arm.intakePos);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     claw.setPower(Constants.Claw.intake);
@@ -174,11 +176,12 @@ public class RedLeft3DW extends OpMode {
                 })
                 .addTemporalMarkerOffset(0.6, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                    clawSensor.setRunInAuto(true);
                 })
                 .waitSeconds(0.5)
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 40, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 40  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                 )
                 .forward(4)
                 .setReversed(true)
@@ -198,7 +201,7 @@ public class RedLeft3DW extends OpMode {
                 .splineTo(new Vector2d(16, -55.5), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(35, -35), Math.toRadians(0))
                 .addTemporalMarkerOffset(-0.5, () -> {
-                    outtake.preset(Constants.Slides.med - 900, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.superLow + 100, Constants.Arm.placePos);
                 })
                 .addTemporalMarkerOffset(0.25, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
@@ -209,8 +212,8 @@ public class RedLeft3DW extends OpMode {
                 })
                 .resetConstraints()
                 .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
+                        (displacement, pose, derivative, baseRobotVelocity) -> 35, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 35  //acc
                 )
                 .waitSeconds(0.4)
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
@@ -269,7 +272,6 @@ public class RedLeft3DW extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .addTemporalMarkerOffset(0, () -> {
-                    clawSensor.setRunInAuto(true);
                     if (hasTwo) {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                     } else {
@@ -291,6 +293,9 @@ public class RedLeft3DW extends OpMode {
                 })
                 .waitSeconds(0.75)
                 .forward(2.5)
+                .addTemporalMarkerOffset(0.25, () -> {
+                    clawSensor.setRunInAuto(true);
+                })
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     clawSensor.setRunInAuto(false);
@@ -306,7 +311,7 @@ public class RedLeft3DW extends OpMode {
                 )
                 .splineTo(new Vector2d(-35, -54.5), Math.toRadians(0))
                 .splineTo(new Vector2d(16, -55.5), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 10, finalPlaceLocation2.getY()), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 17, finalPlaceLocation2.getY()), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1, () -> {
                     outtake.preset(Constants.Slides.med - 900, Constants.Arm.placePos);
                 })
@@ -316,14 +321,14 @@ public class RedLeft3DW extends OpMode {
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see Three", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.kill();
+//                    cameras.kill();
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 35, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 35  //acc
                 )
                 .lineTo(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()))
-                .addTemporalMarkerOffset(-0.5, () -> {
+                .addTemporalMarkerOffset(-0.3, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .resetConstraints()
@@ -332,6 +337,9 @@ public class RedLeft3DW extends OpMode {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
+                })
+                .addTemporalMarkerOffset(0, () -> {
+                    cameras.kill();
                 })
                 .lineToLinearHeading(new Pose2d(49,-66, Math.toRadians(180)))
                 .build());
@@ -343,7 +351,6 @@ public class RedLeft3DW extends OpMode {
         if (clawSensor.autoSense()) {
             intake.setIntakePower(Constants.Intake.outake, 0);
             claw.setPower(0);
-            clawSensor.setRunInAuto(false);
         }
     }
 }
