@@ -149,13 +149,13 @@ public class RedRight4DC extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5, -1.5));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1, -1.5));
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,5));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1,3.5));
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1.5,1.75));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1,1.75));
         } else return;
 
 
