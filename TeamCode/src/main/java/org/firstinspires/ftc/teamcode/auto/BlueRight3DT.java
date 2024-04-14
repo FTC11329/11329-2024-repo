@@ -22,14 +22,14 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Blue Right 3 + 2 D T", group = " Testing")
+@Autonomous(name = "Blue Right 3 + 2 D T", group = "Competition")
 @Config
 public class BlueRight3DT extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(52.5, 41.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, 35.5);
+    static Vector2d placePositionTwo = new Vector2d(52.5, 36);
     static Vector2d placePositionThree = new Vector2d(52.5, 30);
 
     static Vector2d pickupSpecial = new Vector2d(-52.5, 12);
@@ -167,7 +167,7 @@ public class BlueRight3DT extends OpMode {
             if (doWeCare) {
                 finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,1));
             } else {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,3));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,1));
             }
             whiteLeft = false;
         } else if (barcodePosition == BarcodePosition.Three) {
@@ -329,8 +329,8 @@ public class BlueRight3DT extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .splineTo(new Vector2d(0,12), Math.toRadians(0))
-                .splineTo(new Vector2d(25, 14), Math.toRadians(0))
+                .splineTo(new Vector2d(0,13), Math.toRadians(0))
+                .splineTo(new Vector2d(25, 18), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(35, 31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     if (doWeCare) {

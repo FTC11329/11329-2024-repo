@@ -58,7 +58,7 @@ import java.util.List;
 public class Drivetrain extends MecanumDrive {
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(9, 5.5, 3);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(9, 5.5, 2); //D3
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(9, 0, 0);
     public static double LATERAL_MULTIPLIER = 1;
     public static double VX_WEIGHT = 1;
