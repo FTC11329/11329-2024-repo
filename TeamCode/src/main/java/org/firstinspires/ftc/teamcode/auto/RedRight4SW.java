@@ -225,7 +225,7 @@ public class RedRight4SW extends OpMode {
                 .waitSeconds(0.5)
                 .forward(2.5)
                 .setReversed(true)
-                .addTemporalMarkerOffset(2, () -> {
+                .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(0);
                 })
@@ -249,7 +249,7 @@ public class RedRight4SW extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .addTemporalMarkerOffset(0.1, () -> {
+                .addTemporalMarkerOffset(0.75, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
                     claw.setPower(0);
                 })
@@ -288,7 +288,7 @@ public class RedRight4SW extends OpMode {
                 .waitSeconds(0.3)
                 .forward(2.5)
                 .setReversed(true)
-                .addTemporalMarkerOffset(2, () -> {
+                .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     claw.setPower(0);
                 })

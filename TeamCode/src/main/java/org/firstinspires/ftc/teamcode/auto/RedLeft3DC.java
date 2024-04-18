@@ -203,6 +203,7 @@ public class RedLeft3DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
                 )
                 .forward(3)
+//                .waitSeconds(2.5) // HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);

@@ -100,7 +100,7 @@ public class Teleop extends OpMode {
         boolean climberUpBool = gamepad2.left_stick_button;
         boolean climberFireBool = gamepad2.right_stick_button || gamepad1.x;
 
-        boolean planeFire = gamepad1.y;
+        boolean planeFire = gamepad1.y || gamepad2.back;
 
         boolean highPresetBool = gamepad2.dpad_up;
         boolean medPresetBool = gamepad2.dpad_right || gamepad1.dpad_up;

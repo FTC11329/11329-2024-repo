@@ -129,7 +129,7 @@ public class Constants {
         public static double fixPos = 0.524;
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.351;
-        public static double autoArmDrop = 0.063;
+        public static double autoArmDrop = 0.06;
         public static double intakePos = 0.015;
 
         public static double manualPosition = 0.03;
@@ -139,8 +139,9 @@ public class Constants {
     public static class Climber {
         public static double manualClimberPower = 50;
 
+
         public static int down = 0;
-        public static int climberFire = -1150;
+        public static int climberFire = -1052;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

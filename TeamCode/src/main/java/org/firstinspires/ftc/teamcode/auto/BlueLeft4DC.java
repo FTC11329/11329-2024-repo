@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Blue Right 4 + 2 D C", group = "Competition")
+@Autonomous(name = "Blue Left 4 + 2 D C", group = "Competition")
 @Config
 public class BlueLeft4DC extends OpMode {
     static Pose2d startingPose = new Pose2d(17, 64, Math.toRadians(-90));
@@ -29,7 +29,7 @@ public class BlueLeft4DC extends OpMode {
     static Vector2d placePositionTwo = new Vector2d(52.5, 33.5);
     static Vector2d placePositionThree =  new Vector2d(52.5, 30);
 
-    static Pose2d pickupSpecial = new Pose2d(-53.5,17.5, Math.toRadians(180));
+    static Pose2d pickupSpecial = new Pose2d(-53,16, Math.toRadians(180));
 
     static double timeForPixelPlacement = 0.15;
 
@@ -193,8 +193,8 @@ public class BlueLeft4DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 50, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 50  //acc
                 )
-                .splineToConstantHeading(new Vector2d(36, 8), Math.toRadians(180))
-                .splineToSplineHeading(new Pose2d(-30, 9.5, Math.toRadians(-220)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(36, 8.75), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-30, 10.25, Math.toRadians(-220)), Math.toRadians(180))
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
