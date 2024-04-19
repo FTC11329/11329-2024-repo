@@ -173,7 +173,8 @@ public class RedLeft3DC extends OpMode {
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 4));
+//                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 4)); hereeeeeeeeeeeeeeeeeeeeeeeee
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1.5));
             } else {
                 finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 2));
             }
@@ -281,10 +282,24 @@ public class RedLeft3DC extends OpMode {
                 .splineToLinearHeading(new Pose2d(-30, -9, Math.toRadians(195)), Math.toRadians(180))
                 .waitSeconds(0.2)
                 .addTemporalMarkerOffset(0, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("did see two", optionalPose.isPresent());
-                    telemetry.update();
+                    double distance = 30.0;
+                    while (distance > 15.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                        boolean present = optionalPose.isPresent();
+                        if (present) {
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            if (distance < 15.0) {
+                                drivetrain.setPoseEstimate(optionalPose.get());
+                            }
+                        }
+                        telemetry.addData("distance = ", distance);
+                        telemetry.addData("did see two", optionalPose.isPresent());
+                        telemetry.update();
+                    }
+//                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+//                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+//                    telemetry.addData("did see two", optionalPose.isPresent());
+//                    telemetry.update();
                     cameras.setCameraSideThreaded(true);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
@@ -356,7 +371,8 @@ public class RedLeft3DC extends OpMode {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .waitSeconds(0.4)
-                .forward(10)
+//                .forward(10) hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+                .lineTo(new Vector2d(40, -10))
                 .addTemporalMarkerOffset(-0.5, () -> {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);

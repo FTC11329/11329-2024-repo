@@ -29,7 +29,7 @@ public class BlueRight3DC extends OpMode {
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(52.5, 41.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, 36);
+    static Vector2d placePositionTwo = new Vector2d(52.5, 34.75);
     static Vector2d placePositionThree = new Vector2d(52.5, 30);
 
     static Vector2d pickupSpecial = new Vector2d(-52.5, 12);
@@ -233,7 +233,7 @@ public class BlueRight3DC extends OpMode {
                     telemetry.addData("has two"/*reminder*/, hasTwo);
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
-                    cameras.setCameraSide(false);
+                    cameras.setCameraSideThreaded(false);
                 })
                 .waitSeconds(0.3)
                 .resetConstraints()
@@ -281,11 +281,25 @@ public class BlueRight3DC extends OpMode {
                 .splineToLinearHeading(new Pose2d(-28, 11, Math.toRadians(-205)), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("did see two", optionalPose.isPresent());
-                    telemetry.update();
-                    cameras.setCameraSide(true);
+                    double distance = 30.0;
+                    while (distance > 15.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                        boolean present = optionalPose.isPresent();
+                        if (present) {
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            if (distance < 15.0) {
+                                drivetrain.setPoseEstimate(optionalPose.get());
+                            }
+                        }
+                        telemetry.addData("distance = ", distance);
+                        telemetry.addData("did see two", optionalPose.isPresent());
+                        telemetry.update();
+                    }
+//                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+//                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+//                    telemetry.addData("did see two", optionalPose.isPresent());
+//                    telemetry.update();
+                    cameras.setCameraSideThreaded(true);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
 
