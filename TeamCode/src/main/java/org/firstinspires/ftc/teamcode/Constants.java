@@ -128,7 +128,7 @@ public class Constants {
 
         public static double fixPos = 0.524;
         public static double weirdPlacePos = 0.475;
-        public static double placePos = 0.351;
+        public static double placePos = 0.370;
         public static double autoArmDrop = 0.06;
         public static double intakePos = 0.015;
 

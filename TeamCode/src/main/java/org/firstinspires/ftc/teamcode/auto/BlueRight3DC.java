@@ -32,8 +32,8 @@ public class BlueRight3DC extends OpMode {
     static Vector2d placePositionTwo = new Vector2d(52.5, 34.75);
     static Vector2d placePositionThree = new Vector2d(52.5, 30);
 
-    static Vector2d pickupSpecial = new Vector2d(-52.5, 12);
-    static Vector2d pickupSpecial2 = new Vector2d(-55.75,17.5);
+    static Vector2d pickupSpecial = new Vector2d(-53, 12);
+    static Vector2d pickupSpecial2 = new Vector2d(-55.25,17.5);
 
     static double timeForPixelPlacement = 0.15;
 
@@ -261,7 +261,7 @@ public class BlueRight3DC extends OpMode {
                     outtake.presetSlides(Constants.Slides.superLow - 100);
                 })
 
-                .addTemporalMarkerOffset(0.5, () -> {
+                .addTemporalMarkerOffset(0.3, () -> {
                     claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.7, () -> {
@@ -277,8 +277,8 @@ public class BlueRight3DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineToConstantHeading(new Vector2d(36, 10), Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(-28, 11, Math.toRadians(-205)), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(36, 9), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-28, 9, Math.toRadians(-205)), Math.toRadians(180))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;

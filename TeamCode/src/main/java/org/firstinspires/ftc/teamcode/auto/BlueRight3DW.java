@@ -30,8 +30,8 @@ public class BlueRight3DW extends OpMode {
 
     static Pose2d startingPose = new Pose2d(-41, 60, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(52.5, 42.5);
-    static Vector2d placePositionTwo = new Vector2d(52.5, 37.25);
-    static Vector2d placePositionThree = new Vector2d(52.5, 30);
+    static Vector2d placePositionTwo = new Vector2d(52.5, 38.25);
+    static Vector2d placePositionThree = new Vector2d(52.5, 32);
 
     static Pose2d pickupSpecial  = new Pose2d(-55,36, Math.toRadians(180));
     static Pose2d pickupSpecial2 = new Pose2d(-59,43.25, Math.toRadians(204));
@@ -153,7 +153,7 @@ public class BlueRight3DW extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -3));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,0.5));
             } else {
                 finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -5));
             }
@@ -161,7 +161,7 @@ public class BlueRight3DW extends OpMode {
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,1));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,0.5));
             } else {
                 finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,1));
             }
@@ -169,7 +169,7 @@ public class BlueRight3DW extends OpMode {
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation = placePositionThree;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 6));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2,0.5));
             } else {
                 finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 8));
             }
@@ -212,11 +212,11 @@ public class BlueRight3DW extends OpMode {
                     telemetry.update();
                     intake.setIntakePower(0, 0);
                 })
-                .splineToLinearHeading(new Pose2d(-35, 54, Math.toRadians(180)), Math.toRadians(0))
-                .splineTo(new Vector2d(16, 52.75), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-35, 53.75, Math.toRadians(180)), Math.toRadians(0))
+                .splineTo(new Vector2d(16, 50.75), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(35, 35), Math.toRadians(0))
                 .addTemporalMarkerOffset(-0.5, () -> {
-                    outtake.preset(Constants.Slides.superLow + 250, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.superLow + 150, Constants.Arm.placePos);
                 })
                 .addTemporalMarkerOffset(0.25, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
@@ -268,15 +268,26 @@ public class BlueRight3DW extends OpMode {
                 .waitSeconds(0.9)
                 .setReversed(false)
                 .splineToConstantHeading(new Vector2d(16, 60), Math.toRadians(180))
-                .splineTo(new Vector2d(-25, 59), Math.toRadians(180))
+                .splineTo(new Vector2d(-25, 58), Math.toRadians(180))
                 .splineTo(new Vector2d(-40, 53), Math.toRadians(-160))
                 .waitSeconds(0.3)
                 .addTemporalMarkerOffset(0, () -> {
-                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-                    telemetry.addData("did see two", optionalPose.isPresent());
-                    telemetry.update();
+                    double distance = 30.0;
+                    while (distance > 15.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                        boolean present = optionalPose.isPresent();
+                        if (present) {
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            if (distance < 15.0) {
+                                drivetrain.setPoseEstimate(optionalPose.get());
+                            }
+                        }
+                        telemetry.addData("distance = ", distance);
+                        telemetry.addData("did see two", optionalPose.isPresent());
+                        telemetry.update();
+                    }
                     cameras.setCameraSideThreaded(true);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
 
                 //Back For Another One**************************************
@@ -309,6 +320,7 @@ public class BlueRight3DW extends OpMode {
                 })
                 .waitSeconds(0.75)
                 .forward(2.5)
+                .waitSeconds(1) //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
                 .addTemporalMarkerOffset(0.25, () -> {
                     clawSensor.setRunInAuto(true);
                 })
@@ -325,11 +337,11 @@ public class BlueRight3DW extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                 )
-                .splineTo(new Vector2d(-35, 55.5), Math.toRadians(0))
-                .splineTo(new Vector2d(16, 56), Math.toRadians(0))
+                .splineTo(new Vector2d(-35, 56), Math.toRadians(0))
+                .splineTo(new Vector2d(16, 56.5), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX() - 17, finalPlaceLocation2.getY()), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1, () -> {
-                    outtake.preset(Constants.Slides.med - 700, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.med - 800, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.1)
                 .addTemporalMarker(() -> {
@@ -349,7 +361,7 @@ public class BlueRight3DW extends OpMode {
                 })
                 .resetConstraints()
                 .forward(10)
-                .addTemporalMarkerOffset(-0.25, () -> {
+                .addTemporalMarkerOffset(-0.5, () -> {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);

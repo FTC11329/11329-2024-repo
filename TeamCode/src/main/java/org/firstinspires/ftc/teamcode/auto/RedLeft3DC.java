@@ -29,7 +29,7 @@ public class RedLeft3DC extends OpMode {
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
     static Vector2d placePositionOne = new Vector2d(52, - 33.25);
-    static Vector2d placePositionTwo = new Vector2d(52, -36);
+    static Vector2d placePositionTwo = new Vector2d(52, -37.25);
     static Vector2d placePositionThree = new Vector2d(52, -41.5);
     
     static Vector2d pickupSpecial = new Vector2d(-52.5, -12);
@@ -105,7 +105,7 @@ public class RedLeft3DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(-36, -32, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-36, -29, Math.toRadians(180)))
                 .addTemporalMarker(() -> {
                     outtake.presetArm(Constants.Arm.autoArmDrop);
                 })
@@ -114,7 +114,7 @@ public class RedLeft3DC extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
                 .waitSeconds(timeForPixelPlacement)
-                .lineTo(pickupSpecial.plus(new Vector2d(-4.75,-1)))
+                .lineTo(pickupSpecial.plus(new Vector2d(-4.75,0.5)))
                 .build();
     }
 
@@ -157,7 +157,7 @@ public class RedLeft3DC extends OpMode {
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1.5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, 2.5));
             } else {
                 finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -5));
             }
@@ -165,7 +165,7 @@ public class RedLeft3DC extends OpMode {
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
             if (doWeCare) {
-                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-1.5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, 2.5));
             } else {
                 finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2,-2.0));
             }
@@ -174,7 +174,7 @@ public class RedLeft3DC extends OpMode {
             finalPlaceLocation = placePositionThree;
             if (doWeCare) {
 //                finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 4)); hereeeeeeeeeeeeeeeeeeeeeeeee
-                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, -1.5));
+                finalPlaceLocation2 = placePositionOne.plus(new Vector2d(2, 2.5));
             } else {
                 finalPlaceLocation2 = placePositionThree.plus(new Vector2d(2, 2));
             }
@@ -204,7 +204,6 @@ public class RedLeft3DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
                 )
                 .forward(3)
-//                .waitSeconds(2.5) // HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
@@ -223,10 +222,10 @@ public class RedLeft3DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 65  //acc
                 )
                 .splineTo(new Vector2d(-5,-7), Math.toRadians(0))
-                .splineTo(new Vector2d(25, -11), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(40, -21), Math.toRadians(0))
+                .splineTo(new Vector2d(30, -11), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(45, -21), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    outtake.preset(Constants.Slides.superLow + 100, Constants.Arm.placePos);
+                    outtake.preset(Constants.Slides.superLow + 150, Constants.Arm.placePos);
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarker(() -> {
@@ -259,7 +258,7 @@ public class RedLeft3DC extends OpMode {
                 .addTemporalMarkerOffset(0.12, () -> {
                     claw.setPower(0);
                     autoServo.upBoth();
-                    outtake.presetSlides(Constants.Slides.superLow - 100);
+                    outtake.presetSlides(Constants.Slides.superLow + 100);
                 })
 
                 .addTemporalMarkerOffset(0.6, () -> {
@@ -296,10 +295,6 @@ public class RedLeft3DC extends OpMode {
                         telemetry.addData("did see two", optionalPose.isPresent());
                         telemetry.update();
                     }
-//                    Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-//                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
-//                    telemetry.addData("did see two", optionalPose.isPresent());
-//                    telemetry.update();
                     cameras.setCameraSideThreaded(true);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                 })
@@ -345,8 +340,8 @@ public class RedLeft3DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
                 .splineTo(new Vector2d(0,-7), Math.toRadians(0))
-                .splineTo(new Vector2d(25, -10), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(35, -31), Math.toRadians(0))
+                .splineTo(new Vector2d(30, -10), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(40, -31), Math.toRadians(0))
                 .addTemporalMarker(() -> {
                     if (doWeCare) {
                         outtake.preset(Constants.Slides.med - 850, Constants.Arm.placePos);
@@ -372,12 +367,13 @@ public class RedLeft3DC extends OpMode {
                 })
                 .waitSeconds(0.4)
 //                .forward(10) hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                .lineTo(new Vector2d(40, -10))
+                .lineTo(new Vector2d(47, -10))
                 .addTemporalMarkerOffset(-0.5, () -> {
                     claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
+
                 .build());
     }
 
