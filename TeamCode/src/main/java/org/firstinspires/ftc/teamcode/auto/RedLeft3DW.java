@@ -304,7 +304,7 @@ public class RedLeft3DW extends OpMode {
                 })
                 .waitSeconds(0.75)
                 .forward(2.5)
-                .waitSeconds(1) //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+                .waitSeconds(0.75) //HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
                 .addTemporalMarkerOffset(0.25, () -> {
                     clawSensor.setRunInAuto(true);
                 })

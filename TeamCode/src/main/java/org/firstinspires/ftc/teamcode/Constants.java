@@ -51,7 +51,7 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.9;
-        public static double outake = -0.45;
+        public static double outake = -0.5;
 
         public static double autoVomitSpeed = -0.2;
     }
