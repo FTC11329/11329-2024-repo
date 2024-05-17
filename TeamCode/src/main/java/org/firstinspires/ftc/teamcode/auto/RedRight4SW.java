@@ -52,7 +52,7 @@ public class RedRight4SW extends OpMode {
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         //1**************************************************************************
@@ -176,14 +176,12 @@ public class RedRight4SW extends OpMode {
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
                 .addTemporalMarkerOffset(-0.2, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.1, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(0.7, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .waitSeconds(0.2)
                 .setReversed(false)
@@ -213,7 +211,6 @@ public class RedRight4SW extends OpMode {
                 .addTemporalMarkerOffset(-0.2, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(0, () -> {
@@ -227,7 +224,6 @@ public class RedRight4SW extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -235,7 +231,6 @@ public class RedRight4SW extends OpMode {
                 .splineTo(new Vector2d(-35, -54.5), Math.toRadians(0))
                 .splineTo(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()), Math.toRadians(0))
                 .addTemporalMarker(() -> {
-                    claw.setPower(Constants.Claw.outake);
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                     optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
                     telemetry.addData("did see Three", optionalPose.isPresent());
@@ -251,7 +246,6 @@ public class RedRight4SW extends OpMode {
                 )
                 .addTemporalMarkerOffset(0.75, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .resetConstraints()
                 .setReversed(false)
@@ -276,7 +270,6 @@ public class RedRight4SW extends OpMode {
                 .addTemporalMarkerOffset(-0.5, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(-0.1, () -> {
@@ -290,7 +283,6 @@ public class RedRight4SW extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -306,11 +298,9 @@ public class RedRight4SW extends OpMode {
                     outtake.presetArm(Constants.Arm.fixPos);
                 })
                 .addTemporalMarkerOffset(-0.75, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .forward(10)
                 .addTemporalMarkerOffset(-0.5, () -> {
-                    claw.setPower(0);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .build());

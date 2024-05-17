@@ -3,22 +3,56 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.teamcode.Constants;
 
 public class Claw {
-    public CRServo clawServo;
+    public Servo frontClawServo;
+    public Servo backClawServo;
+
+    public Servo wristServo;
 
     public Claw(HardwareMap hardwareMap) {
-        clawServo = hardwareMap.get(CRServo.class, "clawServo");
-        //1 is intake -1 is outtake
-        clawServo.setDirection(DcMotorSimple.Direction.FORWARD);
+        frontClawServo = hardwareMap.get(Servo.class, "clawServoF");
+        backClawServo = hardwareMap.get(Servo.class, "clawServoB");
+
+        wristServo = hardwareMap.get(Servo.class, "wristClawServo");
+    }
+
+    public void setFrontOpen(boolean open) {
+        if (open) {
+            frontClawServo.setPosition(Constants.Claw.frontClawOpen);
+        } else {
+            frontClawServo.setPosition(Constants.Claw.frontClawClosed);
+        }
+    }
+
+    public void setBackOpen(boolean open) {
+        if (open) {
+            backClawServo.setPosition(Constants.Claw.backClawOpen);
+        } else {
+            backClawServo.setPosition(Constants.Claw.backClawClosed);
+        }
+    }
+
+    public void setOpen(boolean open) {
+        setFrontOpen(open);
+        setBackOpen(open);
+    }
+
+    public void setWristPos(double pos) {
+        wristServo.setPosition(pos);
     }
 
 
-    public void setPower(double clawPower) {
-        clawServo.setPower(clawPower);
+    //temp
+    public void setFrontClawServo(double pos) {
+        frontClawServo.setPosition(pos);
     }
 
+    public void periodic() {
+    }
     public void stopClaw() {
-        clawServo.setPower(0);
     }
 }

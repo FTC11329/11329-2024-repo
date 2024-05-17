@@ -51,7 +51,7 @@ public class RedRight4DC extends OpMode {
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         //1**************************************************************************
@@ -178,14 +178,12 @@ public class RedRight4DC extends OpMode {
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
                 .addTemporalMarkerOffset(-0.1, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.1, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(0.7, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .waitSeconds(0.2)
                 .setReversed(false)
@@ -212,7 +210,6 @@ public class RedRight4DC extends OpMode {
                 .addTemporalMarkerOffset(-0.5, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(0, () -> {
@@ -223,7 +220,6 @@ public class RedRight4DC extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -234,11 +230,9 @@ public class RedRight4DC extends OpMode {
                     outtake.preset(Constants.Slides.low - 75, Constants.Arm.placePos);
                 })
                 .addTemporalMarkerOffset(-0.15, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(1, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .resetConstraints()
                 .setReversed(false)
@@ -262,7 +256,6 @@ public class RedRight4DC extends OpMode {
                 .addTemporalMarkerOffset(-0.5, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(0, () -> {
@@ -273,7 +266,6 @@ public class RedRight4DC extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -289,11 +281,9 @@ public class RedRight4DC extends OpMode {
                     outtake.preset(Constants.Slides.med - 400, Constants.Arm.placePos);
                 })
                 .addTemporalMarkerOffset(-0.1, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.5, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .waitSeconds(0.2)
                 .forward(10)

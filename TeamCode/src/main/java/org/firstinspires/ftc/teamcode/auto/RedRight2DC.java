@@ -58,7 +58,7 @@ public class RedRight2DC extends OpMode {
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         //1**************************************************************************
@@ -129,7 +129,6 @@ public class RedRight2DC extends OpMode {
                 })
                 .addTemporalMarkerOffset(0.7, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .waitSeconds(0.2)
                 .setReversed(false)
@@ -154,7 +153,6 @@ public class RedRight2DC extends OpMode {
                 .lineToLinearHeading(new Pose2d(pickupSpecial.getX(), pickupSpecial.getY(), Math.toRadians(180)))
                 .addTemporalMarkerOffset(-1.5, () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                 })
 
@@ -168,7 +166,6 @@ public class RedRight2DC extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -262,7 +259,6 @@ public class RedRight2DC extends OpMode {
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
                 .addTemporalMarkerOffset(0.1, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .waitSeconds(0.2)
                 .build();
@@ -276,12 +272,10 @@ public class RedRight2DC extends OpMode {
                 )
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY(), Math.toRadians(180)))
                 .addTemporalMarkerOffset(0, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .waitSeconds(0.4)
                 .forward(10)
                 .addTemporalMarkerOffset(-0.5, () -> {
-                    claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })

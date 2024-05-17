@@ -16,7 +16,7 @@ public class TurnTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drivetrain drive = new Drivetrain(hardwareMap, telemetry);
+        Drivetrain drive = new Drivetrain(hardwareMap);
 
         waitForStart();
 

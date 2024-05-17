@@ -10,8 +10,6 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -39,7 +37,6 @@ public class BlueLeft4SW extends OpMode {
     TrajectorySequence placeSpikeMark3 = null;
 
 
-    Claw claw;
     Intake intake;
     Outtake outtake;
     Cameras cameras;
@@ -48,11 +45,10 @@ public class BlueLeft4SW extends OpMode {
     DistanceSensors distanceSensors;
 
     public void init() {
-        claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         //1**************************************************************************
@@ -177,14 +173,12 @@ public class BlueLeft4SW extends OpMode {
                 .lineToLinearHeading(new Pose2d(finalPlaceLocation.getX(), finalPlaceLocation.getY(), Math.toRadians(180)))
                 .resetConstraints()
                 .addTemporalMarkerOffset(-0.2, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.1, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(0.7, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .waitSeconds(0.2)
                 .setReversed(false)
@@ -213,7 +207,6 @@ public class BlueLeft4SW extends OpMode {
                 .addTemporalMarkerOffset(-0.2, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(0, () -> {
@@ -227,7 +220,6 @@ public class BlueLeft4SW extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -235,7 +227,6 @@ public class BlueLeft4SW extends OpMode {
                 .splineTo(new Vector2d(-35, 57), Math.toRadians(0))
                 .splineTo(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()), Math.toRadians(0))
                 .addTemporalMarkerOffset(-0.2, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 //WEIRD THING HERE***************************************************
                 .addTemporalMarkerOffset(-1, () -> {
@@ -247,7 +238,6 @@ public class BlueLeft4SW extends OpMode {
                 )
                 .addTemporalMarkerOffset(0.1, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .resetConstraints()
                 .setReversed(false)
@@ -272,7 +262,6 @@ public class BlueLeft4SW extends OpMode {
                 .addTemporalMarkerOffset(-0.5, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(-0.1, () -> {
@@ -286,7 +275,6 @@ public class BlueLeft4SW extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(2, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -302,11 +290,9 @@ public class BlueLeft4SW extends OpMode {
                     outtake.presetArm(Constants.Arm.fixPos);
                 })
                 .addTemporalMarkerOffset(-0.75, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .forward(10)
                 .addTemporalMarkerOffset(-0.5, () -> {
-                    claw.setPower(0);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .build());

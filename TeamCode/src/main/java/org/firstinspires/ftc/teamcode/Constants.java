@@ -74,9 +74,10 @@ public class Constants {
 
     @Config
     public static class Claw {
-        public static double intake = 1;
-        public static double outake = -0.4;
-        public static double slowOutake = -0.2;
+        public static double frontClawOpen = 1;     //TODO: set this
+        public static double frontClawClosed = -0.4;//TODO: set this
+        public static double backClawOpen = 1;      //TODO: set this
+        public static double backClawClosed = -0.4; //TODO: set this
     }
 
     @Config

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -35,15 +36,14 @@ public class Teleop extends OpMode {
     int climberPos = 0;
     double SIntakeStart = 0;
     boolean SIntakeDebounce = true;
+    double temp = 0;
 
-    Claw claw;
     Plane plane;
     Lights lights;
     Intake intake;
     Climber climber;
     Outtake outtake;
     AutoServo autoServo;
-    ClawSensor clawSensor;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
@@ -52,15 +52,13 @@ public class Teleop extends OpMode {
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        claw = new Claw(hardwareMap);
         plane = new Plane(hardwareMap);
         intake = new Intake(hardwareMap);
         lights = new Lights(hardwareMap);
         climber = new Climber(hardwareMap);
         outtake = new Outtake(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
-        clawSensor = new ClawSensor(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
     }
@@ -92,7 +90,7 @@ public class Teleop extends OpMode {
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
         double slowSlidePower = gamepad1.right_trigger - gamepad1.left_trigger;
 
-        double armPower = -gamepad2.left_stick_y;
+        //double armPower = -gamepad2.left_stick_y;
         boolean armFix = gamepad1.a;
 
         double climberPower = gamepad2.right_stick_y;
@@ -153,21 +151,16 @@ public class Teleop extends OpMode {
 
 
         //INTAKE
-        if (intakeBool && !clawSensor.isFull()) {
-            claw.setPower(Constants.Claw.intake);
+        if (intakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
-        } else if (intakeBool && clawSensor.isFull()) {
+        } else if (intakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
-            claw.setPower(0);
         } else if (clawOuttakeBool) {
-            claw.setPower(Constants.Claw.outake);
-        } else if (intakeOuttakeBool && clawSensor.isFull()) {
-            claw.setPower(Constants.Claw.intake);
+        } else if (intakeOuttakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
-        } else if (intakeOuttakeBool && !clawSensor.isFull()) {
+        } else if (intakeOuttakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
         } else {
-            claw.setPower(0);
             intake.setIntakePower(0, outtake.getSlideTargetPosition());
         }
 
@@ -227,7 +220,7 @@ public class Teleop extends OpMode {
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
         //ARM
-        outtake.manualArm(armPower);
+        //outtake.manualArm(armPower);
         if (armFix) {
             outtake.presetArm(Constants.Arm.fixPos);
         }
@@ -286,9 +279,9 @@ public class Teleop extends OpMode {
         }
 
         //LIGHTS
-        if (clawSensor.isFull()) {
+        if (outtake.isFull()) {
             lights.setDumbLed(1);
-        } else if (!clawSensor.isEmpty()) {
+        } else if (!outtake.isEmpty()) {
             lights.setDumbFlash(0.2);
         } else {
             lights.setDumbWave(1,0, 1);
@@ -306,13 +299,15 @@ public class Teleop extends OpMode {
 //        } else {
 //            autoServo.upBoth();
 //        }
+        temp += gamepad2.left_stick_y * 0.05;
+        outtake.setFrontClawServo(temp);
+        telemetry.addData("temp", temp);
         telemetry.addData("Volts", hardwareMap.voltageSensor.iterator().next().getVoltage());
         telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
     }
 
     @Override
     public void stop() {
-        claw.stopClaw();
         intake.stopIntake();
         outtake.stopOuttake();
         drivetrain.stopDrive();

@@ -27,7 +27,7 @@ public class MyLocalizationTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new Drivetrain(hardwareMap, telemetry);
+        drive = new Drivetrain(hardwareMap);
         cameras = new Cameras(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

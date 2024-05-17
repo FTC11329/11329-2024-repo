@@ -79,7 +79,7 @@ public class UtilityCameraFrameCapture extends LinearOpMode
     public void runOpMode()
     {
         VisionPortal portal;
-        Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry);
+        Drivetrain drivetrain = new Drivetrain(hardwareMap);
 
         if (USING_WEBCAM)
         {

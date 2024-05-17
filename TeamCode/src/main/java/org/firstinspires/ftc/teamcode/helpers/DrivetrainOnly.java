@@ -11,7 +11,7 @@ public class DrivetrainOnly extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        Drivetrain drivetrain = new Drivetrain(hardwareMap, telemetry);
+        Drivetrain drivetrain = new Drivetrain(hardwareMap);
 
         waitForStart();
 

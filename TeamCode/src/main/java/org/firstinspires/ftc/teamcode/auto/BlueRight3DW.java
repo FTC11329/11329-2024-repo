@@ -43,7 +43,6 @@ public class BlueRight3DW extends OpMode {
     TrajectorySequence placeSpikeMark2 = null;
     TrajectorySequence placeSpikeMark3 = null;
 
-    Claw claw;
     Intake intake;
     Outtake outtake;
     Cameras cameras;
@@ -54,13 +53,12 @@ public class BlueRight3DW extends OpMode {
     DistanceSensors distanceSensors;
 
     public void init() {
-        claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
         autoServo = new AutoServo(hardwareMap);
         clawSensor = new ClawSensor(hardwareMap);
-        drivetrain = new Drivetrain(hardwareMap, telemetry);
+        drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
         //1**************************************************************************
@@ -184,7 +182,6 @@ public class BlueRight3DW extends OpMode {
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.presetArm(Constants.Arm.intakePos);
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                 })
                 .addTemporalMarkerOffset(0.1, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -202,10 +199,8 @@ public class BlueRight3DW extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(Constants.Claw.intake);
                 })
                 .addTemporalMarkerOffset(2, () -> {
-                    claw.setPower(0);
                     clawSensor.setRunInAuto(false);
                     hasTwo = clawSensor.isFull();
                     telemetry.addData("now", true);
@@ -242,24 +237,20 @@ public class BlueRight3DW extends OpMode {
                 })
                 .addTemporalMarkerOffset(-0.05, () -> {
                     if (hasTwo) {
-                        claw.setPower(Constants.Claw.slowOutake);
                     }
                 })
                 .addTemporalMarkerOffset(0.12, () -> {
-                    claw.setPower(0);
                     autoServo.upBoth();
                     outtake.presetSlides(Constants.Slides.superLow - 100);
                 })
 
                 .addTemporalMarkerOffset(0.6, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .addTemporalMarkerOffset(0.9, () -> {
                     outtake.presetSlides(Constants.Slides.low);
                 })
                 .addTemporalMarkerOffset(1.5, () -> {
                     outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
-                    claw.setPower(0);
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 40, //vel
@@ -305,7 +296,6 @@ public class BlueRight3DW extends OpMode {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                     }
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    claw.setPower(Constants.Claw.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
                 .addTemporalMarkerOffset(0.25, () -> {
@@ -328,7 +318,6 @@ public class BlueRight3DW extends OpMode {
                 .addTemporalMarkerOffset(2, () -> {
                     clawSensor.setRunInAuto(false);
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    claw.setPower(0);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -357,12 +346,10 @@ public class BlueRight3DW extends OpMode {
                 )
                 .lineTo(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()))
                 .addTemporalMarkerOffset(-0.3, () -> {
-                    claw.setPower(Constants.Claw.outake);
                 })
                 .resetConstraints()
                 .forward(10)
                 .addTemporalMarkerOffset(-0.5, () -> {
-                    claw.setPower(0);
                     outtake.presetSlides(Constants.Slides.intake);
                     outtake.presetArm(Constants.Arm.intakePos);
                 })
@@ -378,7 +365,6 @@ public class BlueRight3DW extends OpMode {
         drivetrain.update();
         if (clawSensor.autoSense()) {
             intake.setIntakePower(Constants.Intake.outake, 0);
-            claw.setPower(0);
         }
     }
 }
