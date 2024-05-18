@@ -74,10 +74,14 @@ public class Constants {
 
     @Config
     public static class Claw {
-        public static double frontClawOpen = 1;     //TODO: set this
-        public static double frontClawClosed = -0.4;//TODO: set this
-        public static double backClawOpen = 1;      //TODO: set this
-        public static double backClawClosed = -0.4; //TODO: set this
+        public static double frontClawDrop = 0.008;
+        public static double frontClawHold = 0.243;
+        public static double backClawDrop = 0;
+        public static double backClawHold = 0.21;
+
+        public static double wristIncrement = 1.0/6.0;
+        public static double home = 1.0/3.0;
+        public static int msChange = 200;
     }
 
     @Config
@@ -131,7 +135,7 @@ public class Constants {
         public static double weirdPlacePos = 0.475;
         public static double placePos = 0.370;
         public static double autoArmDrop = 0.06;
-        public static double intakePos = 0.015;
+        public static double intakePos = 0.04;
 
         public static double manualPosition = 0.03;
     }

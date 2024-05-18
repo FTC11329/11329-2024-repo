@@ -1,17 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
-import org.firstinspires.ftc.teamcode.subsystems.Cameras;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
-import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.utility.DriveSpeedEnum;
@@ -21,9 +17,6 @@ import org.firstinspires.ftc.teamcode.subsystems.Lights;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
-import org.firstinspires.ftc.vision.VisionPortal;
-
-import java.util.Optional;
 
 @TeleOp(name = "Tele-op", group = "Allen op mode")
 public class Teleop extends OpMode {
@@ -36,7 +29,9 @@ public class Teleop extends OpMode {
     int climberPos = 0;
     double SIntakeStart = 0;
     boolean SIntakeDebounce = true;
-    double temp = 0;
+    double wristTime = 0;
+    double wristPos = 1.0/3.0;
+    int wristDirection = 0;
 
     Plane plane;
     Lights lights;
@@ -80,7 +75,7 @@ public class Teleop extends OpMode {
         boolean slowStrafeRight = gamepad1.dpad_right;
 
         boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
-        boolean clawOuttakeBool = gamepad2.b || gamepad1.b;//here
+        boolean clawOuttakeBool = gamepad2.b || gamepad1.b;
         boolean intakeOuttakeBool = gamepad2.x;
 
         boolean SIntakeUp = gamepad2.left_bumper;
@@ -90,7 +85,6 @@ public class Teleop extends OpMode {
         double slidePower = gamepad2.right_trigger - gamepad2.left_trigger;
         double slowSlidePower = gamepad1.right_trigger - gamepad1.left_trigger;
 
-        //double armPower = -gamepad2.left_stick_y;
         boolean armFix = gamepad1.a;
 
         double climberPower = gamepad2.right_stick_y;
@@ -104,6 +98,7 @@ public class Teleop extends OpMode {
         boolean medPresetBool = gamepad2.dpad_right || gamepad1.dpad_up;
         boolean lowPresetBool = gamepad2.dpad_down;
         boolean intakePresetBool = gamepad2.dpad_left || gamepad1.dpad_down;
+        double armPower = gamepad2.left_stick_y;
 
         //DRIVETRAIN
         //Testing wheels
@@ -220,11 +215,27 @@ public class Teleop extends OpMode {
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
         //ARM
-        //outtake.manualArm(armPower);
+        outtake.manualArm(armPower);
         if (armFix) {
             outtake.presetArm(Constants.Arm.fixPos);
         }
         telemetry.addData("Arm Position", outtake.getArmPosition());
+
+        //CLAW
+        if (gamepad2.left_stick_x > -0.1) {
+            wristDirection = 1;
+        } else if (gamepad2.left_stick_x < 0.1) {
+            wristDirection = -1;
+        } else {
+            wristDirection = 0;
+            wristTime = -100;
+        }
+
+        if (Math.abs(gamepad2.left_stick_x) > 0.1 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
+            wristTime = elapsedTime.milliseconds();
+            wristPos += (wristDirection*Constants.Claw.wristIncrement);
+        }
+        outtake.setWristPos(wristPos);
 
         //CLIMBER
         if (climberUpBool && !climberDebounce && !climbed) {
@@ -276,6 +287,7 @@ public class Teleop extends OpMode {
         if (intakePresetBool) {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
             intakeLevel = 6;
+            wristPos = 1.0/3.0;
         }
 
         //LIGHTS
@@ -299,9 +311,10 @@ public class Teleop extends OpMode {
 //        } else {
 //            autoServo.upBoth();
 //        }
-        temp += gamepad2.left_stick_y * 0.05;
-        outtake.setFrontClawServo(temp);
-        telemetry.addData("temp", temp);
+
+        outtake.holdFrontClaw(gamepad1.right_bumper);
+        outtake.holdBackClaw(gamepad1.left_bumper);
+
         telemetry.addData("Volts", hardwareMap.voltageSensor.iterator().next().getVoltage());
         telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
     }

@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,28 +15,30 @@ public class Claw {
         frontClawServo = hardwareMap.get(Servo.class, "clawServoF");
         backClawServo = hardwareMap.get(Servo.class, "clawServoB");
 
+        frontClawServo.setDirection(Servo.Direction.REVERSE);
+
         wristServo = hardwareMap.get(Servo.class, "wristClawServo");
     }
 
-    public void setFrontOpen(boolean open) {
-        if (open) {
-            frontClawServo.setPosition(Constants.Claw.frontClawOpen);
+    public void setFrontHold(boolean hold) {
+        if (hold) {
+            frontClawServo.setPosition(Constants.Claw.frontClawHold);
         } else {
-            frontClawServo.setPosition(Constants.Claw.frontClawClosed);
+            frontClawServo.setPosition(Constants.Claw.frontClawDrop);
         }
     }
 
-    public void setBackOpen(boolean open) {
-        if (open) {
-            backClawServo.setPosition(Constants.Claw.backClawOpen);
+    public void setBackHold(boolean hold) {
+        if (hold) {
+            backClawServo.setPosition(Constants.Claw.backClawHold);
         } else {
-            backClawServo.setPosition(Constants.Claw.backClawClosed);
+            backClawServo.setPosition(Constants.Claw.backClawDrop);
         }
     }
 
     public void setOpen(boolean open) {
-        setFrontOpen(open);
-        setBackOpen(open);
+        setFrontHold(open);
+        setBackHold(open);
     }
 
     public void setWristPos(double pos) {

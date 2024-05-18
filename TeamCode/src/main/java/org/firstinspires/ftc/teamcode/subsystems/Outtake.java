@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.Constants;
-
 public class Outtake {
     public Arm arm;
     public Claw claw;
@@ -29,7 +27,9 @@ public class Outtake {
         arm.manualPosition(manualPower);
     }
     public void presetArm(double armPos) {
-        arm.setPosition(armPos);
+        if (getSlidePosition() > 500) {
+            arm.setPosition(armPos);
+        }
     }
     public double getArmPosition() {
         return arm.getCurrentPos();
@@ -50,8 +50,8 @@ public class Outtake {
     }
 
     public void preset(int slidesPos, double armPos) {
-        slides.setPosition(slidesPos);
-        arm.setPosition(armPos);
+        presetSlides(slidesPos);
+        presetArm(armPos);
     }
 
     //Claw Sensor
@@ -63,14 +63,14 @@ public class Outtake {
     }
 
     //Claw
-    public void openClaw(boolean open) {
-        claw.setOpen(open);
+    public void holdClaw(boolean hold) {
+        claw.setOpen(hold);
     }
-    public void openFrontClaw(boolean open) {
-        claw.setFrontOpen(open);
+    public void holdFrontClaw(boolean hold) {
+        claw.setFrontHold(hold);
     }
-    public void openBackClaw(boolean open) {
-        claw.setBackOpen(open);
+    public void holdBackClaw(boolean hold) {
+        claw.setBackHold(hold);
     }
     public void setWristPos(double pos) {
         claw.setWristPos(pos);
