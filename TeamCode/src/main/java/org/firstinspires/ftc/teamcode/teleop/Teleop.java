@@ -30,14 +30,13 @@ public class Teleop extends OpMode {
     double SIntakeStart = 0;
     boolean SIntakeDebounce = true;
     double wristTime = 0;
-    double wristPos = 1.0/3.0;
-    int wristDirection = 0;
+    boolean once = true;
 
     Plane plane;
     Lights lights;
     Intake intake;
     Climber climber;
-    Outtake outtake;
+    volatile Outtake outtake;
     AutoServo autoServo;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
@@ -66,8 +65,7 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
         //INPUTS
-        boolean superFastSpeed = gamepad1.left_bumper;
-        boolean fastDriveSpeed = gamepad1.right_bumper;
+        boolean fastDriveSpeed = gamepad1.right_bumper && (outtake.getSlidePosition() < 100);
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
         double driveTurn = -gamepad1.right_stick_x;
@@ -75,7 +73,6 @@ public class Teleop extends OpMode {
         boolean slowStrafeRight = gamepad1.dpad_right;
 
         boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
-        boolean clawOuttakeBool = gamepad2.b || gamepad1.b;
         boolean intakeOuttakeBool = gamepad2.x;
 
         boolean SIntakeUp = gamepad2.left_bumper;
@@ -88,9 +85,9 @@ public class Teleop extends OpMode {
         boolean armFix = gamepad1.a;
 
         double climberPower = gamepad2.right_stick_y;
-        boolean climberDownBool = gamepad2.a;
+        boolean climberDownBool = gamepad2.dpad_left;
         boolean climberUpBool = gamepad2.left_stick_button;
-        boolean climberFireBool = gamepad2.right_stick_button || gamepad1.x;
+        boolean climberFireBool = gamepad2.right_stick_button;
 
         boolean planeFire = gamepad1.y || gamepad2.back;
 
@@ -101,37 +98,9 @@ public class Teleop extends OpMode {
         double armPower = gamepad2.left_stick_y;
 
         //DRIVETRAIN
-        //Testing wheels
-        /*
-                if (gamepad1.x){
-                    drivetrain.rightFront.setPower(0.25);
-                } else {
-                    drivetrain.rightFront.setPower(0);
-                }
-
-                if (gamepad1.y){
-                    drivetrain.leftFront.setPower(0.25);
-                } else {
-                    drivetrain.leftFront.setPower(0);
-                }
-
-                if (gamepad1.b){
-                    drivetrain.rightRear.setPower(0.25);
-                } else {
-                    drivetrain.rightRear.setPower(0);
-                }
-
-                if (gamepad1.a){
-                    drivetrain.leftRear.setPower(0.25);
-                } else {
-                    drivetrain.leftRear.setPower(0);
-                }
-        */
         DriveSpeedEnum driveSpeed;
         if (fastDriveSpeed) {
             driveSpeed = DriveSpeedEnum.Fast;
-        } else if (superFastSpeed) {
-            driveSpeed = DriveSpeedEnum.SuperFast;
         } else {
             driveSpeed = DriveSpeedEnum.Slow;
         }
@@ -150,7 +119,6 @@ public class Teleop extends OpMode {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
         } else if (intakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
-        } else if (clawOuttakeBool) {
         } else if (intakeOuttakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
         } else if (intakeOuttakeBool && !outtake.isFull()) {
@@ -222,20 +190,15 @@ public class Teleop extends OpMode {
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLAW
-        if (gamepad2.left_stick_x > -0.1) {
-            wristDirection = 1;
-        } else if (gamepad2.left_stick_x < 0.1) {
-            wristDirection = -1;
+        if (gamepad2.left_stick_x < -0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
+            wristTime = elapsedTime.milliseconds();
+            outtake.manualWrist(1);
+        } else if (gamepad2.left_stick_x >  0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
+            wristTime = elapsedTime.milliseconds();
+            outtake.manualWrist(-1);
         } else {
-            wristDirection = 0;
             wristTime = -100;
         }
-
-        if (Math.abs(gamepad2.left_stick_x) > 0.1 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
-            wristTime = elapsedTime.milliseconds();
-            wristPos += (wristDirection*Constants.Claw.wristIncrement);
-        }
-        outtake.setWristPos(wristPos);
 
         //CLIMBER
         if (climberUpBool && !climberDebounce && !climbed) {
@@ -287,7 +250,7 @@ public class Teleop extends OpMode {
         if (intakePresetBool) {
             outtake.preset(Constants.Slides.intake, Constants.Arm.intakePos);
             intakeLevel = 6;
-            wristPos = 1.0/3.0;
+            outtake.setWristPos(3);
         }
 
         //LIGHTS
@@ -302,6 +265,10 @@ public class Teleop extends OpMode {
         //FINALE
         outtake.periodic();
 
+        if (gamepad1.x && once) {
+            outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, 4, true);
+            once = false;
+        }
         //TEMPORARY
         //for auto servo
 //        if (gamepad1.x) {
@@ -312,11 +279,13 @@ public class Teleop extends OpMode {
 //            autoServo.upBoth();
 //        }
 
-        outtake.holdFrontClaw(gamepad1.right_bumper);
-        outtake.holdBackClaw(gamepad1.left_bumper);
+        outtake.holdFrontClaw(!gamepad2.b);
+        outtake.holdBackClaw(!gamepad2.a);
 
         telemetry.addData("Volts", hardwareMap.voltageSensor.iterator().next().getVoltage());
         telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("wristTime", wristTime);
+        telemetry.addData("stick", outtake.getthing());
     }
 
     @Override

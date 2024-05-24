@@ -37,7 +37,7 @@ public class BlueLeft2DW extends OpMode {
 
 
     Intake intake;
-    Outtake outtake;
+    Outtake outtake; //remember*********************************************************************** add volatile to all of these
     Cameras cameras;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;

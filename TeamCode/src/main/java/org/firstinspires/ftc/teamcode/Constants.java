@@ -79,8 +79,13 @@ public class Constants {
         public static double backClawDrop = 0;
         public static double backClawHold = 0.21;
 
-        public static double wristIncrement = 1.0/6.0;
-        public static double home = 1.0/3.0;
+        public static double wrist1 = 0;
+        public static double wrist2 = 2.0/9.0;
+        public static double wrist3 = 1.0/3.0;
+        public static double wrist4 = 4.0/9.0;
+        public static double wrist5 = 6.0/9.0;
+        public static double wrist6 = 8.0/9.0;
+        public static double wrist7 = 1;
         public static int msChange = 200;
     }
 
@@ -111,7 +116,6 @@ public class Constants {
         public static int manualSlidePower = 70;
         public static double slowManualSlidePower = 0.4; //this times manual slide power is the actual speed
 
-        public static int upAmount = 10;
 
         public static int intake = 0;
         public static int superLow = 500; //450
@@ -119,8 +123,7 @@ public class Constants {
         public static int med = 1600;
         public static int high = 1850;
 
-        public static int groundPinchMin = 130;
-        public static int groundPinchMax = 400;
+        public static int safeSlidePos = 500;
 
         public static int slideMax = 1850;
         public static int slideMin = 0;
@@ -133,11 +136,13 @@ public class Constants {
 
         public static double fixPos = 0.524;
         public static double weirdPlacePos = 0.475;
-        public static double placePos = 0.370;
+        public static double placePos = 0.390;
         public static double autoArmDrop = 0.06;
-        public static double intakePos = 0.04;
+        public static double intakePos = 0.045;
 
         public static double manualPosition = 0.03;
+
+        public static double safeArmPos = 0.27;
     }
 
     @Config

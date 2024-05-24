@@ -18,6 +18,8 @@ public class Claw {
         frontClawServo.setDirection(Servo.Direction.REVERSE);
 
         wristServo = hardwareMap.get(Servo.class, "wristClawServo");
+        setWristPosition(1.0/3.0);
+        setOpen(false);
     }
 
     public void setFrontHold(boolean hold) {
@@ -41,7 +43,7 @@ public class Claw {
         setBackHold(open);
     }
 
-    public void setWristPos(double pos) {
+    public void setWristPosition(double pos) {
         wristServo.setPosition(pos);
     }
 
