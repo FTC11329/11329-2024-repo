@@ -123,7 +123,7 @@ public class Constants {
         public static int med = 1600;
         public static int high = 1850;
 
-        public static int safeSlidePos = 500;
+        public static int safeSlidePos = 200;
 
         public static int slideMax = 1850;
         public static int slideMin = 0;
@@ -142,7 +142,7 @@ public class Constants {
 
         public static double manualPosition = 0.03;
 
-        public static double safeArmPos = 0.27;
+        public static double safeArmPos = 0.313;
     }
 
     @Config

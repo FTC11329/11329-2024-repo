@@ -11,7 +11,7 @@ public class Outtake {
     public Slides slides;
     private ClawSensor clawSensor;
 
-    public int wristPos = 3;
+    private int wristPos = 3;
 
     public Outtake(HardwareMap hardwareMap) {
         arm = new Arm(hardwareMap);
@@ -24,7 +24,7 @@ public class Outtake {
         arm.periodic(slides.getPosition());
         claw.periodic();
         slides.slidesPeriodic();
-        if(getArmPosition() > 0.35) {
+        if(getArmPosition() > Constants.Arm.safeArmPos) {
             if (wristPos <= 0) {
                 wristPos = 1;
             } else if (wristPos >= 8) {
@@ -67,7 +67,9 @@ public class Outtake {
 
     //Arm
     public void manualArm(double manualPower) {
-        arm.manualPosition(manualPower);
+        if (slides.getPosition() > Constants.Slides.safeSlidePos) {
+            arm.manualPosition(manualPower);
+        }
     }
     public void presetArm(double armPos) {
         arm.setPosition(armPos);
@@ -102,6 +104,12 @@ public class Outtake {
     public boolean isFull() {
         return clawSensor.isFull();
     }
+    public boolean isFrontSensor() {
+        return clawSensor.isFrontDistance();
+    }
+    public boolean isBackSensor() {
+        return clawSensor.isBackDistance();
+    }
     public boolean isEmpty() {
         return clawSensor.isEmpty();
     }
@@ -119,6 +127,9 @@ public class Outtake {
     public void setWristPos(int pos) {
         wristPos = pos;
     }
+    public int getTriedWristPos() {
+        return wristPos;
+    }
     public void manualWrist(int amount) {
         wristPos += amount;
     }
@@ -126,11 +137,6 @@ public class Outtake {
     //stop it, get some help
     public void stopOuttake() {
         slides.stopSlides();
-    }
-
-    //temp
-    public int getthing() {
-        return wristPos;
     }
 }
 //Allen's first thread! YIPIEEEEEEE
@@ -163,19 +169,50 @@ class PresetThread extends Thread{
                     e.printStackTrace();
                 }
             }
-            if (outtake.getArmPosition() > Constants.Arm.safeArmPos) {
-                outtake.presetArm(armPos);
-                outtake.wristPos = wristPos;
-                return;
-            } else {
-                outtake.presetArm(armPos);
-            }
+            outtake.presetArm(armPos);
             try {
                 sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            outtake.wristPos = wristPos;
+            outtake.setWristPos(wristPos);
+        } else {
+            outtake.presetArm(Constants.Arm.safeArmPos + 0.001);
+            outtake.presetSlides(Constants.Slides.safeSlidePos + 1);
+            /*
+            if (outtake.getTriedWristPos() != wristPos && armPos < Constants.Arm.safeArmPos) {
+                outtake.setWristPos(wristPos);
+                try {
+                    sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                outtake.setWristPos(wristPos);
+            }
+            if (armPos != outtake.getArmPosition() && slidePos < Constants.Slides.safeSlidePos) {
+                outtake.presetArm(armPos);
+                try {
+                    sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            outtake.presetSlides(slidePos);
+             */
+            outtake.setWristPos(wristPos);
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            outtake.presetArm(armPos);
+            try {
+                sleep(300);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            outtake.presetSlides(slidePos);
         }
     }
 }
