@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Intake {
     DcMotor intakeMotor;
+    CRServo intakeServo;
     Telemetry telemetry;
 
     public Intake(HardwareMap hardwareMap) {
@@ -19,13 +21,18 @@ public class Intake {
 
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        intakeServo = hardwareMap.get(CRServo.class, "intakeServo");
+
+        intakeServo.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void setIntakePower(double intakePower, int slidePos) {
-        //if you can find a cleaner way to make sure the intake doesn't run with the slide up, please fix this.
-//        if (slidePos > Constants.Slides.slideMin) {
         intakeMotor.setPower(intakePower);
-//        }
+    }
+
+    public void setIntakeServoPower(double power) {
+        intakeServo.setPower(power);
     }
 
     public void stopIntake() {

@@ -9,6 +9,7 @@ public class Outtake {
     private Arm arm;
     private Claw claw;
     public Slides slides;
+    public Extendo extendo;
     private ClawSensor clawSensor;
 
     private int wristPos = 3;
@@ -17,6 +18,7 @@ public class Outtake {
         arm = new Arm(hardwareMap);
         claw = new Claw(hardwareMap);
         slides = new Slides(hardwareMap);
+        extendo = new Extendo(hardwareMap);
         clawSensor = new ClawSensor(hardwareMap);
     }
 
@@ -134,6 +136,11 @@ public class Outtake {
         wristPos += amount;
     }
 
+    //Extendo
+    public void extend(boolean extend) {
+        extendo.extend(extend);
+    }
+
     //stop it, get some help
     public void stopOuttake() {
         slides.stopSlides();
@@ -160,7 +167,7 @@ class PresetThread extends Thread{
 
     @Override
     public void run() {
-        if(goingUp) {
+        if (goingUp) {
             outtake.presetSlides(slidePos);
             while (outtake.getSlidePosition() < Constants.Slides.safeSlidePos) {
                 try {
@@ -170,6 +177,7 @@ class PresetThread extends Thread{
                 }
             }
             outtake.presetArm(armPos);
+            outtake.extend(true);
             try {
                 sleep(300);
             } catch (InterruptedException e) {
@@ -179,27 +187,6 @@ class PresetThread extends Thread{
         } else {
             outtake.presetArm(Constants.Arm.safeArmPos + 0.001);
             outtake.presetSlides(Constants.Slides.safeSlidePos + 1);
-            /*
-            if (outtake.getTriedWristPos() != wristPos && armPos < Constants.Arm.safeArmPos) {
-                outtake.setWristPos(wristPos);
-                try {
-                    sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                outtake.setWristPos(wristPos);
-            }
-            if (armPos != outtake.getArmPosition() && slidePos < Constants.Slides.safeSlidePos) {
-                outtake.presetArm(armPos);
-                try {
-                    sleep(300);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            outtake.presetSlides(slidePos);
-             */
             outtake.setWristPos(wristPos);
             try {
                 sleep(500);
@@ -207,6 +194,8 @@ class PresetThread extends Thread{
                 e.printStackTrace();
             }
             outtake.presetArm(armPos);
+            outtake.extend(false);
+            outtake.holdClaw(false);
             try {
                 sleep(300);
             } catch (InterruptedException e) {

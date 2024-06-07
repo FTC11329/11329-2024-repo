@@ -45,7 +45,6 @@ public class AprilTagToRoadRunner {
         }
 
         //haha i made my super long if-tree not a super long if-tree yay
-        //if I don't need the breaks in here feel free to remove them.
 
         switch (tag.id) {
             case 1:{

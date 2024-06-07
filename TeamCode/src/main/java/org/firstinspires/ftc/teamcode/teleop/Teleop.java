@@ -33,6 +33,7 @@ public class Teleop extends OpMode {
     boolean presetThreadDebounce = true;
     boolean goingPreset = false;
     boolean atPreset = false;
+    double temp = 0;
 
     Plane plane;
     Lights lights;
@@ -88,7 +89,7 @@ public class Teleop extends OpMode {
 
         boolean armFix = gamepad1.a;
 
-        double clawPower = gamepad2.left_stick_y + gamepad1.right_stick_y;
+        double wristClawPower = gamepad2.left_stick_x;
 
         double climberPower = gamepad2.right_stick_y;
         boolean climberDownBool = gamepad2.dpad_left;
@@ -121,16 +122,24 @@ public class Teleop extends OpMode {
 
 
         //INTAKE
-        if (intakeBool && !outtake.isFull()) {
+        if ((intakeBool || intakeOuttakeBool) && atPreset) {
+            intake.setIntakePower(Constants.Intake.intake * 0.5, 0);
+            intake.setIntakeServoPower(-0.05);
+        } else if (intakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
+            intake.setIntakeServoPower(0.75);
         } else if (intakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
+            intake.setIntakeServoPower(0.75);
         } else if (intakeOuttakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
+            intake.setIntakeServoPower(0.75);
         } else if (intakeOuttakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
+            intake.setIntakeServoPower(0.75);
         } else {
             intake.setIntakePower(0, outtake.getSlideTargetPosition());
+            intake.setIntakeServoPower(0);
         }
 
         //SPECIAL INTAKE
@@ -195,24 +204,28 @@ public class Teleop extends OpMode {
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLAW
-        if (clawPower < -0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
+        if (wristClawPower < -0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
             wristTime = elapsedTime.milliseconds();
             outtake.manualWrist(1);
-        } else if (clawPower >  0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
+        } else if (wristClawPower >  0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
             wristTime = elapsedTime.milliseconds();
             outtake.manualWrist(-1);
         } else {
             wristTime = -100;
         }
         //Might change this ************************************************************************
-        if (outtake.isFull() && gamepad1.left_bumper) {
+        if (!outtake.isEmpty() && (gamepad1.left_bumper || gamepad2.b)) {
             outtake.holdClaw(true);
         } else if (!outtake.isFull() && !atPreset) {
             outtake.holdClaw(false);
         }
         if (atPreset) {
-            outtake.holdFrontClaw(!gamepad1.right_bumper);
-            outtake.holdBackClaw(!gamepad1.left_bumper);
+            if (gamepad2.b) {
+                outtake.holdClaw(false);
+            } else {
+                outtake.holdFrontClaw(!gamepad2.right_bumper);
+                outtake.holdBackClaw(!gamepad2.left_bumper);
+            }
         }
 
         //CLIMBER
@@ -289,6 +302,7 @@ public class Teleop extends OpMode {
         //TEMPORARY
         telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
+
     }
 
     @Override

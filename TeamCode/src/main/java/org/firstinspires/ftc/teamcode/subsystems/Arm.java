@@ -16,6 +16,9 @@ public class Arm {
     public Arm(HardwareMap hardwareMap) {
         armServoL = hardwareMap.get(Servo.class, "leftArmServo");
         armServoR = hardwareMap.get(Servo.class, "rightArmServo");
+
+        armServoL.setDirection(Servo.Direction.FORWARD);
+        armServoR.setDirection(Servo.Direction.FORWARD);
         setPosition(Constants.Arm.intakePos);
     }
 

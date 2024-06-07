@@ -51,7 +51,7 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.9;
-        public static double outake = -0.5;
+        public static double outake = -0.9;
 
         public static double autoVomitSpeed = -0.2;
     }
@@ -70,6 +70,12 @@ public class Constants {
         public static double down1 = 0.365;
 
         public static double manualPosition = 0.04;
+    }
+
+    @Config
+    public static class Extendo {
+        public static double extended = 0.46;// TODO: set
+        public static double closed = 0.01;// TODO: set
     }
 
     @Config
@@ -131,18 +137,18 @@ public class Constants {
 
     @Config
     public static class Arm {
-        public static double armMax = 0.65;
+        public static double armMax = 1;
         public static double armMin = 0;
 
         public static double fixPos = 0.524;
         public static double weirdPlacePos = 0.475;
-        public static double placePos = 0.390;
+        public static double placePos = 0.652;
         public static double autoArmDrop = 0.06;
-        public static double intakePos = 0.045;
+        public static double intakePos = 0.074;
 
         public static double manualPosition = 0.03;
 
-        public static double safeArmPos = 0.313;
+        public static double safeArmPos = 0.367;
     }
 
     @Config
