@@ -149,7 +149,6 @@ public class Outtake {
 //Allen's first thread! YIPIEEEEEEE
 class PresetThread extends Thread{
     ElapsedTime time = new ElapsedTime();
-    double time1 = 0;
     private volatile Outtake outtake;
     private int slidePos;
     private int wristPos;
@@ -188,6 +187,7 @@ class PresetThread extends Thread{
             outtake.presetArm(Constants.Arm.safeArmPos + 0.001);
             outtake.presetSlides(Constants.Slides.safeSlidePos + 1);
             outtake.setWristPos(wristPos);
+            outtake.holdClaw(false);
             try {
                 sleep(500);
             } catch (InterruptedException e) {

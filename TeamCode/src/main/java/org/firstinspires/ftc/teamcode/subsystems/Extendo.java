@@ -43,9 +43,10 @@ public class Extendo {
     }
 
     public double mmToRotation(double mm) {
-        double radians = Math.acos((-Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(mm, 2)) / (2 * a * mm)) + 2 * Math.PI;
+        mm+=64;
+        double radians = -(Math.acos(-(Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(mm, 2)) / (2 * a * mm))) + Math.PI;
 
-        return (radians * 4 * 180)/(270 * 3 * Math.PI);
+        return (radians * 4 * 180 * 0.46)/(270 * 3 * Math.PI);
 
     }
 

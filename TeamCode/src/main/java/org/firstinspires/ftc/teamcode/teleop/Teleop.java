@@ -33,7 +33,11 @@ public class Teleop extends OpMode {
     boolean presetThreadDebounce = true;
     boolean goingPreset = false;
     boolean atPreset = false;
+    boolean backClawDropped = false;
+    boolean frontClawDropped = false;
+    boolean isClimberUp = false;
     double temp = 0;
+    boolean isDroneing = false;
 
     Plane plane;
     Lights lights;
@@ -125,18 +129,23 @@ public class Teleop extends OpMode {
         if ((intakeBool || intakeOuttakeBool) && atPreset) {
             intake.setIntakePower(Constants.Intake.intake * 0.5, 0);
             intake.setIntakeServoPower(-0.05);
+
         } else if (intakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
             intake.setIntakeServoPower(0.75);
+
         } else if (intakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
             intake.setIntakeServoPower(0.75);
+
         } else if (intakeOuttakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
             intake.setIntakeServoPower(0.75);
+
         } else if (intakeOuttakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
             intake.setIntakeServoPower(0.75);
+
         } else {
             intake.setIntakePower(0, outtake.getSlideTargetPosition());
             intake.setIntakeServoPower(0);
@@ -151,11 +160,9 @@ public class Teleop extends OpMode {
         if (SIntakeUp && elapsedTime.milliseconds() - SIntakeStart > 150) {
             intakeLevel = 3;
         }
-
         if (!SIntakeUp) {
             SIntakeDebounce = true;
         }
-
         if (SIntakeDown && !intakeDebounce) {
             intakeLevel --;
             intakeDebounce = true;
@@ -192,7 +199,6 @@ public class Teleop extends OpMode {
 
         //SLIDES
         slidePower = slidePower + (slowSlidePower * Constants.Slides.slowManualSlidePower);
-        outtake.manualSlides(slidePower, overwriteBool);
         telemetry.addData("Slide Position", outtake.getSlidePosition());
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
@@ -215,16 +221,37 @@ public class Teleop extends OpMode {
         }
         //Might change this ************************************************************************
         if (!outtake.isEmpty() && (gamepad1.left_bumper || gamepad2.b)) {
-            outtake.holdClaw(true);
-        } else if (!outtake.isFull() && !atPreset) {
+            if (outtake.isFull()) {
+                outtake.holdClaw(true);
+            } else {
+                outtake.holdBackClaw(true);
+            }
+            frontClawDropped = false;
+            backClawDropped = false;
+            slidePower = -75;
+        } else if (outtake.isEmpty() && !atPreset && (outtake.getSlidePosition() < 50)) {
             outtake.holdClaw(false);
         }
         if (atPreset) {
             if (gamepad2.b) {
                 outtake.holdClaw(false);
-            } else {
-                outtake.holdFrontClaw(!gamepad2.right_bumper);
-                outtake.holdBackClaw(!gamepad2.left_bumper);
+                outtake.extend(false);
+                backClawDropped = true;
+                frontClawDropped = true;
+
+            } else if (gamepad2.right_bumper && !frontClawDropped) {
+                outtake.holdFrontClaw(false);
+                frontClawDropped = true;
+                if (backClawDropped) {
+                    outtake.extend(false);
+                }
+
+            } else if (gamepad2.left_bumper && !frontClawDropped) {
+                outtake.holdBackClaw(false);
+                backClawDropped = true;
+                if (frontClawDropped) {
+                    outtake.extend(false);
+                }
             }
         }
 
@@ -233,14 +260,21 @@ public class Teleop extends OpMode {
             startClimb = elapsedTime.milliseconds();
             climberDebounce = true;
             intakeLevel = 5;
+
         } else if (!climberUpBool && climbed) {
             climberPos = Constants.Climber.climbButSlightlyDown;
             climbed = false;
+
         } else if (climberFireBool) {
             climberPos = Constants.Climber.climberFire;
+            isDroneing = true;
+
         } else if (climberDownBool){
             climberPos = Constants.Climber.down;
             intakeLevel = 6;
+        }
+        if (isClimberUp) {
+            outtake.extendo.setExtendo(0.16);
         }
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
@@ -249,7 +283,18 @@ public class Teleop extends OpMode {
         if (climberUpBool && (elapsedTime.milliseconds() - startClimb > 300)) {
             climberPos = Constants.Climber.climb;
             climbed = true;
+            isClimberUp = true;
         }
+        if (isDroneing) {
+            outtake.extendo.setExtendo(1.6);
+            if (climber.getPosition() < 10) {
+                isDroneing = false;
+            }
+            if (intakePresetBool) {
+                climberPos = Constants.Climber.down;
+            }
+        }
+
         if (!climberUpBool) {
             climberDebounce = false;
         }
@@ -263,20 +308,20 @@ public class Teleop extends OpMode {
 
         //PRE-SETS
         goingPreset = highPresetBool || medPresetBool || lowPresetBool || intakePresetBool;
-        if (goingPreset && presetThreadDebounce) {
-            if (highPresetBool) {
-                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.weirdPlacePos, outtake.getTriedWristPos(), true);
+        if (goingPreset && presetThreadDebounce && !isClimberUp) {
+            if (highPresetBool && !isDroneing) {
+                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
                 intakeLevel = 6;
                 atPreset = true;
-            } else if (medPresetBool) {
+            } else if (medPresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
                 intakeLevel = 6;
                 atPreset = true;
-            } else if (lowPresetBool) {
+            } else if (lowPresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
                 intakeLevel = 6;
                 atPreset = true;
-            } else if (intakePresetBool) {
+            } else if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false);
                 intakeLevel = 6;
                 atPreset = false;
@@ -302,6 +347,16 @@ public class Teleop extends OpMode {
         //TEMPORARY
         telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
+
+        outtake.manualSlides(slidePower, overwriteBool); // keep this
+
+        telemetry.addData("149", outtake.extendo.mmToRotation(149));
+
+        if (gamepad1.x) {
+            outtake.extendo.setExtendo(outtake.extendo.mmToRotation(149));
+        }
+        telemetry.addData("climbed", climbed);
+
 
     }
 

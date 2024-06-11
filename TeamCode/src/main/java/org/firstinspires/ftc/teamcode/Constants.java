@@ -52,8 +52,6 @@ public class Constants {
     public static class Intake {
         public static double intake = 0.9;
         public static double outake = -0.9;
-
-        public static double autoVomitSpeed = -0.2;
     }
 
     @Config
@@ -74,8 +72,8 @@ public class Constants {
 
     @Config
     public static class Extendo {
-        public static double extended = 0.46;// TODO: set
-        public static double closed = 0.01;// TODO: set
+        public static double extended = 0.46;
+        public static double closed = 0.01;
     }
 
     @Config
@@ -92,7 +90,7 @@ public class Constants {
         public static double wrist5 = 6.0/9.0;
         public static double wrist6 = 8.0/9.0;
         public static double wrist7 = 1;
-        public static int msChange = 200;
+        public static int msChange = 100; //TODO: change this
     }
 
     @Config
@@ -124,14 +122,14 @@ public class Constants {
 
 
         public static int intake = 0;
-        public static int superLow = 500; //450
+        public static int superLow = 500;
         public static int low = 900;
         public static int med = 1600;
         public static int high = 1850;
 
         public static int safeSlidePos = 200;
 
-        public static int slideMax = 1850;
+        public static int slideMax = 2500;
         public static int slideMin = 0;
     }
 
@@ -141,10 +139,9 @@ public class Constants {
         public static double armMin = 0;
 
         public static double fixPos = 0.524;
-        public static double weirdPlacePos = 0.475;
         public static double placePos = 0.652;
         public static double autoArmDrop = 0.06;
-        public static double intakePos = 0.074;
+        public static double intakePos = 0.105;
 
         public static double manualPosition = 0.03;
 
