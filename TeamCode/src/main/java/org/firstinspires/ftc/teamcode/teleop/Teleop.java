@@ -338,7 +338,7 @@ public class Teleop extends OpMode {
         goingPreset = highPresetBool || medPresetBool || lowPresetBool || intakePresetBool;
         if (goingPreset && presetThreadDebounce && !isClimberUp) {
             if (highPresetBool && !isDroneing) {
-                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
+                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
                 intakeLevel = 6;
                 atPreset = true;
                 if(outtake.isFull()) {
@@ -348,7 +348,7 @@ public class Teleop extends OpMode {
                     backClawDropped = false;
                 }
             } else if (medPresetBool && !isDroneing) {
-                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
+                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
                 intakeLevel = 6;
                 atPreset = true;
                 if(outtake.isFull()) {
@@ -358,7 +358,7 @@ public class Teleop extends OpMode {
                     backClawDropped = false;
                 }
             } else if (lowPresetBool && !isDroneing) {
-                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
+                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
                 intakeLevel = 6;
                 atPreset = true;
                 if(outtake.isFull()) {
@@ -368,7 +368,7 @@ public class Teleop extends OpMode {
                     backClawDropped = false;
                 }
             } else if (intakePresetBool && !isDroneing) {
-                outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false);
+                outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                 intakeLevel = 6;
                 atPreset = false;
             }

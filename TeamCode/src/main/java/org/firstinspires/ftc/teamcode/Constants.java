@@ -32,7 +32,7 @@ public class Constants {
         public static Pose2d camOffsetBack = new Pose2d(3, -7.5, Math.toRadians(0));
         public static Pose2d camOffsetFront = new Pose2d(8.5, -5.25, Math.toRadians(0));
 
-        //regular tags
+        /*regular tags
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(62,35.5,0);
         public static Pose2d tag3Pose = new Pose2d(62,29.5,0);
@@ -47,6 +47,21 @@ public class Constants {
         public static Pose2d tag9Pose = new Pose2d(-70.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
 
+        */
+        public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
+        public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
+        public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
+
+        public static Pose2d tag4Pose = new Pose2d(86,-29.5,0);
+        public static Pose2d tag5Pose = new Pose2d(86,-35.5,0);
+        public static Pose2d tag6Pose = new Pose2d(86,-41.5,0);
+
+        public static Pose2d tag7Pose = new Pose2d(-94.5,-40, Math.toRadians(180));
+        public static Pose2d tag8Pose = new Pose2d(-94.5,-34.5, Math.toRadians(180));
+
+        public static Pose2d tag9Pose = new Pose2d(-94.5,34.5, Math.toRadians(180));
+        public static Pose2d tag10Pose= new Pose2d(-94.5,40, Math.toRadians(180));
+
     }
 
     @Config
@@ -57,16 +72,16 @@ public class Constants {
 
     @Config
     public static class SpecialIntake {
-        public static double min = 0;
-        public static double max = 0.37;
+        public static double min = 0.2;
+        public static double max = 0.6;
 
-        public static double ready = 0.235;
-        public static double up = 0.0666666666666666666666;
-        public static double down5 = 0.275;
-        public static double down4 = 0.295;
-        public static double down3 = 0.315;
-        public static double down2 = 0.325;
-        public static double down1 = 0.365;
+        public static double ready = 0.4;
+        public static double up = 0.2;
+        public static double down5 = 0.475;
+        public static double down4 = 0.495;
+        public static double down3 = 0.515;
+        public static double down2 = 0.54;
+        public static double down1 = 0.565;
 
         public static double manualPosition = 0.04;
     }
@@ -75,6 +90,7 @@ public class Constants {
     public static class Extendo {
         public static double extended = 0.46;
         public static double closed = 0.01;
+        public static double auto = 0.1;
     }
 
     @Config
@@ -128,7 +144,7 @@ public class Constants {
         public static int med = 1350;
         public static int high = 2000;
 
-        public static int safeSlidePos = 200;
+        public static int safeSlidePos = 100;
 
         public static int slideMax = 2350;
         public static int slideMin = 0;
@@ -141,7 +157,7 @@ public class Constants {
 
         public static double fixPos = 0.524;
         public static double placePos = 0.652;
-        public static double autoArmDrop = 0.06;
+        public static double autoArmDrop = 0.3;
         public static double intakePos = 0.105;
 
         public static double manualPosition = 0.03;
@@ -163,14 +179,6 @@ public class Constants {
     @Config
     public static class DistanceSensors {
         public static int tolerance = 60;
-    }
-    @Config
-    public static class AutoServo {
-        public static double downLeft = 0.92;
-        public static double downRight = 0.91;
-
-        public static double upLeft = 0;
-        public static double upRight = 0;
     }
 
     @Config

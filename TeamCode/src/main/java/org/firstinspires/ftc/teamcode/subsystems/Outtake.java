@@ -98,8 +98,17 @@ public class Outtake {
         presetSlides(slidesPos);
         presetArm(armPos);
     }
-    public void createPresetThread(int slidePos, double armPos, int wristPos, boolean goingUp) {
-        new PresetThread(this, slidePos, armPos, wristPos, goingUp).start();
+    public void createPresetThread(int slidePos, double armPos, int wristPos, double extend, boolean goingUp) {
+        new PresetThread(this, slidePos, armPos, wristPos, extend, goingUp).start();
+    }
+    public void createPresetThread(int slidePos, double armPos, int wristPos, boolean extend, boolean goingUp) {
+        double rot;
+        if (extend) {
+            rot = Constants.Extendo.extended;
+        } else {
+            rot = Constants.Extendo.closed;
+        }
+        new PresetThread(this, slidePos, armPos, wristPos, rot, goingUp).start();
     }
 
     //Claw Sensor
@@ -140,6 +149,9 @@ public class Outtake {
     public void extend(boolean extend) {
         extendo.extend(extend);
     }
+    public void setExtendo(double rot) {
+        extendo.setExtendo(rot);
+    }
 
     //stop it, get some help
     public void stopOuttake() {
@@ -153,14 +165,16 @@ class PresetThread extends Thread{
     private int slidePos;
     private int wristPos;
     private double armPos;
+    private double extend;
     private boolean goingUp;
 
-    public PresetThread(Outtake outtake, int slidePos, double armPos, int wristPos, boolean goingUp) {
+    public PresetThread(Outtake outtake, int slidePos, double armPos, int wristPos, double extend, boolean goingUp) {
         super();
         this.outtake = outtake;
         this.slidePos = slidePos;
         this.wristPos = wristPos;
         this.armPos = armPos;
+        this.extend = extend;
         this.goingUp = goingUp;
     }
 
@@ -182,7 +196,7 @@ class PresetThread extends Thread{
                 }
             }
             outtake.presetArm(armPos);
-            outtake.extend(true);
+            outtake.setExtendo(extend);
             try {
                 sleep(300);
             } catch (InterruptedException e) {
