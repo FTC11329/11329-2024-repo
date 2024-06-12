@@ -32,7 +32,7 @@ public class Constants {
         public static Pose2d camOffsetBack = new Pose2d(3, -7.5, Math.toRadians(0));
         public static Pose2d camOffsetFront = new Pose2d(8.5, -5.25, Math.toRadians(0));
 
-
+        //regular tags
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(62,35.5,0);
         public static Pose2d tag3Pose = new Pose2d(62,29.5,0);
@@ -46,6 +46,7 @@ public class Constants {
 
         public static Pose2d tag9Pose = new Pose2d(-70.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
+
     }
 
     @Config
@@ -123,13 +124,13 @@ public class Constants {
 
         public static int intake = 0;
         public static int superLow = 500;
-        public static int low = 900;
-        public static int med = 1600;
-        public static int high = 1850;
+        public static int low = 700;
+        public static int med = 1350;
+        public static int high = 2000;
 
         public static int safeSlidePos = 200;
 
-        public static int slideMax = 2500;
+        public static int slideMax = 2350;
         public static int slideMin = 0;
     }
 

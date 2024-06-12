@@ -38,6 +38,7 @@ public class Teleop extends OpMode {
     boolean isClimberUp = false;
     double temp = 0;
     boolean isDroneing = false;
+    boolean flipDebounce = false;
 
     Plane plane;
     Lights lights;
@@ -74,7 +75,7 @@ public class Teleop extends OpMode {
     @Override
     public void loop() {
         //INPUTS
-        boolean fastDriveSpeed = gamepad1.right_bumper && !atPreset;
+        boolean fastDriveSpeed = gamepad1.right_bumper;
         double driveForward = -gamepad1.left_stick_y;
         double driveStrafe = -gamepad1.left_stick_x;
         double driveTurn = -gamepad1.right_stick_x;
@@ -94,6 +95,11 @@ public class Teleop extends OpMode {
         boolean armFix = gamepad1.a;
 
         double wristClawPower = gamepad2.left_stick_x;
+        boolean flippingButton = gamepad2.a;
+        boolean grabIntake = gamepad2.b;
+        boolean dropFrontClaw = gamepad2.right_bumper;
+        boolean dropBackClaw = gamepad2.left_bumper;
+        boolean dropClaw = gamepad2.b || gamepad1.left_bumper;
 
         double climberPower = gamepad2.right_stick_y;
         boolean climberDownBool = gamepad2.dpad_left;
@@ -219,8 +225,30 @@ public class Teleop extends OpMode {
         } else {
             wristTime = -100;
         }
-        //Might change this ************************************************************************
-        if (!outtake.isEmpty() && (gamepad1.left_bumper || gamepad2.b)) {
+        //for flipping 180
+        if (flippingButton && flipDebounce) {
+            if ((outtake.getTriedWristPos() - 4) >= 1) {
+                outtake.setWristPos(outtake.getTriedWristPos() - 4);
+            } else if ((outtake.getTriedWristPos() + 4) <= 7) {
+                outtake.setWristPos(outtake.getTriedWristPos() + 4);
+            } else {
+                outtake.setWristPos(1);
+            }
+            flipDebounce = false;
+        }
+        if (!flipDebounce && !flippingButton) {
+            flipDebounce = true;
+        }
+
+        //for preset rotating the claw
+        if (gamepad1.x) {
+            outtake.setWristPos(1);
+        } else if (gamepad1.b) {
+            outtake.setWristPos(5);
+        }
+
+        //for dropping pixels
+        if (!outtake.isEmpty() && grabIntake && !atPreset) {
             if (outtake.isFull()) {
                 outtake.holdClaw(true);
             } else {
@@ -228,25 +256,25 @@ public class Teleop extends OpMode {
             }
             frontClawDropped = false;
             backClawDropped = false;
-            slidePower = -75;
+            slidePower = -1;
         } else if (outtake.isEmpty() && !atPreset && (outtake.getSlidePosition() < 50)) {
             outtake.holdClaw(false);
         }
         if (atPreset) {
-            if (gamepad2.b) {
+            if (dropClaw) {
                 outtake.holdClaw(false);
                 outtake.extend(false);
                 backClawDropped = true;
                 frontClawDropped = true;
 
-            } else if (gamepad2.right_bumper && !frontClawDropped) {
+            } else if (dropFrontClaw && !frontClawDropped) {
                 outtake.holdFrontClaw(false);
                 frontClawDropped = true;
                 if (backClawDropped) {
                     outtake.extend(false);
                 }
 
-            } else if (gamepad2.left_bumper && !frontClawDropped) {
+            } else if (dropBackClaw && !backClawDropped) {
                 outtake.holdBackClaw(false);
                 backClawDropped = true;
                 if (frontClawDropped) {
@@ -313,14 +341,32 @@ public class Teleop extends OpMode {
                 outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
                 intakeLevel = 6;
                 atPreset = true;
+                if(outtake.isFull()) {
+                    frontClawDropped = false;
+                    backClawDropped = false;
+                } else {
+                    backClawDropped = false;
+                }
             } else if (medPresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
                 intakeLevel = 6;
                 atPreset = true;
+                if(outtake.isFull()) {
+                    frontClawDropped = false;
+                    backClawDropped = false;
+                } else {
+                    backClawDropped = false;
+                }
             } else if (lowPresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true);
                 intakeLevel = 6;
                 atPreset = true;
+                if(outtake.isFull()) {
+                    frontClawDropped = false;
+                    backClawDropped = false;
+                } else {
+                    backClawDropped = false;
+                }
             } else if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false);
                 intakeLevel = 6;
@@ -350,14 +396,9 @@ public class Teleop extends OpMode {
 
         outtake.manualSlides(slidePower, overwriteBool); // keep this
 
-        telemetry.addData("149", outtake.extendo.mmToRotation(149));
-
-        if (gamepad1.x) {
-            outtake.extendo.setExtendo(outtake.extendo.mmToRotation(149));
-        }
         telemetry.addData("climbed", climbed);
 
-
+        telemetry.addData("claw pos", outtake.getTriedWristPos());
     }
 
     @Override

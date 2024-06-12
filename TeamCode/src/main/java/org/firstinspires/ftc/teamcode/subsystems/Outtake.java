@@ -167,6 +167,12 @@ class PresetThread extends Thread{
     @Override
     public void run() {
         if (goingUp) {
+            outtake.holdClaw(true);
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             outtake.presetSlides(slidePos);
             while (outtake.getSlidePosition() < Constants.Slides.safeSlidePos) {
                 try {

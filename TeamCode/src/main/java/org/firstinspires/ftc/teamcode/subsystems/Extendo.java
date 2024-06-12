@@ -15,7 +15,7 @@ public class Extendo {
 
         extendo.setDirection(Servo.Direction.REVERSE);
 
-        setExtendo(0);
+        setExtendo(Constants.Extendo.closed);
     }
 
     public void setExtendo(double pos) {
