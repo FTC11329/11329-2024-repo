@@ -16,12 +16,11 @@ public class SpecialIntake {
 
     public SpecialIntake(HardwareMap hardwareMap) {
         intakeServo = hardwareMap.get(Servo.class, "specialIntake");
-//        intakeServo.setDirection(Servo.Direction.REVERSE);
         intakeServo.setPosition(0);
     }
 
     public void setIntakeServo(double servoPos) {
-        if (Constants.SpecialIntake.max > servoPos && servoPos > Constants.SpecialIntake.min) {
+        if (Constants.SpecialIntake.max >= servoPos && servoPos >= Constants.SpecialIntake.min) {
             intakeServo.setPosition(servoPos);
         }
     }

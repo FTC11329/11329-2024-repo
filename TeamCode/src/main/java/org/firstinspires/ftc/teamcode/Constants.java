@@ -76,7 +76,7 @@ public class Constants {
         public static double max = 0.6;
 
         public static double ready = 0.4;
-        public static double up = 0.2;
+        public static double up = 0.21;
         public static double down5 = 0.475;
         public static double down4 = 0.495;
         public static double down3 = 0.515;
@@ -89,6 +89,7 @@ public class Constants {
     @Config
     public static class Extendo {
         public static double extended = 0.46;
+        public static double half = 0.235;
         public static double closed = 0.01;
         public static double auto = 0.1;
     }
@@ -233,8 +234,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 45;
-        public static double MAX_ACCEL = 45;
+        public static double MAX_VEL = 40;
+        public static double MAX_ACCEL = 40;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }

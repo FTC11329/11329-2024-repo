@@ -170,37 +170,29 @@ public class Teleop extends OpMode {
             SIntakeDebounce = true;
         }
         if (SIntakeDown && !intakeDebounce) {
-            intakeLevel --;
+            intakeLevel--;
             intakeDebounce = true;
-        } else if (!SIntakeDown && intakeDebounce){
+        } else if (!SIntakeDown && intakeDebounce) {
             intakeDebounce = false;
         }
 
-        switch (intakeLevel) {
-            case 6: {
-                specialIntake.setIntakeServo(Constants.SpecialIntake.up);
-                break;
-            }
-            case 5: {
-                specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
-                break;
-            }
-            case 4: {
-                specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
-                break;
-            }
-            case 3: {
-                specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
-                break;
-            }
-            case 2: {
-                specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
-                break;
-            }
-            case 1: {
-                specialIntake.setIntakeServo(Constants.SpecialIntake.down1);
-                break;
-            }
+        if (intakeLevel == 6) {
+            specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+
+        } else if  (intakeLevel == 5) {
+            specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+
+        } else if  (intakeLevel == 4) {
+            specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+
+        } else if  (intakeLevel == 3) {
+            specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
+
+        } else if  (intakeLevel == 2) {
+            specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
+
+        } else if  (intakeLevel == 1) {
+            specialIntake.setIntakeServo(Constants.SpecialIntake.down1);
         }
 
         //SLIDES
@@ -256,7 +248,7 @@ public class Teleop extends OpMode {
             }
             frontClawDropped = false;
             backClawDropped = false;
-            slidePower = -1;
+            slidePower = -2;
         } else if (outtake.isEmpty() && !atPreset && (outtake.getSlidePosition() < 50)) {
             outtake.holdClaw(false);
         }
@@ -338,27 +330,30 @@ public class Teleop extends OpMode {
         goingPreset = highPresetBool || medPresetBool || lowPresetBool || intakePresetBool;
         if (goingPreset && presetThreadDebounce && !isClimberUp) {
             if (highPresetBool && !isDroneing) {
+                intakeLevel = 6;
+                atPreset = true;
+                if(outtake.isFull()) {
+                    frontClawDropped = false;
+                    backClawDropped = false;
+                } else {
+                    backClawDropped = false;
+                    outtake.setWristPos(7);
+                }
                 outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
-                intakeLevel = 6;
-                atPreset = true;
-                if(outtake.isFull()) {
-                    frontClawDropped = false;
-                    backClawDropped = false;
-                } else {
-                    backClawDropped = false;
-                }
+
             } else if (medPresetBool && !isDroneing) {
+                intakeLevel = 6;
+                atPreset = true;
+                if(outtake.isFull()) {
+                    frontClawDropped = false;
+                    backClawDropped = false;
+                } else {
+                    backClawDropped = false;
+                    outtake.setWristPos(7);
+                }
                 outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
-                intakeLevel = 6;
-                atPreset = true;
-                if(outtake.isFull()) {
-                    frontClawDropped = false;
-                    backClawDropped = false;
-                } else {
-                    backClawDropped = false;
-                }
+
             } else if (lowPresetBool && !isDroneing) {
-                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
                 intakeLevel = 6;
                 atPreset = true;
                 if(outtake.isFull()) {
@@ -366,7 +361,10 @@ public class Teleop extends OpMode {
                     backClawDropped = false;
                 } else {
                     backClawDropped = false;
+                    outtake.setWristPos(7);
                 }
+                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
+
             } else if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                 intakeLevel = 6;
