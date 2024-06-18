@@ -48,9 +48,9 @@ public class Constants {
         public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
 
         */
-        public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
-        public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
-        public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
+//        public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
+//        public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
+//        public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
 
         public static Pose2d tag4Pose = new Pose2d(86,-29.5,0);
         public static Pose2d tag5Pose = new Pose2d(86,-35.5,0);
@@ -61,6 +61,15 @@ public class Constants {
 
         public static Pose2d tag9Pose = new Pose2d(-94.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-94.5,40, Math.toRadians(180));
+
+//        public static Pose2d tag11Pose = new Pose2d(86,6,0);
+//        public static Pose2d tag12Pose = new Pose2d(86,0,0);
+//        public static Pose2d tag13Pose = new Pose2d(86,-6,0);
+
+        public static Pose2d tag1Pose = new Pose2d(86,6,0);
+        public static Pose2d tag2Pose = new Pose2d(86,0,0);
+        public static Pose2d tag3Pose = new Pose2d(86,-6,0);
+
 
     }
 
@@ -91,13 +100,13 @@ public class Constants {
         public static double extended = 0.46;
         public static double half = 0.235;
         public static double closed = 0.01;
-        public static double auto = 0.1;
+        public static double auto = 0.2;
     }
 
     @Config
     public static class Claw {
-        public static double frontClawDrop = 0.008;
-        public static double frontClawHold = 0.243;
+        public static double frontClawDrop = 0.119;
+        public static double frontClawHold = 0.325;
         public static double backClawDrop = 0;
         public static double backClawHold = 0.21;
 
@@ -140,14 +149,14 @@ public class Constants {
 
 
         public static int intake = 0;
-        public static int superLow = 500;
-        public static int low = 700;
-        public static int med = 1350;
-        public static int high = 2000;
+        public static int superLow = 310;
+        public static int low = 850;
+        public static int med = 1800;
+        public static int high = 3000;
 
-        public static int safeSlidePos = 100;
+        public static int safeSlidePos = 150;
 
-        public static int slideMax = 2350;
+        public static int slideMax = 3200;
         public static int slideMin = 0;
     }
 
@@ -179,7 +188,8 @@ public class Constants {
 
     @Config
     public static class DistanceSensors {
-        public static int tolerance = 60;
+        public static int longTolerance = 25;
+        public static int shortTolerance = 40;
     }
 
     @Config

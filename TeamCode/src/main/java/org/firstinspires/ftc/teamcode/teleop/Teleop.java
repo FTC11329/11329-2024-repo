@@ -132,6 +132,9 @@ public class Teleop extends OpMode {
 
 
         //INTAKE
+        if (intakeBool && !atPreset) {
+            outtake.presetSlides(20);
+        }
         if ((intakeBool || intakeOuttakeBool) && atPreset) {
             intake.setIntakePower(Constants.Intake.intake * 0.5, 0);
             intake.setIntakeServoPower(-0.05);

@@ -34,10 +34,10 @@ public class AutoServo {
     }
 
     public void setAutoServoL(double pos) {
-        AutoServoL.setPosition(pos);
+//        AutoServoL.setPosition(pos);
     }
 
     public void setAutoServoR(double pos) {
-        AutoServoR.setPosition(pos);
+//        AutoServoR.setPosition(pos);
     }
 }

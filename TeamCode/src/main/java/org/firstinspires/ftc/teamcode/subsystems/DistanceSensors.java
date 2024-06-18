@@ -28,17 +28,17 @@ public class DistanceSensors {
 
     public BarcodePosition getDirectionBlue(boolean right) {
         if (right) {
-            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.longTolerance) {
                 spikeNumber = BarcodePosition.Two; //left
-            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.shortTolerance) {
                 spikeNumber = BarcodePosition.Three; //center
             } else {
                 spikeNumber = BarcodePosition.One; //right
             }
         } else {
-            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.shortTolerance) {
                 spikeNumber = BarcodePosition.One; //left
-            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.longTolerance) {
                 spikeNumber = BarcodePosition.Two; //center
             } else {
                 spikeNumber = BarcodePosition.Three; //right
@@ -50,17 +50,17 @@ public class DistanceSensors {
 
     public BarcodePosition getDirectionRed(boolean left) {
         if (left) {
-            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.longTolerance) {
                 spikeNumber = BarcodePosition.One; //left
-            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.shortTolerance) {
                 spikeNumber = BarcodePosition.Two; //center
             } else {
                 spikeNumber = BarcodePosition.Three; //right
             }
         } else {
-            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            if (leftDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.shortTolerance) {
                 spikeNumber = BarcodePosition.Two; //left
-            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.tolerance) {
+            } else if (rightDistanceSensor.getDistance(DistanceUnit.INCH) < Constants.DistanceSensors.longTolerance) {
                 spikeNumber = BarcodePosition.Three; //center
             } else {
                 spikeNumber = BarcodePosition.One; //right

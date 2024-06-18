@@ -144,7 +144,6 @@ public class Outtake {
     public void manualWrist(int amount) {
         wristPos += amount;
     }
-
     //Extendo
     public void extend(boolean extend) {
         extendo.extend(extend);
@@ -214,7 +213,6 @@ class PresetThread extends Thread{
                 e.printStackTrace();
             }
             outtake.presetArm(armPos);
-            outtake.extend(false);
             outtake.holdClaw(false);
             try {
                 sleep(300);
@@ -222,6 +220,8 @@ class PresetThread extends Thread{
                 e.printStackTrace();
             }
             outtake.presetSlides(slidePos);
+            outtake.extend(false);
+
         }
     }
 }
