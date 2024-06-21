@@ -17,17 +17,25 @@ import org.firstinspires.ftc.teamcode.utility.SequenceFunction;
 
 import java.util.Optional;
 
+
 public class ConstantCRIPaths {
-    static Pose2d pickupSpecial = new Pose2d(-16.5, -13, Math.toRadians(135));
+    Pose2d pickupSpecial;
+    Pose2d pickupSpecial2;
+
+    Vector2d centerBDPlacePos;
 
     public PlacePurplePathsRed placePurplePathsRed;
     public PickupWhitePixelStack pickupWhitePixelStack;
     public PlaceOnBackDrop placeOnBackDrop;
 
-    public ConstantCRIPaths(Telemetry telemetry, Claw claw, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
+    public ConstantCRIPaths(Telemetry telemetry, Claw claw, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake, Pose2d pickupSpecial, Pose2d pickupSpecial2, Vector2d centerBDPlacePos) {
         placePurplePathsRed = new PlacePurplePathsRed(claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
         pickupWhitePixelStack = new PickupWhitePixelStack(claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
         placeOnBackDrop = new PlaceOnBackDrop(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
+
+        this.pickupSpecial = pickupSpecial;
+        this.pickupSpecial2 = pickupSpecial2;
+        this.centerBDPlacePos = centerBDPlacePos;
     }
     @Config
     public class PlacePurplePathsRed {
@@ -49,18 +57,78 @@ public class ConstantCRIPaths {
         }
             //Left *************************************************************************************************************************************************************************************************************************************
 
-         SequenceFunction LeftPlacePos1 = (prev) -> {
+         SequenceFunction LeftPlacePos1 = (prev) -> {//untested
             prev
-                    .waitSeconds(1);
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .addTemporalMarker(() -> {
+                        outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                    })
+                    .lineToLinearHeading(new Pose2d(-63, -31, Math.toRadians(0)))
+                    .waitSeconds(0.1)
+                    .addTemporalMarkerOffset(0.1, () -> {
+                        outtake.holdClaw(false);
+                    })
+                    .addTemporalMarkerOffset(0.15, () -> {
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
+                    })
+                    .addTemporalMarkerOffset(0.5, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    })
+                    .waitSeconds(0.15)
+                    .turn(Math.toRadians(90))
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(-50,0, 0)));
 
         };
-        SequenceFunction LeftPlacePos2 = (prev) -> {
+        SequenceFunction LeftPlacePos2 = (prev) -> {//untested
             prev
-                    .waitSeconds(1);
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .addTemporalMarker(() -> {
+                        outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                    })
+                    .lineToLinearHeading(new Pose2d(-60, -15, Math.toRadians(90)))
+                    .waitSeconds(0.1)
+                    .addTemporalMarkerOffset(0.1, () -> {
+                        outtake.holdClaw(false);
+                    })
+                    .addTemporalMarkerOffset(0.15, () -> {
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
+                    })
+                    .addTemporalMarkerOffset(0.5, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    })
+                    .waitSeconds(0.15)
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(-50,0, 0)));
         };
-        SequenceFunction LeftPlacePos3 = (prev) -> {
+        SequenceFunction LeftPlacePos3 = (prev) -> { //untested
             prev
-                    .waitSeconds(1);
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .addTemporalMarker(() -> {
+                        outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                    })
+                    .lineToLinearHeading(new Pose2d(-62, -33, Math.toRadians(180)))
+                    .waitSeconds(0.1)
+                    .addTemporalMarkerOffset(0.1, () -> {
+                        outtake.holdClaw(false);
+                    })
+                    .addTemporalMarkerOffset(0.15, () -> {
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
+                    })
+                    .waitSeconds(0.15)
+                    .turn(Math.toRadians(-90))
+                    .addTemporalMarkerOffset(0, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    })
+                    .splineToLinearHeading(pickupSpecial.plus(new Pose2d(-50,0, 0)), Math.toRadians(90));
+
         };
         //Center **************************************************************************************************************************************************************************************************************************************
 
@@ -85,31 +153,30 @@ public class ConstantCRIPaths {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .lineToLinearHeading(new Pose2d(-12,-30, 90))
+                    .turn(Math.toRadians(90))
                     .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,0, 0)));
         };
         SequenceFunction CenterPlacePos2 = (prev) -> {
             prev
-                    .setConstraints(
-                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
-                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
-                    )
-                    .addTemporalMarker(() -> {
+                    .lineToSplineHeading(new Pose2d(-13, -36, Math.toRadians(180)))
+                    .lineToSplineHeading(new Pose2d(-12.5, -24, Math.toRadians(180)))
+                    .lineToSplineHeading(new Pose2d(-16, -14, Math.toRadians(145)))
+
+                    .addTemporalMarkerOffset(-0.5, () -> {
                         outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-12, -15, Math.toRadians(90)))
-                    .waitSeconds(0.1)
-                    .addTemporalMarkerOffset(0.1, () -> {
+                    .waitSeconds(0.2)
+                    .addTemporalMarkerOffset(0, () -> {
                         outtake.holdClaw(false);
                     })
-                    .addTemporalMarkerOffset(0.15, () -> {
+                    .addTemporalMarkerOffset(0.1, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
                     })
                     .addTemporalMarkerOffset(0.5, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,0, 0)));
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,0, 125)));
         };
         SequenceFunction CenterPlacePos3 = (prev) -> {
             prev
@@ -133,7 +200,7 @@ public class ConstantCRIPaths {
                     .addTemporalMarkerOffset(0, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .splineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,0, 0)), Math.toRadians(90));
+                    .splineToLinearHeading(pickupSpecial.plus(new Pose2d(4,0, 0)), Math.toRadians(90));
         };
         //Right **************************************************************************************************************************************************************************************************************************************
 
@@ -168,7 +235,7 @@ public class ConstantCRIPaths {
             this.drivetrain = drivetrain;
             this.specialIntake = specialIntake;
         }
-        SequenceFunction CenterStackFromCenter1st = (prev) -> {
+        SequenceFunction Left1stToCenterStack =(prev) -> { //untested
             prev
                     .resetConstraints()
                     .setReversed(true)
@@ -178,7 +245,37 @@ public class ConstantCRIPaths {
                         clawSensor.setRunInAuto(true);
                         outtake.presetSlides(20);
                         intake.setIntakePower(Constants.Intake.intake, 0);
-                        intake.setIntakeServoPower(0.75);
+                        intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                    })
+                    .addTemporalMarkerOffset(0.1, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                    })
+                    //1st pickup end
+                    .waitSeconds(0.1)
+                    .forward(1.73)
+                    .setReversed(true)
+                    .addTemporalMarkerOffset(1.5, () -> {
+                        intake.setIntakePower(Constants.Intake.outake, 0);
+                        outtake.presetSlides(0);
+                        clawSensor.setRunInAuto(false);
+                        outtake.presetSlides(-1);
+                    })
+                    .addTemporalMarkerOffset(3, () -> {
+                        intake.setIntakePower(0, 0);
+                    });
+        };
+        SequenceFunction Center1stToCenterStack = (prev) -> {
+            prev
+                    .resetConstraints()
+                    .setReversed(true)
+                    .lineToLinearHeading(pickupSpecial)
+                    //1st pickup start
+                    .addTemporalMarkerOffset(-0.2, () -> {
+                        clawSensor.setRunInAuto(true);
+                        outtake.presetSlides(20);
+                        intake.setIntakePower(Constants.Intake.intake, 0);
+                        intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                     })
                     .addTemporalMarkerOffset(0.1, () -> {
@@ -193,7 +290,39 @@ public class ConstantCRIPaths {
                         outtake.presetSlides(0);
                         clawSensor.setRunInAuto(false);
                     })
-                    .addTemporalMarkerOffset(4, () -> {
+                    .addTemporalMarkerOffset(3, () -> {
+                        intake.setIntakePower(0, 0);
+                    });
+        };
+        SequenceFunction BackDropToCenterStack = (prev) -> {
+            prev
+                    .splineTo(new Vector2d(40, -13), Math.toRadians(180))
+                    .splineTo(new Vector2d(0, -13), Math.toRadians(180))
+                    .splineToSplineHeading(pickupSpecial2, Math.toRadians(180))
+                    .addTemporalMarkerOffset(-0.5, () -> {
+                        clawSensor.setRunInAuto(true);
+                        outtake.presetSlides(20);
+                        intake.setIntakePower(Constants.Intake.intake, 0);
+                        intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                    })
+                    .addTemporalMarkerOffset(0.05 , () -> {
+                        intake.setIntakePower(Constants.Intake.intake, 0);
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.down1);
+
+                    })
+
+                    .waitSeconds(0.1)
+                    .forward(1.73)
+                    .addTemporalMarkerOffset(0.5 , () -> {
+                        outtake.presetSlides(0);
+                    })
+                    .setReversed(true)
+                    .addTemporalMarkerOffset(1.5, () -> {
+                        intake.setIntakePower(Constants.Intake.outake, 0);
+                        clawSensor.setRunInAuto(false);
+                    })
+                    .addTemporalMarkerOffset(3, () -> {
                         intake.setIntakePower(0, 0);
                     });
         };
@@ -218,11 +347,15 @@ public class ConstantCRIPaths {
             this.drivetrain = drivetrain;
             this.specialIntake = specialIntake;
         }
-        SequenceFunction CenterStackTo3rdPos = (prev) -> {
+        //1*****************************************************************************************
+        SequenceFunction WallStackTo1stPlacePos = (prev) -> {
+
+        };
+        SequenceFunction CenterStackTo1stPlacePos = (prev) -> {
             prev
                     .splineTo(new Vector2d(0, -12), Math.toRadians(0))
                     .splineTo(new Vector2d(40, -12), Math.toRadians(0))
-                    .waitSeconds(0.1)
+                    .waitSeconds(0.01)
                     .addTemporalMarkerOffset(0, () -> {
                         double distance = 30.0;
                         while (distance > 15.0) {
@@ -240,19 +373,121 @@ public class ConstantCRIPaths {
                         }
                     })
 
-                    .splineTo(new Vector2d(72, -38), Math.toRadians(0))//final place pos 1
-                    .addTemporalMarkerOffset(-1, () -> {
+                    .splineTo(new Vector2d(70, -32.25), Math.toRadians(0))//final place pos 1*******************
+                    .addTemporalMarkerOffset(-2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
+                    })
+                    .addTemporalMarkerOffset(0.2, () -> {
+                        outtake.holdClaw(false);
+                        outtake.extend(false);
+                    })
+                    .setReversed(false)
+                    .addTemporalMarkerOffset(0.05, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                    });
+        };
+        //2*****************************************************************************************
+        SequenceFunction CenterStackTo2ndPlacePos = (prev) -> {
+            prev
+                    .splineTo(new Vector2d(0, -12), Math.toRadians(0))
+                    .splineTo(new Vector2d(40, -12), Math.toRadians(0))
+                    .waitSeconds(0.01)
+                    .addTemporalMarkerOffset(0, () -> {
+                        double distance = 30.0;
+                        while (distance > 15.0) {
+                            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                            boolean present = optionalPose.isPresent();
+                            if (present) {
+                                distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                                if (distance < 15.0) {
+                                    drivetrain.setPoseEstimate(optionalPose.get());
+                                }
+                            }
+                            telemetry.addData("distance = ", distance);
+                            telemetry.addData("did see one", optionalPose.isPresent());
+                            telemetry.update();
+                        }
+                    })
+
+                    .splineTo(new Vector2d(70, -32.25), Math.toRadians(0))//final place pos 2*******************
+                    .addTemporalMarkerOffset(-2, () -> {
                         intake.setIntakePower(0, 0);
                         intake.setIntakeServoPower(0);
                         outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
+                    })
+                    .addTemporalMarkerOffset(0.05, () -> {
+                        outtake.holdClaw(false);
+                        outtake.extend(false);
+                    })
+                    .setReversed(false)
+                    .addTemporalMarkerOffset(0.2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                    });
+        };
+        //3*****************************************************************************************
+        SequenceFunction CenterStackTo3rdPlacePos = (prev) -> {
+            prev
+                    .splineTo(new Vector2d(0, -12), Math.toRadians(0))
+                    .splineTo(new Vector2d(40, -12), Math.toRadians(0))
+                    .waitSeconds(0.01)
+                    .addTemporalMarkerOffset(0, () -> {
+                        double distance = 30.0;
+                        while (distance > 15.0) {
+                            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                            boolean present = optionalPose.isPresent();
+                            if (present) {
+                                distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                                if (distance < 15.0) {
+                                    drivetrain.setPoseEstimate(optionalPose.get());
+                                }
+                            }
+                            telemetry.addData("distance = ", distance);
+                            telemetry.addData("did see one", optionalPose.isPresent());
+                            telemetry.update();
+                        }
+                    })
+
+                    .splineTo(new Vector2d(70, -37), Math.toRadians(0))//final place pos 3*******************
+                    .addTemporalMarkerOffset(-2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
+                    })
+                    .addTemporalMarkerOffset(0.05, () -> {
+                        outtake.holdClaw(false);
+                        outtake.extend(false);
+                    })
+                    .setReversed(false)
+                    .addTemporalMarkerOffset(0.2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                    });
+        };
+        SequenceFunction CenterStackToCenterBD = (prev) -> {
+            prev
+                    .splineTo(new Vector2d(0, -14), Math.toRadians(0))
+                    .splineTo(new Vector2d(24, -14), Math.toRadians(0))
+                    .splineTo(centerBDPlacePos, Math.toRadians(0))
+                    .addTemporalMarkerOffset(-2.4, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
                     })
                     .addTemporalMarkerOffset(0.2, () -> {
                         outtake.holdClaw(false);
                         outtake.extend(false);
                     })
                     .waitSeconds(0.1)
-                    .setReversed(false)
-                    .addTemporalMarkerOffset(0.2, () -> {
+                    .strafeLeft(10)
+                    .addTemporalMarkerOffset(-0.5, () -> {
                         intake.setIntakePower(0, 0);
                         intake.setIntakeServoPower(0);
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);

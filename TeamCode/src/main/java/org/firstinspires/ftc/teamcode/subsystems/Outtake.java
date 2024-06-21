@@ -180,6 +180,7 @@ class PresetThread extends Thread{
     @Override
     public void run() {
         if (goingUp) {
+            outtake.presetSlides(-10);
             outtake.holdClaw(true);
             try {
                 sleep(100);
@@ -204,7 +205,7 @@ class PresetThread extends Thread{
             outtake.setWristPos(wristPos);
         } else {
             outtake.presetArm(Constants.Arm.safeArmPos + 0.001);
-            outtake.presetSlides(Constants.Slides.safeSlidePos + 1);
+            outtake.presetSlides(Constants.Slides.safeSlidePos + 100);
             outtake.setWristPos(wristPos);
             outtake.holdClaw(false);
             try {

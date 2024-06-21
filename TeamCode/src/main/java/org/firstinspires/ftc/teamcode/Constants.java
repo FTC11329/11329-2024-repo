@@ -77,6 +77,8 @@ public class Constants {
     public static class Intake {
         public static double intake = 0.9;
         public static double outake = -0.9;
+
+        public static double intakeServoIntake = 0.9;
     }
 
     @Config
@@ -84,13 +86,13 @@ public class Constants {
         public static double min = 0.2;
         public static double max = 0.6;
 
-        public static double ready = 0.4;
+        public static double ready = 0.44;
         public static double up = 0.21;
         public static double down5 = 0.475;
         public static double down4 = 0.495;
-        public static double down3 = 0.515;
-        public static double down2 = 0.54;
-        public static double down1 = 0.565;
+        public static double down3 = 0.510;
+        public static double down2 = 0.530;
+        public static double down1 = 0.555;
 
         public static double manualPosition = 0.04;
     }
@@ -172,7 +174,7 @@ public class Constants {
 
         public static double manualPosition = 0.03;
 
-        public static double safeArmPos = 0.367;
+        public static double safeArmPos = 0.48;
     }
 
     @Config

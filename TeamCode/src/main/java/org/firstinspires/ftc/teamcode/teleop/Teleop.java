@@ -133,7 +133,7 @@ public class Teleop extends OpMode {
 
         //INTAKE
         if (intakeBool && !atPreset) {
-            outtake.presetSlides(20);
+            outtake.presetSlides(50);
         }
         if ((intakeBool || intakeOuttakeBool) && atPreset) {
             intake.setIntakePower(Constants.Intake.intake * 0.5, 0);
@@ -141,19 +141,19 @@ public class Teleop extends OpMode {
 
         } else if (intakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
-            intake.setIntakeServoPower(0.75);
+            intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
 
         } else if (intakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
-            intake.setIntakeServoPower(0.75);
+            intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
 
         } else if (intakeOuttakeBool && outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.intake, outtake.getSlideTargetPosition());
-            intake.setIntakeServoPower(0.75);
+            intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
 
         } else if (intakeOuttakeBool && !outtake.isFull()) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
-            intake.setIntakeServoPower(0.75);
+            intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
 
         } else {
             intake.setIntakePower(0, outtake.getSlideTargetPosition());

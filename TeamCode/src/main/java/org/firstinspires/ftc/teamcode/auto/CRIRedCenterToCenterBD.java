@@ -15,20 +15,20 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lights;
 import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 @Autonomous(name = "Red Center CRI", group = " Testing")
 @Config
-public class CRITestAuto extends OpMode {
+public class CRIRedCenterToCenterBD extends OpMode {
     boolean whiteLeft;
     static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(73, -30);
-    static Vector2d placePositionTwo = new Vector2d(73, -34);
-    static Vector2d placePositionThree = new Vector2d(73, -34);
+    static Vector2d finalPlacePos2 = new Vector2d(70, -12);
 
-    static Pose2d pickupSpecial2 = new Pose2d(-15,-12, Math.toRadians(135));
+    static Pose2d pickupSpecial = new Pose2d(-16.5, -13, Math.toRadians(135));
+    static Pose2d pickupSpecial2 = new Pose2d(-15,-10, Math.toRadians(135));
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -38,6 +38,7 @@ public class CRITestAuto extends OpMode {
 
     Claw claw;
     Intake intake;
+    Lights lights;
     Outtake outtake;
     Cameras cameras;
     ClawSensor clawSensor;
@@ -52,6 +53,9 @@ public class CRITestAuto extends OpMode {
 
 
     public void init() {
+        lights = new Lights(hardwareMap);
+
+        lights.setDumbLed(1);
         claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
@@ -61,14 +65,13 @@ public class CRITestAuto extends OpMode {
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
 
-        constantCRIPaths = new ConstantCRIPaths(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
+        claw.setBackHold(true);
+
+        constantCRIPaths = new ConstantCRIPaths(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
         placeOnBackDrop = constantCRIPaths.placeOnBackDrop;
 
-
-
-        claw.setBackHold(true);
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose);
         placePurplePathsRed.CenterPlacePos1.run(placeSpikeMark1);
@@ -78,6 +81,7 @@ public class CRITestAuto extends OpMode {
         //3**************************************************************************
         placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose);
         placePurplePathsRed.CenterPlacePos3.run(placeSpikeMark3);
+        lights.setDumbLed(0);
     }
 
     @Override
@@ -112,85 +116,23 @@ public class CRITestAuto extends OpMode {
         }
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
+        restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
+        pickupWhitePixelStack.Center1stToCenterStack.run(restOfIt);
 
-        Vector2d finalPlaceLocation = null;
-        Vector2d finalPlaceLocation2 = null;
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = new Vector2d(70, -14);
-            whiteLeft = false;
-
+            placeOnBackDrop.CenterStackTo1stPlacePos.run(restOfIt);
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = new Vector2d(70, -14);
-            whiteLeft = true;
-
+            placeOnBackDrop.CenterStackTo2ndPlacePos.run(restOfIt);
         } else {
-            finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = new Vector2d(70, -14);
-            whiteLeft = true;
+            placeOnBackDrop.CenterStackTo3rdPlacePos.run(restOfIt);
+
         }
 
 
-        restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
-
-        pickupWhitePixelStack.CenterStackFromCenter1st.run(restOfIt);
-        placeOnBackDrop.CenterStackTo3rdPos.run(restOfIt);
-
+        pickupWhitePixelStack.BackDropToCenterStack.run(restOfIt);
+        placeOnBackDrop.CenterStackToCenterBD.run(restOfIt);
         restOfIt
-
-                .splineTo(new Vector2d(40, -14), Math.toRadians(180))
-                .splineTo(new Vector2d(0, -14), Math.toRadians(180))
-                .splineToSplineHeading(pickupSpecial2, Math.toRadians(180))
-                //2nd pickup start
-                .addTemporalMarkerOffset(-0.5, () -> {
-                    clawSensor.setRunInAuto(true);
-                    outtake.presetSlides(20);
-                    intake.setIntakePower(Constants.Intake.intake, 0);
-                    intake.setIntakeServoPower(0.75);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
-                })
-                .addTemporalMarkerOffset(0.05 , () -> {
-                    intake.setIntakePower(Constants.Intake.intake, 0);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down1);
-
-                })
-
-                //2nd pickup done
-                .waitSeconds(0.1)
-                .forward(1.73)
-                .addTemporalMarkerOffset(0.5 , () -> {
-                    outtake.presetSlides(0);
-                })
-                .setReversed(true)
-                .addTemporalMarkerOffset(1.5, () -> {
-                    intake.setIntakePower(Constants.Intake.outake, 0);
-                    clawSensor.setRunInAuto(false);
-                })
-                .addTemporalMarkerOffset(3, () -> {
-                    intake.setIntakePower(0, 0);
-                })
-                .splineTo(new Vector2d(0, -14), Math.toRadians(0))
-                .splineTo(new Vector2d(24, -14), Math.toRadians(0))
-                .splineTo(finalPlaceLocation2, Math.toRadians(0))
-                .addTemporalMarkerOffset(-3.5, () -> {
-                    intake.setIntakePower(0, 0);
-                    intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
-                })
-                //2nd place
-                .addTemporalMarkerOffset(0.2, () -> {
-                    outtake.holdClaw(false);
-                    outtake.extend(false);
-                })
-                .waitSeconds(0.1)
-                .strafeLeft(10)
-                .addTemporalMarkerOffset(-0.5, () -> {
-                    intake.setIntakePower(0, 0);
-                    intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
-                })
                 .waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());
