@@ -133,7 +133,7 @@ public class Teleop extends OpMode {
 
         //INTAKE
         if (intakeBool && !atPreset) {
-            outtake.presetSlides(50);
+            outtake.presetSlides(Constants.Slides.whileIntaking);
         }
         if ((intakeBool || intakeOuttakeBool) && atPreset) {
             intake.setIntakePower(Constants.Intake.intake * 0.5, 0);
@@ -297,7 +297,7 @@ public class Teleop extends OpMode {
             intakeLevel = 6;
         }
         if (isClimberUp) {
-            outtake.extendo.setExtendo(0.16);
+            outtake.extendo.setExtendo(Constants.Extendo.clearSlides);
         }
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
@@ -309,7 +309,7 @@ public class Teleop extends OpMode {
             isClimberUp = true;
         }
         if (isDroneing) {
-            outtake.extendo.setExtendo(1.6);
+            outtake.extendo.setExtendo(Constants.Extendo.clearSlides);
             if (climber.getPosition() < 10) {
                 isDroneing = false;
             }
@@ -338,7 +338,7 @@ public class Teleop extends OpMode {
                 if(outtake.isFull()) {
                     frontClawDropped = false;
                     backClawDropped = false;
-                } else {
+                } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
                     outtake.setWristPos(7);
                 }
@@ -350,7 +350,7 @@ public class Teleop extends OpMode {
                 if(outtake.isFull()) {
                     frontClawDropped = false;
                     backClawDropped = false;
-                } else {
+                } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
                     outtake.setWristPos(7);
                 }
@@ -362,7 +362,7 @@ public class Teleop extends OpMode {
                 if(outtake.isFull()) {
                     frontClawDropped = false;
                     backClawDropped = false;
-                } else {
+                } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
                     outtake.setWristPos(7);
                 }

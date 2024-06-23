@@ -180,10 +180,10 @@ class PresetThread extends Thread{
     @Override
     public void run() {
         if (goingUp) {
-            outtake.presetSlides(-10);
+            outtake.presetSlides(-20);
             outtake.holdClaw(true);
             try {
-                sleep(100);
+                sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

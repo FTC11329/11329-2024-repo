@@ -20,12 +20,12 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
-@Autonomous(name = "Red Center CRI", group = " Testing")
+@Autonomous(name = "Red Left Center CRI", group = " Testing")
 @Config
-public class CRIRedCenterToCenterBD extends OpMode {
+public class CRIRedLeftToRightBDThrCenter extends OpMode {
     boolean whiteLeft;
-    static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));
-    static Vector2d finalPlacePos2 = new Vector2d(70, -12);
+    static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
+    static Vector2d finalPlacePos2 = new Vector2d(70, -10);
 
     static Pose2d pickupSpecial = new Pose2d(-16.5, -13, Math.toRadians(135));
     static Pose2d pickupSpecial2 = new Pose2d(-15,-10, Math.toRadians(135));
@@ -54,7 +54,6 @@ public class CRIRedCenterToCenterBD extends OpMode {
 
     public void init() {
         lights = new Lights(hardwareMap);
-
         lights.setDumbLed(1);
         claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
@@ -65,8 +64,6 @@ public class CRIRedCenterToCenterBD extends OpMode {
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
 
-        claw.setBackHold(true);
-
         constantCRIPaths = new ConstantCRIPathsRed(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
@@ -74,13 +71,13 @@ public class CRIRedCenterToCenterBD extends OpMode {
 
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.CenterPlacePos1.run(placeSpikeMark1);
+        placePurplePathsRed.LeftPlacePos1Center.run(placeSpikeMark1);
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.CenterPlacePos2.run(placeSpikeMark2);
+        placePurplePathsRed.LeftPlacePos2Center.run(placeSpikeMark2);
         //3**************************************************************************
         placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.CenterPlacePos3.run(placeSpikeMark3);
+        placePurplePathsRed.LeftPlacePos3Center.run(placeSpikeMark3);
         lights.setDumbLed(0);
     }
 
@@ -89,7 +86,7 @@ public class CRIRedCenterToCenterBD extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(isBack);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
@@ -101,7 +98,7 @@ public class CRIRedCenterToCenterBD extends OpMode {
     @Override
     public void start() {
         cameras.setCameraSideThreaded(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);
 
@@ -117,7 +114,7 @@ public class CRIRedCenterToCenterBD extends OpMode {
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
-        pickupWhitePixelStack.Center1stToCenterStack.run(restOfIt);
+        pickupWhitePixelStack.Left1stToCenterStack.run(restOfIt);
 
 
         if (barcodePosition == BarcodePosition.One) {

@@ -28,9 +28,9 @@ public class RedLeft3DC extends OpMode {
     boolean whiteLeft;
     boolean hasTwo;
     static Pose2d startingPose = new Pose2d(-41, -60, Math.toRadians(90));
-    static Vector2d placePositionOne = new Vector2d(52, - 33.25);
-    static Vector2d placePositionTwo = new Vector2d(52, -37.25);
-    static Vector2d placePositionThree = new Vector2d(52, -41.5);
+    static Vector2d placePositionOne = new Vector2d(54, - 33.25);
+    static Vector2d placePositionTwo = new Vector2d(54, -37.25);
+    static Vector2d placePositionThree = new Vector2d(54, -41.5);
     
     static Vector2d pickupSpecial = new Vector2d(-52.5, -12);
     static Vector2d pickupSpecial2 = new Vector2d(-56.5,-4.5);

@@ -20,15 +20,15 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
-@Autonomous(name = "Red Left CRI", group = " Testing")
+@Autonomous(name = "Red Left Wall CRI", group = " Testing")
 @Config
-public class CRIRedLeftToRightBD extends OpMode {
+public class CRIRedLeftToRightBDThrWall extends OpMode {
     boolean whiteLeft;
-    static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));
+    static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
     static Vector2d finalPlacePos2 = new Vector2d(70, -10);
 
-    static Pose2d pickupSpecial = new Pose2d(-16.5, -13, Math.toRadians(135));
-    static Pose2d pickupSpecial2 = new Pose2d(-15,-10, Math.toRadians(135));
+    static Pose2d pickupSpecial = new Pose2d(-80.5,-39, Math.toRadians(180));
+    static Pose2d pickupSpecial2 = new Pose2d(-80.5,-39, Math.toRadians(180));
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -46,10 +46,10 @@ public class CRIRedLeftToRightBD extends OpMode {
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
 
-    ConstantCRIPaths constantCRIPaths;
-    ConstantCRIPaths.PlacePurplePathsRed placePurplePathsRed;
-    ConstantCRIPaths.PickupWhitePixelStack pickupWhitePixelStack;
-    ConstantCRIPaths.PlaceOnBackDrop placeOnBackDrop;
+    ConstantCRIPathsRed constantCRIPaths;
+    ConstantCRIPathsRed.PlacePurplePaths placePurplePathsRed;
+    ConstantCRIPathsRed.PickupWhitePixelStack pickupWhitePixelStack;
+    ConstantCRIPathsRed.PlaceOnBackDrop placeOnBackDrop;
 
 
     public void init() {
@@ -64,20 +64,20 @@ public class CRIRedLeftToRightBD extends OpMode {
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
 
-        constantCRIPaths = new ConstantCRIPaths(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
+        constantCRIPaths = new ConstantCRIPathsRed(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
         placeOnBackDrop = constantCRIPaths.placeOnBackDrop;
 
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.LeftPlacePos1.run(placeSpikeMark1);
+        placePurplePathsRed.LeftPlacePos1Left.run(placeSpikeMark1);
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.LeftPlacePos2.run(placeSpikeMark2);
+        placePurplePathsRed.LeftPlacePos2Left.run(placeSpikeMark2);
         //3**************************************************************************
         placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.LeftPlacePos3.run(placeSpikeMark3);
+        placePurplePathsRed.LeftPlacePos3Left.run(placeSpikeMark3);
         lights.setDumbLed(0);
     }
 
@@ -86,7 +86,7 @@ public class CRIRedLeftToRightBD extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(isBack);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
@@ -98,7 +98,7 @@ public class CRIRedLeftToRightBD extends OpMode {
     @Override
     public void start() {
         cameras.setCameraSideThreaded(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
         drivetrain.setPoseEstimate(startingPose);
 
@@ -114,23 +114,20 @@ public class CRIRedLeftToRightBD extends OpMode {
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
-        pickupWhitePixelStack.Left1stToCenterStack.run(restOfIt);
+        pickupWhitePixelStack.Left1stToWallStack.run(restOfIt);
 
 
         if (barcodePosition == BarcodePosition.One) {
-            placeOnBackDrop.CenterStackTo1stPlacePos.run(restOfIt);
+            placeOnBackDrop.WallStackTo1stPlacePos.run(restOfIt);
         } else if (barcodePosition == BarcodePosition.Two) {
-            placeOnBackDrop.CenterStackTo2ndPlacePos.run(restOfIt);
+            placeOnBackDrop.WallStackTo2ndPlacePos.run(restOfIt);
         } else {
-            placeOnBackDrop.CenterStackTo3rdPlacePos.run(restOfIt);
-
+            placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
         }
 
-
-        pickupWhitePixelStack.BackDropToCenterStack.run(restOfIt);
-        placeOnBackDrop.CenterStackToCenterBD.run(restOfIt);
-        restOfIt
-                .waitSeconds(10);
+        pickupWhitePixelStack.BackDropToWallStack.run(restOfIt);
+        placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
+        restOfIt.waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());
     }

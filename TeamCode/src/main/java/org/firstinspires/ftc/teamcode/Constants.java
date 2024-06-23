@@ -48,9 +48,9 @@ public class Constants {
         public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
 
         */
-//        public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
-//        public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
-//        public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
+        public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
+        public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
+        public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
 
         public static Pose2d tag4Pose = new Pose2d(86,-29.5,0);
         public static Pose2d tag5Pose = new Pose2d(86,-35.5,0);
@@ -62,14 +62,9 @@ public class Constants {
         public static Pose2d tag9Pose = new Pose2d(-94.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-94.5,40, Math.toRadians(180));
 
-//        public static Pose2d tag11Pose = new Pose2d(86,6,0);
-//        public static Pose2d tag12Pose = new Pose2d(86,0,0);
-//        public static Pose2d tag13Pose = new Pose2d(86,-6,0);
-
-        public static Pose2d tag1Pose = new Pose2d(86,6,0);
-        public static Pose2d tag2Pose = new Pose2d(86,0,0);
-        public static Pose2d tag3Pose = new Pose2d(86,-6,0);
-
+        public static Pose2d tag11Pose = new Pose2d(86,6,0);
+        public static Pose2d tag12Pose = new Pose2d(86,0,0);
+        public static Pose2d tag13Pose = new Pose2d(86,-6,0);
 
     }
 
@@ -101,7 +96,8 @@ public class Constants {
     public static class Extendo {
         public static double extended = 0.46;
         public static double half = 0.235;
-        public static double closed = 0.01;
+        public static double clearSlides = 0.16;
+        public static double closed = 0.07;
         public static double auto = 0.2;
     }
 
@@ -149,6 +145,7 @@ public class Constants {
         public static int manualSlidePower = 70;
         public static double slowManualSlidePower = 0.4; //this times manual slide power is the actual speed
 
+        public static int whileIntaking = 10;
 
         public static int intake = 0;
         public static int superLow = 310;
@@ -170,7 +167,7 @@ public class Constants {
         public static double fixPos = 0.524;
         public static double placePos = 0.652;
         public static double autoArmDrop = 0.3;
-        public static double intakePos = 0.105;
+        public static double intakePos = 0.115;
 
         public static double manualPosition = 0.03;
 
