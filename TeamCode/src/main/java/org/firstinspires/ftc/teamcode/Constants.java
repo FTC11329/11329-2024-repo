@@ -32,7 +32,7 @@ public class Constants {
         public static Pose2d camOffsetBack = new Pose2d(3, -7.5, Math.toRadians(0));
         public static Pose2d camOffsetFront = new Pose2d(8.5, -5.25, Math.toRadians(0));
 
-        /*regular tags
+        //regular tags
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(62,35.5,0);
         public static Pose2d tag3Pose = new Pose2d(62,29.5,0);
@@ -47,7 +47,7 @@ public class Constants {
         public static Pose2d tag9Pose = new Pose2d(-70.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
 
-        */
+        /*
         public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
         public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
@@ -61,11 +61,10 @@ public class Constants {
 
         public static Pose2d tag9Pose = new Pose2d(-94.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-94.5,40, Math.toRadians(180));
-
+*/
         public static Pose2d tag11Pose = new Pose2d(86,6,0);
         public static Pose2d tag12Pose = new Pose2d(86,0,0);
         public static Pose2d tag13Pose = new Pose2d(86,-6,0);
-
     }
 
     @Config
@@ -94,7 +93,7 @@ public class Constants {
 
     @Config
     public static class Extendo {
-        public static double extended = 0.46;
+        public static double extended = 0.54;
         public static double half = 0.235;
         public static double clearSlides = 0.16;
         public static double closed = 0.07;
@@ -153,10 +152,10 @@ public class Constants {
         public static int med = 1800;
         public static int high = 3000;
 
-        public static int safeSlidePos = 150;
+        public static int safeSlidePos = 100;
 
         public static int slideMax = 3200;
-        public static int slideMin = 0;
+        public static int slideMin = -5;
     }
 
     @Config
@@ -167,7 +166,7 @@ public class Constants {
         public static double fixPos = 0.524;
         public static double placePos = 0.652;
         public static double autoArmDrop = 0.3;
-        public static double intakePos = 0.115;
+        public static double intakePos = 0.105;
 
         public static double manualPosition = 0.03;
 
@@ -202,7 +201,6 @@ public class Constants {
         public static final String rightFrontHardwareMapName = "frontRight";
         public static final String rightRearHardwareMapName = "backRight";
 
-        public static double superFast = 1;
         public static double fast = 1;
         public static double slow = 0.5;
         public static double fixSpeedStrafe = 0.75;

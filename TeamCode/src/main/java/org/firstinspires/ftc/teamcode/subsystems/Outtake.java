@@ -208,6 +208,7 @@ class PresetThread extends Thread{
             outtake.presetSlides(Constants.Slides.safeSlidePos + 100);
             outtake.setWristPos(wristPos);
             outtake.holdClaw(false);
+            outtake.extend(false);
             try {
                 sleep(500);
             } catch (InterruptedException e) {
@@ -221,8 +222,6 @@ class PresetThread extends Thread{
                 e.printStackTrace();
             }
             outtake.presetSlides(slidePos);
-            outtake.extend(false);
-
         }
     }
 }

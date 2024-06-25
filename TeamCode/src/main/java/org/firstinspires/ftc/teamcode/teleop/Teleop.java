@@ -400,6 +400,7 @@ public class Teleop extends OpMode {
         telemetry.addData("climbed", climbed);
 
         telemetry.addData("claw pos", outtake.getTriedWristPos());
+        telemetry.addData("1.1*10", (1.1 * 10));
     }
 
     @Override

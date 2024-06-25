@@ -7,7 +7,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
 import org.firstinspires.ftc.teamcode.subsystems.Intake;
@@ -36,10 +35,10 @@ public class ConstantCRIPathsRed {
     public PickupWhitePixelStack pickupWhitePixelStack;
     public PlaceOnBackDrop placeOnBackDrop;
 
-    public ConstantCRIPathsRed(Telemetry telemetry, Claw claw, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake, Pose2d pickupSpecial, Pose2d pickupSpecial2, Vector2d centerBDPlacePos) {
-        placePurplePathsRed = new PlacePurplePaths(claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
-        pickupWhitePixelStack = new PickupWhitePixelStack(claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
-        placeOnBackDrop = new PlaceOnBackDrop(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
+    public ConstantCRIPathsRed(Telemetry telemetry, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake, Pose2d pickupSpecial, Pose2d pickupSpecial2, Vector2d centerBDPlacePos) {
+        placePurplePathsRed = new PlacePurplePaths(intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
+        pickupWhitePixelStack = new PickupWhitePixelStack(intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
+        placeOnBackDrop = new PlaceOnBackDrop(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake);
 
         this.pickupSpecial = pickupSpecial;
         this.pickupSpecial2 = pickupSpecial2;
@@ -47,15 +46,13 @@ public class ConstantCRIPathsRed {
     }
     @Config
     public class PlacePurplePaths {
-        private Claw claw;
         private Intake intake;
         private Outtake outtake;
         private Cameras cameras;
         private ClawSensor clawSensor;
         private Drivetrain drivetrain;
         private SpecialIntake specialIntake;
-        public PlacePurplePaths(Claw claw, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
-            this.claw = claw;
+        public PlacePurplePaths(Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
             this.intake = intake;
             this.outtake = outtake;
             this.cameras = cameras;
@@ -300,15 +297,13 @@ public class ConstantCRIPathsRed {
     }
     @Config
     public class PickupWhitePixelStack {
-        private Claw claw;
         private Intake intake;
         private Outtake outtake;
         private Cameras cameras;
         private ClawSensor clawSensor;
         private Drivetrain drivetrain;
         private SpecialIntake specialIntake;
-        public PickupWhitePixelStack(Claw claw, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
-            this.claw = claw;
+        public PickupWhitePixelStack(Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
             this.intake = intake;
             this.outtake = outtake;
             this.cameras = cameras;
@@ -487,16 +482,14 @@ public class ConstantCRIPathsRed {
     @Config
     public class PlaceOnBackDrop {
         private Telemetry telemetry;
-        private Claw claw;
         private Intake intake;
         private Outtake outtake;
         private Cameras cameras;
         private ClawSensor clawSensor;
         private Drivetrain drivetrain;
         private SpecialIntake specialIntake;
-        public PlaceOnBackDrop(Telemetry telemetry, Claw claw, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
+        public PlaceOnBackDrop(Telemetry telemetry, Intake intake, Outtake outtake, Cameras cameras, ClawSensor clawSensor, Drivetrain drivetrain, SpecialIntake specialIntake) {
             this.telemetry = telemetry;
-            this.claw = claw;
             this.intake = intake;
             this.outtake = outtake;
             this.cameras = cameras;

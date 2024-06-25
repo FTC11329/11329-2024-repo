@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
+import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -19,10 +20,17 @@ public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Drivetrain drive = new Drivetrain(hardwareMap);
+        SpecialIntake specialIntake = new SpecialIntake(hardwareMap);
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        double speed;
         waitForStart();
+        if (gamepad1.left_bumper) {
+            speed = 0.8;
+        } else {
+            speed = 0.5;
+        }
 
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
@@ -30,7 +38,7 @@ public class LocalizationTest extends LinearOpMode {
                             -gamepad1.left_stick_y,
                             -gamepad1.left_stick_x,
                             -gamepad1.right_stick_x
-                    ).times(0.5)
+                    ).times(speed)
             );
 
             drive.update();

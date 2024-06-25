@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
-import org.firstinspires.ftc.teamcode.subsystems.Claw;
 import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
@@ -36,7 +35,6 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
 
     TrajectorySequenceBuilder restOfIt = null;
 
-    Claw claw;
     Intake intake;
     Lights lights;
     Outtake outtake;
@@ -55,7 +53,6 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
     public void init() {
         lights = new Lights(hardwareMap);
         lights.setDumbLed(1);
-        claw = new Claw(hardwareMap);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
@@ -64,7 +61,7 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
 
-        constantCRIPaths = new ConstantCRIPathsRed(telemetry, claw, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
+        constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
         placeOnBackDrop = constantCRIPaths.placeOnBackDrop;
