@@ -70,7 +70,7 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.9;
-        public static double outake = -0.9;
+        public static double outake = -0.7;
 
         public static double intakeServoIntake = 0.9;
     }
@@ -95,7 +95,7 @@ public class Constants {
     public static class Extendo {
         public static double extended = 0.54;
         public static double half = 0.235;
-        public static double clearSlides = 0.16;
+        public static double clearClimber = 0.25;
         public static double closed = 0.07;
         public static double auto = 0.2;
     }
@@ -103,7 +103,7 @@ public class Constants {
     @Config
     public static class Claw {
         public static double frontClawDrop = 0.119;
-        public static double frontClawHold = 0.325;
+        public static double frontClawHold = 0.345;
         public static double backClawDrop = 0;
         public static double backClawHold = 0.21;
 
@@ -119,7 +119,7 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double distanceLimit = 0.65;
+        public static double distanceLimit = 0.9;
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
         public static Vector3D whiteBack   = new Vector3D(1425, 2950, 3600);
@@ -142,11 +142,12 @@ public class Constants {
     @Config
     public static class Slides {
         public static int manualSlidePower = 70;
-        public static double slowManualSlidePower = 0.4; //this times manual slide power is the actual speed
+        public static double slowManualSlidePower = 0.8; //this times manual slide power is the actual speed
 
-        public static int whileIntaking = 10;
+        public static int whileIntaking = 25;
 
         public static int intake = 0;
+        public static int autoPurple = 150;
         public static int superLow = 310;
         public static int low = 850;
         public static int med = 1800;
@@ -163,14 +164,13 @@ public class Constants {
         public static double armMax = 1;
         public static double armMin = 0;
 
-        public static double fixPos = 0.524;
-        public static double placePos = 0.652;
-        public static double autoArmDrop = 0.3;
-        public static double intakePos = 0.105;
+        public static double placePos = 0.706;
+        public static double autoArmDrop = 0.408;
+        public static double intakePos = 0.150;// 105
 
         public static double manualPosition = 0.03;
 
-        public static double safeArmPos = 0.48;
+        public static double safeArmPos = 0.534;
     }
 
     @Config
@@ -186,8 +186,8 @@ public class Constants {
 
     @Config
     public static class DistanceSensors {
-        public static int longTolerance = 25;
-        public static int shortTolerance = 40;
+        public static int longTolerance = 30;//25
+        public static int shortTolerance = 40;//40
     }
 
     @Config

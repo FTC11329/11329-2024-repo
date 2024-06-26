@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.checkerframework.checker.units.qual.C;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
@@ -39,13 +40,15 @@ public class Teleop extends OpMode {
     double temp = 0;
     boolean isDroneing = false;
     boolean flipDebounce = false;
+    boolean endgameToggle = false;
+    boolean endgameDebounce = false;
+    boolean goingToClaw = false;
 
     Plane plane;
     Lights lights;
     Intake intake;
     Climber climber;
     volatile Outtake outtake;
-    AutoServo autoServo;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
@@ -57,7 +60,6 @@ public class Teleop extends OpMode {
         lights = new Lights(hardwareMap);
         climber = new Climber(hardwareMap);
         outtake = new Outtake(hardwareMap);
-        autoServo = new AutoServo(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
@@ -93,6 +95,7 @@ public class Teleop extends OpMode {
         double slowSlidePower = gamepad1.right_trigger - gamepad1.left_trigger;
 
         boolean armFix = gamepad1.a;
+        double armPower = gamepad2.left_stick_y;
 
         double wristClawPower = gamepad2.left_stick_x;
         boolean flippingButton = gamepad2.a;
@@ -112,7 +115,8 @@ public class Teleop extends OpMode {
         boolean medPresetBool = gamepad2.dpad_right || gamepad1.dpad_up;
         boolean lowPresetBool = gamepad2.dpad_down;
         boolean intakePresetBool = gamepad2.dpad_left || gamepad1.dpad_down;
-        double armPower = gamepad2.left_stick_y;
+
+        boolean endgameButton = gamepad1.b;
 
         //DRIVETRAIN
         DriveSpeedEnum driveSpeed;
@@ -206,7 +210,10 @@ public class Teleop extends OpMode {
         //ARM
         outtake.manualArm(armPower);
         if (armFix) {
-            outtake.presetArm(Constants.Arm.fixPos);
+            outtake.presetArm(Constants.Arm.placePos);
+            outtake.presetSlides(Constants.Slides.low);
+            outtake.holdBackClaw(true);
+            outtake.holdFrontClaw(false);
         }
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
@@ -238,22 +245,24 @@ public class Teleop extends OpMode {
         //for preset rotating the claw
         if (gamepad1.x) {
             outtake.setWristPos(1);
-        } else if (gamepad1.b) {
-            outtake.setWristPos(5);
         }
 
         //for dropping pixels
         if (!outtake.isEmpty() && grabIntake && !atPreset) {
-            if (outtake.isFull()) {
-                outtake.holdClaw(true);
-            } else {
-                outtake.holdBackClaw(true);
-            }
+            goingToClaw = true;
             frontClawDropped = false;
             backClawDropped = false;
             slidePower = -2;
         } else if (outtake.isEmpty() && !atPreset && (outtake.getSlidePosition() < 50)) {
             outtake.holdClaw(false);
+        }
+        if (goingToClaw && outtake.getSlidePosition() <= 0) {
+            goingToClaw = false;
+            if (outtake.isFull()) {
+                outtake.holdClaw(true);
+            } else {
+                outtake.holdBackClaw(true);
+            }
         }
         if (atPreset) {
             if (dropClaw) {
@@ -297,7 +306,7 @@ public class Teleop extends OpMode {
             intakeLevel = 6;
         }
         if (isClimberUp) {
-            outtake.extendo.setExtendo(Constants.Extendo.clearSlides);
+            outtake.extendo.setExtendo(Constants.Extendo.clearClimber);
         }
         climberPos += climberPower * Constants.Climber.manualClimberPower;
         climber.setPos(climberPos);
@@ -309,7 +318,7 @@ public class Teleop extends OpMode {
             isClimberUp = true;
         }
         if (isDroneing) {
-            outtake.extendo.setExtendo(Constants.Extendo.clearSlides);
+            outtake.extendo.setExtendo(Constants.Extendo.clearClimber);
             if (climber.getPosition() < 10) {
                 isDroneing = false;
             }
@@ -331,7 +340,7 @@ public class Teleop extends OpMode {
 
         //PRE-SETS
         goingPreset = highPresetBool || medPresetBool || lowPresetBool || intakePresetBool;
-        if (goingPreset && presetThreadDebounce && !isClimberUp) {
+        if (goingPreset && presetThreadDebounce && !isClimberUp && !endgameToggle) {
             if (highPresetBool && !isDroneing) {
                 intakeLevel = 6;
                 atPreset = true;
@@ -375,6 +384,17 @@ public class Teleop extends OpMode {
             }
             presetThreadDebounce = false;
         }
+
+        if (goingPreset && endgameToggle) {
+            if (intakePresetBool && !isDroneing) {
+                outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
+                intakeLevel = 6;
+                atPreset = false;
+            } else {
+                outtake.createPresetThread(300, Constants.Arm.autoArmDrop, 3, true, true);
+
+            }
+        }
         if (!goingPreset) {
             presetThreadDebounce = true;
         }
@@ -389,18 +409,28 @@ public class Teleop extends OpMode {
         }
 
         //FINALE
+        if (endgameButton && endgameDebounce) {
+            endgameToggle = !endgameToggle;
+            endgameDebounce = false;
+        }
+        if (!endgameButton) {
+            endgameDebounce = true;
+        }
+
         outtake.periodic();
+        outtake.manualSlides(slidePower, overwriteBool);
+
 
         //TEMPORARY
-        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("endgame", endgameToggle);
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-
-        outtake.manualSlides(slidePower, overwriteBool); // keep this
+        telemetry.addData("back", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
+        telemetry.addData("fron", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
 
         telemetry.addData("climbed", climbed);
 
         telemetry.addData("claw pos", outtake.getTriedWristPos());
-        telemetry.addData("1.1*10", (1.1 * 10));
     }
 
     @Override

@@ -10,7 +10,7 @@ public class Outtake {
     private Claw claw;
     public Slides slides;
     public Extendo extendo;
-    private ClawSensor clawSensor;
+    public ClawSensor clawSensor;
 
     private int wristPos = 3;
 
@@ -28,9 +28,9 @@ public class Outtake {
         slides.slidesPeriodic();
         if(getArmPosition() > Constants.Arm.safeArmPos) {
             if (wristPos <= 0) {
-                wristPos = 1;
-            } else if (wristPos >= 8) {
                 wristPos = 7;
+            } else if (wristPos >= 8) {
+                wristPos = 1;
             }
             switch (wristPos) {
                 case 1: {

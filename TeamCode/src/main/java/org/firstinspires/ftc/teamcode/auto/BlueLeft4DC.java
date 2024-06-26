@@ -25,7 +25,7 @@ import java.util.Optional;
 public class BlueLeft4DC extends OpMode {
     static Pose2d startingPose = new Pose2d(17, 64, Math.toRadians(-90));
     static Vector2d placePositionOne = new Vector2d(49, 43.5);
-    static Vector2d placePositionTwo = new Vector2d(49, 33.5);
+    static Vector2d placePositionTwo = new Vector2d(49, 35);
     static Vector2d placePositionThree =  new Vector2d(49, 30);
 
     static Pose2d pickupSpecial = new Pose2d(-51,29, Math.toRadians(180));
@@ -55,13 +55,13 @@ public class BlueLeft4DC extends OpMode {
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose)
                 .addTemporalMarkerOffset(0, () -> {
-                    outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half, true);
+                    outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half, true);
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(34, 32, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(35, 35, Math.toRadians(0)))
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdBackClaw(false);
                     outtake.extend(false);
@@ -74,13 +74,13 @@ public class BlueLeft4DC extends OpMode {
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose)
                 .addTemporalMarkerOffset(0, () -> {
-                    outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                    outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(27, 25, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(27, 24.5, Math.toRadians(0)))
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdBackClaw(false);
                     outtake.extend(false);
@@ -93,13 +93,13 @@ public class BlueLeft4DC extends OpMode {
         //3**************************************************************************
         placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose)
                 .addTemporalMarkerOffset(0, () -> {
-                    outtake.createPresetThread(150, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half, true);
+                    outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half, true);
                 })
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(12, 32, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(20, 32, Math.toRadians(0)))
                 .addTemporalMarkerOffset(-0.6, () -> {
                     outtake.extend(true);
                 })
@@ -146,7 +146,7 @@ public class BlueLeft4DC extends OpMode {
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
 
         Vector2d finalPlaceLocation = null;
-        Vector2d finalPlaceLocation2 = placePositionOne.plus(new Vector2d(-1, -14));
+        Vector2d finalPlaceLocation2 = placePositionOne.plus(new Vector2d(-3, -14));
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
@@ -227,7 +227,7 @@ public class BlueLeft4DC extends OpMode {
                     outtake.holdClaw(true);
                 })
                 .splineTo(new Vector2d(-36, 14), Math.toRadians(0))
-                .splineTo(new Vector2d(20, 14), Math.toRadians(0))
+                .splineTo(new Vector2d(24, 14), Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY() + 3), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1.75, () -> {
                     outtake.createPresetThread(Constants.Slides.superLow + 400, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
@@ -236,7 +236,7 @@ public class BlueLeft4DC extends OpMode {
                     outtake.holdClaw(false);
                     outtake.extend(false);
                 })
-                .addTemporalMarkerOffset(1, () -> {
+                .addTemporalMarkerOffset(0.5, () -> {
                     outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
                 })
                 .setReversed(false)
@@ -250,7 +250,7 @@ public class BlueLeft4DC extends OpMode {
                     cameras.kill();
                 })
                 //Back For Another One**************************************
-                .lineToLinearHeading(pickupSpecial,
+                .lineToLinearHeading(pickupSpecial.plus(new Pose2d(-1.5,0)),
                         (displacement, pose, derivative, baseRobotVelocity) -> 32, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 32  //acc
                 )
@@ -267,7 +267,7 @@ public class BlueLeft4DC extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(0.1)
-                .forward(5)
+                .forward(5.5)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     clawSensor.setRunInAuto(false);
@@ -278,7 +278,7 @@ public class BlueLeft4DC extends OpMode {
                     intake.setIntakeServoPower(0);
                 })
                 .splineTo(new Vector2d(-36, 14), Math.toRadians(0))
-                .splineTo(new Vector2d(20, 13), Math.toRadians(0))
+                .splineTo(new Vector2d(24, 12), Math.toRadians(0))
                 .splineToConstantHeading(finalPlaceLocation2, Math.toRadians(0))
                 .addTemporalMarkerOffset(-1.75, () -> {
                     outtake.createPresetThread(Constants.Slides.superLow + 400, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
@@ -291,7 +291,7 @@ public class BlueLeft4DC extends OpMode {
                     outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
                 })
                 .waitSeconds(0.2)
-                .forward(9)
+                .forward(7)
                 .waitSeconds(1)
                 .build());
     }
