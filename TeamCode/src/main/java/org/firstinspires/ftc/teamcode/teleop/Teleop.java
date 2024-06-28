@@ -34,8 +34,8 @@ public class Teleop extends OpMode {
     boolean presetThreadDebounce = true;
     boolean goingPreset = false;
     boolean atPreset = false;
-    boolean backClawDropped = false;
-    boolean frontClawDropped = false;
+    boolean backClawDropped = true;
+    boolean frontClawDropped = true;
     boolean isClimberUp = false;
     double temp = 0;
     boolean isDroneing = false;
@@ -344,47 +344,57 @@ public class Teleop extends OpMode {
             if (highPresetBool && !isDroneing) {
                 intakeLevel = 6;
                 atPreset = true;
+                if (outtake.isBackSensor() && !outtake.isFull()) {
+                    outtake.setWristPos(7);
+                }
+                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
                 if(outtake.isFull()) {
                     frontClawDropped = false;
                     backClawDropped = false;
                 } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
-                    outtake.setWristPos(7);
                 }
-                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
 
             } else if (medPresetBool && !isDroneing) {
                 intakeLevel = 6;
                 atPreset = true;
+                if (outtake.isBackSensor() && !outtake.isFull()) {
+                    outtake.setWristPos(7);
+                }
+                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
                 if(outtake.isFull()) {
                     frontClawDropped = false;
                     backClawDropped = false;
                 } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
-                    outtake.setWristPos(7);
                 }
-                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
 
             } else if (lowPresetBool && !isDroneing) {
                 intakeLevel = 6;
                 atPreset = true;
+                if (outtake.isBackSensor() && !outtake.isFull()) {
+                    outtake.setWristPos(7);
+                }
+                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
                 if(outtake.isFull()) {
                     frontClawDropped = false;
                     backClawDropped = false;
                 } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
-                    outtake.setWristPos(7);
                 }
-                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true);
 
             } else if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                 intakeLevel = 6;
                 atPreset = false;
+                backClawDropped = true;
+                frontClawDropped = true;
             }
             presetThreadDebounce = false;
         }
 
+
+        //Endgame
         if (goingPreset && endgameToggle) {
             if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
@@ -392,7 +402,13 @@ public class Teleop extends OpMode {
                 atPreset = false;
             } else {
                 outtake.createPresetThread(300, Constants.Arm.autoArmDrop, 3, true, true);
-
+                if(outtake.isFull()) {
+                    frontClawDropped = false;
+                    backClawDropped = false;
+                } else if (outtake.isBackSensor()) {
+                    backClawDropped = false;
+                }
+                atPreset = true;
             }
         }
         if (!goingPreset) {
@@ -429,6 +445,10 @@ public class Teleop extends OpMode {
         telemetry.addData("fron", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
 
         telemetry.addData("climbed", climbed);
+        telemetry.addData("climber pos", climberPos);
+
+        telemetry.addData("bak", backClawDropped);
+        telemetry.addData("fon", frontClawDropped);
 
         telemetry.addData("claw pos", outtake.getTriedWristPos());
     }

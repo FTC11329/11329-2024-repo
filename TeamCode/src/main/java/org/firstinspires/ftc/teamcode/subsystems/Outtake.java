@@ -98,8 +98,18 @@ public class Outtake {
         presetSlides(slidesPos);
         presetArm(armPos);
     }
+
+    public void createPresetThread(int slidePos, double armPos, int wristPos, boolean extend, boolean grabbed, boolean goingUp) {
+        double rot;
+        if (extend) {
+            rot = Constants.Extendo.extended;
+        } else {
+            rot = Constants.Extendo.closed;
+        }
+        new PresetThread(this, slidePos, armPos, wristPos, rot, grabbed, goingUp).start();
+    }
     public void createPresetThread(int slidePos, double armPos, int wristPos, double extend, boolean goingUp) {
-        new PresetThread(this, slidePos, armPos, wristPos, extend, goingUp).start();
+        new PresetThread(this, slidePos, armPos, wristPos, extend, false, goingUp).start();
     }
     public void createPresetThread(int slidePos, double armPos, int wristPos, boolean extend, boolean goingUp) {
         double rot;
@@ -108,7 +118,7 @@ public class Outtake {
         } else {
             rot = Constants.Extendo.closed;
         }
-        new PresetThread(this, slidePos, armPos, wristPos, rot, goingUp).start();
+        new PresetThread(this, slidePos, armPos, wristPos, rot, false, goingUp).start();
     }
 
     //Claw Sensor
@@ -159,15 +169,15 @@ public class Outtake {
 }
 //Allen's first thread! YIPIEEEEEEE
 class PresetThread extends Thread{
-    ElapsedTime time = new ElapsedTime();
     private volatile Outtake outtake;
     private int slidePos;
     private int wristPos;
     private double armPos;
     private double extend;
     private boolean goingUp;
+    private boolean grabbed;
 
-    public PresetThread(Outtake outtake, int slidePos, double armPos, int wristPos, double extend, boolean goingUp) {
+    public PresetThread(Outtake outtake, int slidePos, double armPos, int wristPos, double extend, boolean grabbed, boolean goingUp) {
         super();
         this.outtake = outtake;
         this.slidePos = slidePos;
@@ -175,17 +185,20 @@ class PresetThread extends Thread{
         this.armPos = armPos;
         this.extend = extend;
         this.goingUp = goingUp;
+        this.grabbed = grabbed;
     }
 
     @Override
     public void run() {
         if (goingUp) {
-            outtake.presetSlides(-20);
-            outtake.holdClaw(true);
-            try {
-                sleep(200);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if (!grabbed) {
+                outtake.presetSlides(-20);
+                outtake.holdClaw(true);
+                try {
+                    sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             outtake.presetSlides(slidePos);
             while (outtake.getSlidePosition() < Constants.Slides.safeSlidePos) {

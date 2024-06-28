@@ -84,7 +84,7 @@ public class RedRight4DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(27, -24.25, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(28.5, -24.25, Math.toRadians(0)))
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdBackClaw(false);
                 })
@@ -147,15 +147,24 @@ public class RedRight4DC extends OpMode {
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
 
-        Vector2d finalPlaceLocation = null;
-        Vector2d finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -2));
-
+        Vector2d finalPlaceLocation;
+        Vector2d finalPlaceLocation2;
+        Vector2d finalPlaceLocation3;
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -6));
+            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(1, -12));
+
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -4));
+            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(1, -11));
+
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -2));
+            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(0, -2));
+
         } else return;
 
 
@@ -216,7 +225,7 @@ public class RedRight4DC extends OpMode {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
                 .waitSeconds(0.1)
-                .forward(3.5)
+                .forward(2)
                 .setReversed(true)
                 .addTemporalMarkerOffset(0.75, () -> {
                     clawSensor.setRunInAuto(false);
@@ -230,7 +239,7 @@ public class RedRight4DC extends OpMode {
                 })
                 .splineTo(new Vector2d(-36, -10), Math.toRadians(0))
                 .splineTo(new Vector2d(23, -10), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY() - 2), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(finalPlaceLocation2.getX(), finalPlaceLocation2.getY()), Math.toRadians(0))
                 .addTemporalMarkerOffset(-1.75, () -> {
                     outtake.createPresetThread(Constants.Slides.superLow + 400, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
                 })
@@ -283,7 +292,7 @@ public class RedRight4DC extends OpMode {
                 })
                 .splineTo(new Vector2d(-36,-9), Math.toRadians(0))
                 .splineTo(new Vector2d(23, -9), Math.toRadians(0))
-                .splineToConstantHeading(finalPlaceLocation2.plus(new Vector2d(0, -3)), Math.toRadians(0))
+                .splineToConstantHeading(finalPlaceLocation3, Math.toRadians(0))
                 .addTemporalMarkerOffset(-1.75, () -> {
                     outtake.createPresetThread(Constants.Slides.superLow + 400, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
                 })

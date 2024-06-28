@@ -282,17 +282,65 @@ public class ConstantCRIPathsRed {
         };
         //Right **************************************************************************************************************************************************************************************************************************************
 
-        SequenceFunction RightPlacePos1 = (prev) -> {
+        SequenceFunction RightPlacePos1 = (prev) -> {//add 18 to x
             prev
-                    .waitSeconds(1);
+                    .addTemporalMarkerOffset(0, () -> {
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half, true);
+                    })
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .lineToLinearHeading(new Pose2d(38, -34, Math.toRadians(0)))
+                    .addTemporalMarkerOffset(-0.6, () -> {
+                        outtake.extend(true);
+                    })
+                    .addTemporalMarkerOffset(0, () -> {
+                        outtake.holdBackClaw(false);
+                    })
+                    .addTemporalMarkerOffset(0.5, () -> {
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true);
+                    })
+                    .lineToLinearHeading(new Pose2d(58, -36, Math.toRadians(180)));
         };
         SequenceFunction RightPlacePos2 = (prev) -> {
             prev
-                    .waitSeconds(1);
+                    .addTemporalMarkerOffset(0, () -> {
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                    })
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .lineToLinearHeading(new Pose2d(45, -24.25, Math.toRadians(0)))
+                    .addTemporalMarkerOffset(0, () -> {
+                        outtake.holdBackClaw(false);
+                    })
+                    .addTemporalMarkerOffset(0.25, () -> {
+                        outtake.presetArm(Constants.Arm.placePos);
+                    })
+                    .addTemporalMarkerOffset(0.5, () -> {
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true);
+                    })
+                    .lineToLinearHeading(new Pose2d(58, -36, Math.toRadians(181)));
         };
         SequenceFunction RightPlacePos3 = (prev) -> {
             prev
-                    .waitSeconds(1);
+                    .addTemporalMarkerOffset(0, () -> {
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                    })
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .lineToLinearHeading(new Pose2d(53, -30, Math.toRadians(0)))
+                    .addTemporalMarkerOffset(0, () -> {
+                        outtake.holdBackClaw(false);
+                    })
+                    .addTemporalMarkerOffset(0.25, () -> {
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true);
+                    })
+                    .lineToLinearHeading(new Pose2d(58, -36, Math.toRadians(181)));
         };
     }
     @Config
