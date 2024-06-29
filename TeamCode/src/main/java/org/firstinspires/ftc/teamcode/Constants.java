@@ -119,7 +119,8 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double distanceLimit = 0.9;
+        public static double fDistanceLimit = 0.5;
+        public static double bDistanceLimit = 0.6;
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
         public static Vector3D whiteBack   = new Vector3D(1425, 2950, 3600);
@@ -142,16 +143,16 @@ public class Constants {
     @Config
     public static class Slides {
         public static int manualSlidePower = 70;
-        public static double slowManualSlidePower = 0.8; //this times manual slide power is the actual speed
+        public static double slowManualSlidePower = 0.9; //this times manual slide power is the actual speed
 
         public static int whileIntaking = 25;
 
         public static int intake = 0;
         public static int autoPurple = 150;
         public static int superLow = 310;
-        public static int low = 850;
-        public static int med = 1800;
-        public static int high = 3000;
+        public static int low = 850;//850
+        public static int med = 1800;//1800
+        public static int high = 3000;//3000
 
         public static int safeSlidePos = 100;
 
@@ -179,7 +180,7 @@ public class Constants {
 
 
         public static int down = 0;
-        public static int climberFire = -1215;
+        public static int climberFire = -650;//1215
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

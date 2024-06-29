@@ -138,15 +138,15 @@ public class Teleop extends OpMode {
             driveStrafe += Constants.Drivetrain.fixSpeedStrafe;
         }
 
-        backLeft = backDistanceSensors.getBLeftState();
-        backRight = backDistanceSensors.getBRightState();
-        backOffset = backRight - backLeft;
         if (align) {
+            backLeft = backDistanceSensors.getBLeftState();
+            backRight = backDistanceSensors.getBRightState();
+            backOffset = backRight - backLeft;
             //movement
-            if (Math.min(backLeft, backRight) > 12.5) {
-                driveForward -= 0.6;
+            if (Math.min(backLeft, backRight) > 11.5) {
+                driveForward -= 0.5;
             } else if (Math.max(backLeft, backRight) < 11) {
-                driveForward += 0.6;
+                driveForward += 0.5;
             }
             //starfing
             else if (backOffset > 7) {
@@ -243,7 +243,7 @@ public class Teleop extends OpMode {
         if (armFix) {
             outtake.presetArm(Constants.Arm.placePos);
             outtake.presetSlides(Constants.Slides.low);
-            outtake.holdBackClaw(true);
+            outtake.holdFrontClaw(true);
             outtake.holdFrontClaw(false);
         }
         telemetry.addData("Arm Position", outtake.getArmPosition());

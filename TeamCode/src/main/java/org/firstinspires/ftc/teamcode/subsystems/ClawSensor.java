@@ -124,10 +124,10 @@ public class ClawSensor {
 
     //Distances
     public boolean isFrontDistance() {
-        return (colorSensorFront.getDistance(DistanceUnit.INCH) <= Constants.ClawSensor.distanceLimit);
+        return (colorSensorFront.getDistance(DistanceUnit.INCH) <= Constants.ClawSensor.fDistanceLimit);
     }
     public boolean isBackDistance() {
-        return (colorSensorBack.getDistance(DistanceUnit.INCH) <= Constants.ClawSensor.distanceLimit);
+        return (colorSensorBack.getDistance(DistanceUnit.INCH) <= Constants.ClawSensor.bDistanceLimit);
     }
 
     public boolean isEmpty() {

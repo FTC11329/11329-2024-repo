@@ -84,7 +84,7 @@ public class RedRight4DC extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .lineToLinearHeading(new Pose2d(28.5, -24.25, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(28.5, -25.25, Math.toRadians(0)))
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdBackClaw(false);
                 })
@@ -152,18 +152,18 @@ public class RedRight4DC extends OpMode {
         Vector2d finalPlaceLocation3;
         if (barcodePosition == BarcodePosition.One) {
             finalPlaceLocation  = placePositionOne;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -6));
-            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(1, -12));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1, -7));
+            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(2.5, -12));
 
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlaceLocation  = placePositionTwo;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -4));
-            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(1, -11));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1, -7));
+            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(2.5, -11));
 
         } else if (barcodePosition == BarcodePosition.Three) {
             finalPlaceLocation  = placePositionThree;
-            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(0, -2));
-            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(0, -2));
+            finalPlaceLocation2 = placePositionOne.plus(new Vector2d(1, -7));
+            finalPlaceLocation3 = placePositionOne.plus(new Vector2d(2.5, -8));
 
         } else return;
 
@@ -207,7 +207,7 @@ public class RedRight4DC extends OpMode {
                     telemetry.update();
                 })
                 //Back For Another One**************************************
-                .lineToLinearHeading(pickupSpecial,
+                .lineToLinearHeading(pickupSpecial.plus(new Pose2d(1, 2)),
                         (displacement, pose, derivative, baseRobotVelocity) -> 32, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 32  //acc
                 )
@@ -303,7 +303,8 @@ public class RedRight4DC extends OpMode {
                 .addTemporalMarkerOffset(0.3, () -> {
                     outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
                 })
-                .forward(7)
+                .setReversed(false)
+                .lineToLinearHeading(new Pose2d(42, 10, Math.toRadians(1)))
                 .waitSeconds(1)
                 .build());
     }
