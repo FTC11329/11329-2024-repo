@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
+import org.firstinspires.ftc.teamcode.subsystems.BackDistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.utility.DriveSpeedEnum;
@@ -43,6 +44,9 @@ public class Teleop extends OpMode {
     boolean endgameToggle = false;
     boolean endgameDebounce = false;
     boolean goingToClaw = false;
+    double backLeft;
+    double backRight;
+    double backOffset;
 
     Plane plane;
     Lights lights;
@@ -52,6 +56,7 @@ public class Teleop extends OpMode {
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
+    BackDistanceSensors backDistanceSensors;
 
     @Override
     public void init() {
@@ -63,6 +68,7 @@ public class Teleop extends OpMode {
         drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
+        backDistanceSensors = new BackDistanceSensors(hardwareMap);
 
         outtake.holdClaw(false);
 
@@ -83,6 +89,7 @@ public class Teleop extends OpMode {
         double driveTurn = -gamepad1.right_stick_x;
         boolean slowStrafeLeft = gamepad1.dpad_left;
         boolean slowStrafeRight = gamepad1.dpad_right;
+        boolean align = gamepad1.b;
 
         boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
         boolean intakeOuttakeBool = gamepad2.x;
@@ -116,7 +123,7 @@ public class Teleop extends OpMode {
         boolean lowPresetBool = gamepad2.dpad_down;
         boolean intakePresetBool = gamepad2.dpad_left || gamepad1.dpad_down;
 
-        boolean endgameButton = gamepad1.b;
+        boolean endgameButton = gamepad1.x;
 
         //DRIVETRAIN
         DriveSpeedEnum driveSpeed;
@@ -127,10 +134,34 @@ public class Teleop extends OpMode {
         }
         if (slowStrafeLeft) {
             driveStrafe -= Constants.Drivetrain.fixSpeedStrafe;
-            driveForward -= Constants.Drivetrain.fixSpeedForward;
         } else if (slowStrafeRight) {
             driveStrafe += Constants.Drivetrain.fixSpeedStrafe;
-            driveForward -= Constants.Drivetrain.fixSpeedForward;
+        }
+
+        backLeft = backDistanceSensors.getBLeftState();
+        backRight = backDistanceSensors.getBRightState();
+        backOffset = backRight - backLeft;
+        if (align) {
+            //movement
+            if (Math.min(backLeft, backRight) > 12.5) {
+                driveForward -= 0.6;
+            } else if (Math.max(backLeft, backRight) < 11) {
+                driveForward += 0.6;
+            }
+            //starfing
+            else if (backOffset > 7) {
+                driveStrafe += 0.75;
+            } else if (backOffset < -7) {
+                driveStrafe -= 0.75;
+            }
+            //turning
+            else if (backOffset > 0.6) {
+                driveTurn -= 0.4;
+            } else if (backOffset < -0.6) {
+                driveTurn += 0.4;
+            }
+
+
         }
         drivetrain.drive(driveForward, driveStrafe, driveTurn, driveSpeed);
 
@@ -240,11 +271,6 @@ public class Teleop extends OpMode {
         }
         if (!flipDebounce && !flippingButton) {
             flipDebounce = true;
-        }
-
-        //for preset rotating the claw
-        if (gamepad1.x) {
-            outtake.setWristPos(1);
         }
 
         //for dropping pixels
@@ -439,18 +465,16 @@ public class Teleop extends OpMode {
 
         //TEMPORARY
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("endgame", endgameToggle);
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-        telemetry.addData("back", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
-        telemetry.addData("fron", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
 
-        telemetry.addData("climbed", climbed);
         telemetry.addData("climber pos", climberPos);
 
-        telemetry.addData("bak", backClawDropped);
-        telemetry.addData("fon", frontClawDropped);
 
-        telemetry.addData("claw pos", outtake.getTriedWristPos());
+        telemetry.addData("BL", backLeft);
+        telemetry.addData("BR", backRight);
+
+        telemetry.addData("Of", backOffset);
+
     }
 
     @Override

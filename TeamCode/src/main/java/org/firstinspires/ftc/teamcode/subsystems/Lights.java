@@ -11,32 +11,19 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Subsystem for controlling rev blinkin led
  */
 public class Lights {
-    RevBlinkinLedDriver smartLEDLeft;
-    RevBlinkinLedDriver smartLEDRight;
     DcMotor dumbLights;
 
     ElapsedTime elapsedTime = new ElapsedTime();
 
 
     public Lights(HardwareMap hardwareMap) {
-        smartLEDLeft = hardwareMap.get(RevBlinkinLedDriver.class, "sLedL");
-        smartLEDLeft = hardwareMap.get(RevBlinkinLedDriver.class, "sLedR");
-
         dumbLights = hardwareMap.get(DcMotor.class, "dumbLed");
         dumbLights.setDirection(DcMotorSimple.Direction.REVERSE);
         dumbLights.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    //Smart stuff
-    public void setPatternLeft(RevBlinkinLedDriver.BlinkinPattern blinkinPattern) {
-        smartLEDLeft.setPattern(blinkinPattern);
-    }
-    public void setPatternRight(RevBlinkinLedDriver.BlinkinPattern blinkinPattern) {
-        smartLEDRight.setPattern(blinkinPattern);
-    }
-
     //Dumb dump
-    //IMPORTANT ----- YOU HAVE TO USE setDumbLed BECAUSE THE POWER HAS TO BE *-1?
+    //IMPORTANT ----- YOU HAVE TO USE setDumbLed BECAUSE THE POWER HAS TO BE *-1???????
     public void setDumbLed(double power) {
         dumbLights.setPower(power);
     }

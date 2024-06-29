@@ -93,7 +93,7 @@ public class Constants {
 
     @Config
     public static class Extendo {
-        public static double extended = 0.54;
+        public static double extended = 0.59;
         public static double half = 0.235;
         public static double clearClimber = 0.25;
         public static double closed = 0.07;
@@ -114,7 +114,7 @@ public class Constants {
         public static double wrist5 = 6.0/9.0;
         public static double wrist6 = 8.0/9.0;
         public static double wrist7 = 1;
-        public static int msChange = 100; //TODO: change this
+        public static int msChange = 150; //TODO: change this
     }
 
     @Config
@@ -164,7 +164,7 @@ public class Constants {
         public static double armMax = 1;
         public static double armMin = 0;
 
-        public static double placePos = 0.706;
+        public static double placePos = 0.726;
         public static double autoArmDrop = 0.408;
         public static double intakePos = 0.150;// 105
 
