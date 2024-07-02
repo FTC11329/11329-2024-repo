@@ -32,7 +32,7 @@ public class Constants {
         public static Pose2d camOffsetBack = new Pose2d(3, -7.5, Math.toRadians(0));
         public static Pose2d camOffsetFront = new Pose2d(8.5, -5.25, Math.toRadians(0));
 
-        //regular tags
+        /*regular tags
         public static Pose2d tag1Pose = new Pose2d(62,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(62,35.5,0);
         public static Pose2d tag3Pose = new Pose2d(62,29.5,0);
@@ -47,7 +47,7 @@ public class Constants {
         public static Pose2d tag9Pose = new Pose2d(-70.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-70.5,40, Math.toRadians(180));
 
-        /*
+        */
         public static Pose2d tag1Pose = new Pose2d(86,41.5,0);
         public static Pose2d tag2Pose = new Pose2d(86,35.5,0);
         public static Pose2d tag3Pose = new Pose2d(86,29.5,0);
@@ -61,7 +61,7 @@ public class Constants {
 
         public static Pose2d tag9Pose = new Pose2d(-94.5,34.5, Math.toRadians(180));
         public static Pose2d tag10Pose= new Pose2d(-94.5,40, Math.toRadians(180));
-*/
+
         public static Pose2d tag11Pose = new Pose2d(86,6,0);
         public static Pose2d tag12Pose = new Pose2d(86,0,0);
         public static Pose2d tag13Pose = new Pose2d(86,-6,0);
@@ -70,7 +70,7 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.9;
-        public static double outake = -0.7;
+        public static double outake = -0.9;
 
         public static double intakeServoIntake = 0.9;
     }
@@ -93,7 +93,7 @@ public class Constants {
 
     @Config
     public static class Extendo {
-        public static double extended = 0.59;
+        public static double extended = 0.50;
         public static double half = 0.235;
         public static double clearClimber = 0.25;
         public static double closed = 0.07;
@@ -102,10 +102,10 @@ public class Constants {
 
     @Config
     public static class Claw {
-        public static double frontClawDrop = 0.119;
-        public static double frontClawHold = 0.345;
-        public static double backClawDrop = 0;
-        public static double backClawHold = 0.21;
+        public static double frontClawDrop = 0.204;
+        public static double frontClawHold = 0.555;
+        public static double backClawDrop = 0.24;
+        public static double backClawHold = 0.5555;
 
         public static double wrist1 = 0;
         public static double wrist2 = 2.0/9.0;
@@ -119,8 +119,8 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double fDistanceLimit = 0.5;
-        public static double bDistanceLimit = 0.6;
+        public static double fDistanceLimit = 1.0;//0.33 0.45 0.34 0.2
+        public static double bDistanceLimit = 1.0;//0.44, 0.74 0.8 0.5 0.56 0.7 0.5 1.5
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
         public static Vector3D whiteBack   = new Vector3D(1425, 2950, 3600);

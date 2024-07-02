@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.Constants;
 
 public class Outtake {
     private Arm arm;
-    private Claw claw;
+    public Claw claw;
     public Slides slides;
     public Extendo extendo;
     public ClawSensor clawSensor;

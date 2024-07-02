@@ -52,6 +52,9 @@ public class Claw {
     public void setFrontClawServo(double pos) {
         frontClawServo.setPosition(pos);
     }
+    public void setBackClawServo(double pos) {
+        backClawServo.setPosition(pos);
+    }
 
     public void periodic() {
     }
