@@ -377,7 +377,7 @@ public class ConstantCRIPathsBlue {
                     })
                     //1st pickup end
                     .waitSeconds(0.1)
-                    .forward(1.73)
+                    .forward(2.5)
                     .setReversed(true)
                     .addTemporalMarkerOffset(1.5, () -> {
                         intake.setIntakePower(Constants.Intake.outake, 0);
@@ -403,7 +403,7 @@ public class ConstantCRIPathsBlue {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                     })
                     .waitSeconds(0.1)
-                    .forward(1.73)
+                    .forward(2.5)
                     .setReversed(true)
                     .addTemporalMarkerOffset(1.5, () -> {
                         intake.setIntakePower(Constants.Intake.outake, 0);
@@ -454,7 +454,7 @@ public class ConstantCRIPathsBlue {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                     })
                     .waitSeconds(0.1)
-                    .forward(1.73)
+                    .forward(2.5)
                     .setReversed(true)
                     .addTemporalMarkerOffset(1.5, () -> {
                         intake.setIntakePower(Constants.Intake.outake, 0);
@@ -483,7 +483,7 @@ public class ConstantCRIPathsBlue {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                     })
                     .waitSeconds(0.1)
-                    .forward(1.73)
+                    .forward(2.5)
                     .setReversed(true)
                     .addTemporalMarkerOffset(1.5, () -> {
                         intake.setIntakePower(Constants.Intake.outake, 0);
@@ -513,7 +513,7 @@ public class ConstantCRIPathsBlue {
                     })
 
                     .waitSeconds(0.1)
-                    .forward(1.73)
+                    .forward(2.5)
                     .addTemporalMarkerOffset(0.5 , () -> {
                         outtake.presetSlides(0);
                     })

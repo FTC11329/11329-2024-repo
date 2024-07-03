@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Constants;
 
@@ -111,6 +110,9 @@ public class Outtake {
     public void createPresetThread(int slidePos, double armPos, int wristPos, double extend, boolean goingUp) {
         new PresetThread(this, slidePos, armPos, wristPos, extend, false, goingUp).start();
     }
+    public void createPresetThread(int slidePos, double armPos, int wristPos, double extend, boolean grabbed, boolean goingUp) {
+        new PresetThread(this, slidePos, armPos, wristPos, extend, grabbed, goingUp).start();
+    }
     public void createPresetThread(int slidePos, double armPos, int wristPos, boolean extend, boolean goingUp) {
         double rot;
         if (extend) {
@@ -137,7 +139,7 @@ public class Outtake {
 
     //Claw
     public void holdClaw(boolean hold) {
-        claw.setOpen(hold);
+        claw.holdClaw(hold);
     }
     public void holdFrontClaw(boolean hold) {
         claw.setFrontHold(hold);
@@ -220,7 +222,7 @@ class PresetThread extends Thread{
             outtake.presetArm(Constants.Arm.safeArmPos + 0.001);
             outtake.presetSlides(Constants.Slides.safeSlidePos + 100);
             outtake.setWristPos(wristPos);
-            outtake.holdClaw(false);
+            outtake.holdClaw(grabbed);
             outtake.extend(false);
             try {
                 sleep(500);

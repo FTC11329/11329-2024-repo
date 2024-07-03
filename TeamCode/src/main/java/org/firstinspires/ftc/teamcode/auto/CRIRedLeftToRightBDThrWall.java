@@ -23,11 +23,11 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 @Config
 public class CRIRedLeftToRightBDThrWall extends OpMode {
     boolean whiteLeft;
-    static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
-    static Vector2d finalPlacePos2 = new Vector2d(70, -10);
+    static Pose2d startingPose = new Pose2d(-64.25, -63, Math.toRadians(90));
+    static Vector2d finalPlacePos2 = new Vector2d(73, -15);
 
-    static Pose2d pickupSpecial = new Pose2d(-80.5,-39, Math.toRadians(180));
-    static Pose2d pickupSpecial2 = new Pose2d(-80.5,-39, Math.toRadians(180));
+    static Pose2d pickupSpecial = new Pose2d(-78,-37, Math.toRadians(180));
+    static Pose2d pickupSpecial2 = new Pose2d(-14,-12, Math.toRadians(135));//76, -32
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -48,6 +48,7 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
     ConstantCRIPathsRed.PlacePurplePaths placePurplePathsRed;
     ConstantCRIPathsRed.PickupWhitePixelStack pickupWhitePixelStack;
     ConstantCRIPathsRed.PlaceOnBackDrop placeOnBackDrop;
+    ConstantCRIPathsRed.ParkPath parkPath;
 
 
     public void init() {
@@ -60,10 +61,12 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
         drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
+        outtake.holdBackClaw(true);
 
         constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
+        parkPath = constantCRIPaths.parkPath;
         placeOnBackDrop = constantCRIPaths.placeOnBackDrop;
 
         //1**************************************************************************
@@ -122,8 +125,8 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
             placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
         }
 
-        pickupWhitePixelStack.BackDropToWallStack.run(restOfIt);
-        placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
+        pickupWhitePixelStack.BackDropToCenterStack.run(restOfIt);
+        placeOnBackDrop.CenterStackToCenterBD.run(restOfIt);
         restOfIt.waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());

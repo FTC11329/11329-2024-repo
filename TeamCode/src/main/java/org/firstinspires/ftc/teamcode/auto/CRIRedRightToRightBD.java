@@ -26,8 +26,8 @@ public class CRIRedRightToRightBD extends OpMode {
     static Pose2d startingPose = new Pose2d(41, -63, Math.toRadians(90));
     static Vector2d finalPlacePos2 = new Vector2d(70, -10);
 
-    static Pose2d pickupSpecial = new Pose2d(-80.5,-39, Math.toRadians(180));
-    static Pose2d pickupSpecial2 = new Pose2d(-80.5,-39, Math.toRadians(180));
+    static Pose2d pickupSpecial = new Pose2d(-74,-37, Math.toRadians(180));
+    static Pose2d pickupSpecial2 = pickupSpecial;
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -60,6 +60,7 @@ public class CRIRedRightToRightBD extends OpMode {
         drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
+        outtake.holdBackClaw(true);
 
         constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;

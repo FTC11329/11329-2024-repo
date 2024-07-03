@@ -22,9 +22,8 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 @Autonomous(name = "Red Center CRI", group = " Testing")
 @Config
 public class CRIRedCenterToCenterBD extends OpMode {
-    boolean whiteLeft;
     static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));
-    static Vector2d finalPlacePos2 = new Vector2d(70, -12);
+    static Vector2d finalPlacePos2 = new Vector2d(73, -15);
 
     static Pose2d pickupSpecial = new Pose2d(-16.5, -13, Math.toRadians(135));
     static Pose2d pickupSpecial2 = new Pose2d(-15,-10, Math.toRadians(135));
@@ -61,7 +60,6 @@ public class CRIRedCenterToCenterBD extends OpMode {
         drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
         distanceSensors = new DistanceSensors(hardwareMap);
-
         outtake.holdBackClaw(true);
 
         constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);

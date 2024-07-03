@@ -19,7 +19,7 @@ public class Claw {
 
         wristServo = hardwareMap.get(Servo.class, "wristClawServo");
         setWristPosition(1.0/3.0);
-        setOpen(false);
+        holdClaw(false);
     }
 
     public void setFrontHold(boolean hold) {
@@ -38,7 +38,7 @@ public class Claw {
         }
     }
 
-    public void setOpen(boolean open) {
+    public void holdClaw(boolean open) {
         setFrontHold(open);
         setBackHold(open);
     }
