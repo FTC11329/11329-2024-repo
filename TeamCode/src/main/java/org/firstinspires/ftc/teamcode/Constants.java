@@ -109,7 +109,7 @@ public class Constants {
 
         public static double wrist1 = 0;
         public static double wrist2 = 2.0/9.0;
-        public static double wrist3 = 1.0/3.0;
+        public static double wrist3 = 0.335333333333333333333333333333333333333333333333333333333333333;
         public static double wrist4 = 4.0/9.0;
         public static double wrist5 = 6.0/9.0;
         public static double wrist6 = 8.0/9.0;
@@ -142,10 +142,10 @@ public class Constants {
 
     @Config
     public static class Slides {
-        public static int manualSlidePower = 70;
+        public static int manualSlidePower = 90;
         public static double slowManualSlidePower = 0.9; //this times manual slide power is the actual speed
 
-        public static int whileIntaking = 25;
+        public static int whileIntaking = 15;
 
         public static int intake = 0;
         public static int autoPurple = 150;

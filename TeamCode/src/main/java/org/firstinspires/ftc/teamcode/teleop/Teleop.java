@@ -243,7 +243,9 @@ public class Teleop extends OpMode {
             outtake.presetArm(Constants.Arm.placePos);
             outtake.presetSlides(Constants.Slides.low);
             outtake.holdFrontClaw(true);
-            outtake.holdFrontClaw(false);
+            outtake.holdBackClaw(false);
+            frontClawDropped = false;
+            backClawDropped = true;
         }
         telemetry.addData("Arm Position", outtake.getArmPosition());
 
@@ -365,7 +367,7 @@ public class Teleop extends OpMode {
 
         //PRE-SETS
         goingPreset = highPresetBool || medPresetBool || lowPresetBool || intakePresetBool;
-        if (goingPreset && presetThreadDebounce && !isClimberUp && !endgameToggle) {
+        if (goingPreset && presetThreadDebounce && !isClimberUp && !endgameToggle && !atPreset) {
             if (highPresetBool && !isDroneing) {
                 intakeLevel = 6;
                 atPreset = true;
@@ -407,6 +409,29 @@ public class Teleop extends OpMode {
                 } else if (outtake.isBackSensor()) {
                     backClawDropped = false;
                 }
+
+            } else if (intakePresetBool && !isDroneing) {
+                outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
+                intakeLevel = 6;
+                atPreset = false;
+                backClawDropped = true;
+                frontClawDropped = true;
+            }
+            presetThreadDebounce = false;
+
+
+        } else if (goingPreset && presetThreadDebounce && !isClimberUp && !endgameToggle && atPreset) {
+            if (highPresetBool && !isDroneing) {
+                intakeLevel = 6;
+                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
+
+            } else if (medPresetBool && !isDroneing) {
+                intakeLevel = 6;
+                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
+
+            } else if (lowPresetBool && !isDroneing) {
+                intakeLevel = 6;
+                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
 
             } else if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);

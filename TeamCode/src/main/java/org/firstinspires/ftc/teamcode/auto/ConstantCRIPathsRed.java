@@ -23,6 +23,10 @@ public class ConstantCRIPathsRed {
 
     Vector2d centerBDPlacePos;
 
+    Vector2d finalPlacePos1Right = new Vector2d(73, -35.25);
+    Vector2d finalPlacePos2Right = new Vector2d(73, -35.25);
+    Vector2d finalPlacePos3Right = new Vector2d(73, -40);
+
     Vector2d finalPlacePos1Center = new Vector2d(70, -32.25);
     Vector2d finalPlacePos2Center = new Vector2d(70, -32.25);
     Vector2d finalPlacePos3Center = new Vector2d(70, -37);
@@ -333,7 +337,7 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                     )
-                    .lineToLinearHeading(new Pose2d(53, -30, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(59, -30, Math.toRadians(0)))
                     .addTemporalMarkerOffset(0, () -> {
                         outtake.holdBackClaw(false);
                     })
@@ -425,10 +429,10 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                     )
-                    .lineTo(new Vector2d(-72, -55))
-                    .lineToLinearHeading(new Pose2d(-73, -55, Math.toRadians(180)))
+                    .lineTo(new Vector2d(-72, -60))//was -55y
+                    .lineToLinearHeading(new Pose2d(-73, -55, Math.toRadians(125)))
                     .resetConstraints()
-                    .addTemporalMarkerOffset(0, () -> {
+                    .addTemporalMarkerOffset(0.25, () -> {
                         double distance = 30.0;
                         while (distance > 15.0) {
                             Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
@@ -546,6 +550,118 @@ public class ConstantCRIPathsRed {
             this.specialIntake = specialIntake;
         }
         //1*****************************************************************************************
+        SequenceFunction rightPurpleTo1stPlacePos = (prev) -> {//untested
+            prev
+                    .setReversed(true)
+                    .addTemporalMarkerOffset(0, () -> {
+                        double distance = 30.0;
+                        while (distance > 15.0) {
+                            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                            boolean present = optionalPose.isPresent();
+                            if (present) {
+                                distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                                if (distance < 15.0) {
+                                    drivetrain.setPoseEstimate(optionalPose.get());
+                                }
+                            }
+                            telemetry.addData("distance = ", distance);
+                            telemetry.addData("did see one", optionalPose.isPresent());
+                            telemetry.update();
+                        }
+                    })
+                    .splineTo(finalPlacePos1Right, Math.toRadians(0))//final place pos 1*******************
+                    .addTemporalMarkerOffset(-2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
+                    })
+                    .addTemporalMarkerOffset(0.2, () -> {
+                        outtake.holdClaw(false);
+                        outtake.extend(false);
+                    })
+                    .setReversed(false)
+                    .addTemporalMarkerOffset(0.05, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                    })
+                    .waitSeconds(0.2);
+        };
+        SequenceFunction rightPurpleTo2stPlacePos = (prev) -> {//untested
+            prev
+                    .setReversed(true)
+                    .addTemporalMarkerOffset(0, () -> {
+                        double distance = 30.0;
+                        while (distance > 15.0) {
+                            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                            boolean present = optionalPose.isPresent();
+                            if (present) {
+                                distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                                if (distance < 15.0) {
+                                    drivetrain.setPoseEstimate(optionalPose.get());
+                                }
+                            }
+                            telemetry.addData("distance = ", distance);
+                            telemetry.addData("did see one", optionalPose.isPresent());
+                            telemetry.update();
+                        }
+                    })
+                    .splineTo(finalPlacePos2Right, Math.toRadians(0))//final place pos 1*******************
+                    .addTemporalMarkerOffset(-2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
+                    })
+                    .addTemporalMarkerOffset(0.2, () -> {
+                        outtake.holdClaw(false);
+                        outtake.extend(false);
+                    })
+                    .setReversed(false)
+                    .addTemporalMarkerOffset(0.05, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                    })
+                    .waitSeconds(0.2);
+        };
+        SequenceFunction rightPurpleTo3stPlacePos = (prev) -> {//untested
+            prev
+                    .setReversed(true)
+                    .addTemporalMarkerOffset(0, () -> {
+                        double distance = 30.0;
+                        while (distance > 15.0) {
+                            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                            boolean present = optionalPose.isPresent();
+                            if (present) {
+                                distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                                if (distance < 15.0) {
+                                    drivetrain.setPoseEstimate(optionalPose.get());
+                                }
+                            }
+                            telemetry.addData("distance = ", distance);
+                            telemetry.addData("did see one", optionalPose.isPresent());
+                            telemetry.update();
+                        }
+                    })
+                    .splineTo(finalPlacePos3Right, Math.toRadians(0))//final place pos 1*******************
+                    .addTemporalMarkerOffset(-2, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
+                    })
+                    .addTemporalMarkerOffset(0.2, () -> {
+                        outtake.holdClaw(false);
+                        outtake.extend(false);
+                    })
+                    .setReversed(false)
+                    .addTemporalMarkerOffset(0.05, () -> {
+                        intake.setIntakePower(0, 0);
+                        intake.setIntakeServoPower(0);
+                        outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                    })
+                    .waitSeconds(0.2);
+        };
+
         SequenceFunction WallStackTo1stPlacePos = (prev) -> {//untested
             prev
                     .lineToSplineHeading(new Pose2d(-72, -50, Math.toRadians(0)))
