@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "Red Right 4 + 2 D C", group = " Competition")
+@Autonomous(name = "Red Right 4 + 2 D C", group = "zCompetition")
 @Config
 public class RedRight4DC extends OpMode {
     static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));

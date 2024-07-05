@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
-@Autonomous(name = "Red Center CRI", group = " Testing")
+@Autonomous(name = "Red Center CRI", group = "Testing")
 @Config
 public class CRIRedCenterToCenterBD extends OpMode {
     static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));

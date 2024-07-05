@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
-@Autonomous(name = "Red Right Wall CRI", group = " Testing")
+@Autonomous(name = "Red Right Wall CRI", group = "Testing")
 @Config
 public class CRIRedRightToRightBD extends OpMode {
     boolean whiteLeft;

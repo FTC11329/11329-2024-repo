@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Constants;
+import org.firstinspires.ftc.teamcode.auto.ConstantCRIPathsRed;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
@@ -19,11 +20,13 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
-@Autonomous(name = "Red Left Wall CRI", group = "Testing")
+import java.util.Optional;
+
+@Autonomous(name = "A Red Left Wall CRI", group = " Testing")
 @Config
-public class CRIRedLeftToRightBDThrWall extends OpMode {
-    boolean whiteLeft;
+public class ACRIRedLeftWall extends OpMode {
     static Pose2d startingPose = new Pose2d(-64.25, -63, Math.toRadians(90));
+    static Vector2d finalPlacePos;
     static Vector2d finalPlacePos2 = new Vector2d(73, -15);
 
     static Pose2d pickupSpecial = new Pose2d(-78,-37, Math.toRadians(180));
@@ -118,15 +121,88 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
 
 
         if (barcodePosition == BarcodePosition.One) {
-            placeOnBackDrop.WallStackTo1stPlacePos.run(restOfIt);
-        } else if (barcodePosition == BarcodePosition.Two) {
-            placeOnBackDrop.WallStackTo2ndPlacePos.run(restOfIt);
-        } else {
-            placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
-        }
+            finalPlacePos = new Vector2d(72, -28.75); //left wrong
+            finalPlacePos = new Vector2d(72, -31.75); //right
 
-        pickupWhitePixelStack.BackDropToWallStack.run(restOfIt);
-        placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
+        } else if (barcodePosition == BarcodePosition.Two) {
+            finalPlacePos = new Vector2d(72, -33.75); //left
+            finalPlacePos = new Vector2d(72, -36.75); //right wrong
+
+        } else {//if barcodePosition == BarcodePosition.Three
+            finalPlacePos = new Vector2d(72, -38.5); //left
+            finalPlacePos = new Vector2d(72, -41.5); //right wrong
+
+        }
+        restOfIt
+                .addTemporalMarkerOffset(0, () -> {
+                    cameras.setCameraSideThreaded(true);
+                })
+                .lineToSplineHeading(new Pose2d(-72, -57, Math.toRadians(180)))
+                .splineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(180)), Math.toRadians(0))
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                )
+                .splineTo(new Vector2d(0,-57), Math.toRadians(0))
+                .splineTo(new Vector2d(50,-50), Math.toRadians(0))
+                .addTemporalMarkerOffset(-2, () -> {
+                    outtake.holdClaw(true);
+                })
+                .resetConstraints()
+                .splineToLinearHeading(new Pose2d(60,-43, Math.toRadians(215)), Math.toRadians(45))
+                .waitSeconds(0.5)
+                .addTemporalMarkerOffset(0, () -> {
+                    double distance = 30.0;
+                    while (distance > 25.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
+                        boolean present = optionalPose.isPresent();
+                        if (present) {
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            if (distance < 25.0) {
+                                drivetrain.setPoseEstimate(optionalPose.get());
+                            }
+                        }
+                        telemetry.addData("distance = ", distance);
+                        telemetry.addData("did see one", optionalPose.isPresent());
+                        telemetry.update();
+                    }
+                })
+                .waitSeconds(0.2)
+                .addTemporalMarkerOffset(0, () -> {
+                    double distance = 30.0;
+                    while (distance > 25.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
+                        boolean present = optionalPose.isPresent();
+                        if (present) {
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            if (distance < 25.0) {
+                                drivetrain.setPoseEstimate(optionalPose.get());
+                            }
+                        }
+                        telemetry.addData("distance = ", distance);
+                        telemetry.addData("did see one", optionalPose.isPresent());
+                        telemetry.update();
+                    }
+                })
+                .splineTo(finalPlacePos2, Math.toRadians(0))
+                .addTemporalMarkerOffset(-2, () -> {
+                    intake.setIntakePower(0, 0);
+                    intake.setIntakeServoPower(0);
+                    outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
+                })
+                .addTemporalMarkerOffset(0, () -> {
+                    outtake.holdClaw(false);
+                    outtake.extend(false);
+                })
+                .setReversed(false)
+                .addTemporalMarkerOffset(0.5, () -> {
+                    intake.setIntakePower(0, 0);
+                    intake.setIntakeServoPower(0);
+                    outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
+                })
+                .lineTo(new Vector2d(70, -50))
+                .lineTo(new Vector2d(80, -50));
+
         restOfIt.waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());

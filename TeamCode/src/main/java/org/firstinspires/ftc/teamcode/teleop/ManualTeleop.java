@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.Outtake;
 import org.firstinspires.ftc.teamcode.subsystems.Plane;
 import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 
-@TeleOp(name = "Manual Demo", group = "Allen op mode")
+@TeleOp(name = "Manual Demo (don't run)", group = "z not Allen op mode")
 public class ManualTeleop extends OpMode {
     ElapsedTime elapsedTime = new ElapsedTime();
     boolean extended = false;

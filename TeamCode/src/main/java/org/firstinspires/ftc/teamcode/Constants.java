@@ -148,7 +148,7 @@ public class Constants {
         public static int whileIntaking = 15;
 
         public static int intake = 0;
-        public static int autoPurple = 150;
+        public static int autoPurple = 200;
         public static int superLow = 310;
         public static int low = 850;
         public static int med = 1800;
