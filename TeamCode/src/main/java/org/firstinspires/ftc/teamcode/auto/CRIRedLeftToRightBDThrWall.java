@@ -27,7 +27,7 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
     static Vector2d finalPlacePos2 = new Vector2d(73, -15);
 
     static Pose2d pickupSpecial = new Pose2d(-78,-37, Math.toRadians(180));
-    static Pose2d pickupSpecial2 = new Pose2d(-14,-12, Math.toRadians(135));//76, -32
+    static Pose2d pickupSpecial2 = new Pose2d(-75,-32, Math.toRadians(180));
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -125,8 +125,8 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
             placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
         }
 
-        pickupWhitePixelStack.BackDropToCenterStack.run(restOfIt);
-        placeOnBackDrop.CenterStackToCenterBD.run(restOfIt);
+        pickupWhitePixelStack.BackDropToWallStack.run(restOfIt);
+        placeOnBackDrop.WallStackTo3rdPlacePos.run(restOfIt);
         restOfIt.waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());

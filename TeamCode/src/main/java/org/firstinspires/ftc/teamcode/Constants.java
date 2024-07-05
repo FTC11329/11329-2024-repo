@@ -70,9 +70,9 @@ public class Constants {
     @Config
     public static class Intake {
         public static double intake = 0.9;
-        public static double outake = -0.9;
+        public static double outake = -0.7;
 
-        public static double intakeServoIntake = 0.9;
+        public static double intakeServoIntake = 1;
     }
 
     @Config
@@ -109,7 +109,7 @@ public class Constants {
 
         public static double wrist1 = 0;
         public static double wrist2 = 2.0/9.0;
-        public static double wrist3 = 0.335333333333333333333333333333333333333333333333333333333333333;
+        public static double wrist3 = 0.3353333333333333333333333333333333333333333333333333333333333333;
         public static double wrist4 = 4.0/9.0;
         public static double wrist5 = 6.0/9.0;
         public static double wrist6 = 8.0/9.0;
@@ -119,7 +119,7 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double fDistanceLimit = 1.0;//0.33 0.45 0.34 0.2
+        public static double fDistanceLimit = 0.8;//0.33 0.45 0.34 0.2
         public static double bDistanceLimit = 1.0;//0.44, 0.74 0.8 0.5 0.56 0.7 0.5 1.5
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
@@ -150,11 +150,11 @@ public class Constants {
         public static int intake = 0;
         public static int autoPurple = 150;
         public static int superLow = 310;
-        public static int low = 850;//850
-        public static int med = 1800;//1800
-        public static int high = 3000;//3000
+        public static int low = 850;
+        public static int med = 1800;
+        public static int high = 3000;
 
-        public static int safeSlidePos = 100;
+        public static int safeSlidePos = 175;
 
         public static int slideMax = 3200;
         public static int slideMin = -5;

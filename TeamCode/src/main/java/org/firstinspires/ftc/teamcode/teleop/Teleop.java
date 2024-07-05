@@ -46,6 +46,7 @@ public class Teleop extends OpMode {
     double backLeft;
     double backRight;
     double backOffset;
+    double intakeDroneTime = 2140000000;
 
     Plane plane;
     Lights lights;
@@ -240,8 +241,7 @@ public class Teleop extends OpMode {
         //ARM
         outtake.manualArm(armPower);
         if (armFix) {
-            outtake.presetArm(Constants.Arm.placePos);
-            outtake.presetSlides(Constants.Slides.low);
+            outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 3, true, true, true);
             outtake.holdFrontClaw(true);
             outtake.holdBackClaw(false);
             frontClawDropped = false;
@@ -313,6 +313,19 @@ public class Teleop extends OpMode {
                 }
             }
         }
+        //PLANE
+        if (planeFire) {
+            plane.fire();
+            intakeDroneTime = elapsedTime.milliseconds() + 250;
+        } else {
+            plane.hold();
+        }
+        if (elapsedTime.milliseconds() > intakeDroneTime) {
+            intakeDroneTime = 2140000000;
+            intakePresetBool = true;
+            climberDownBool = true;
+            outtake.holdClaw(false);
+        }
 
         //CLIMBER
         if (climberUpBool && !climberDebounce && !climbed) {
@@ -339,7 +352,7 @@ public class Teleop extends OpMode {
         climber.setPos(climberPos);
 
         //makes you have to hold the button in to make the climber go up
-        if (climberUpBool && (elapsedTime.milliseconds() - startClimb > 300)) {
+        if (climberUpBool && (elapsedTime.milliseconds() - startClimb > 100)) {
             climberPos = Constants.Climber.climb;
             climbed = true;
             isClimberUp = true;
@@ -356,13 +369,6 @@ public class Teleop extends OpMode {
 
         if (!climberUpBool) {
             climberDebounce = false;
-        }
-
-        //PLANE
-        if (planeFire) {
-            plane.fire();
-        } else {
-            plane.hold();
         }
 
         //PRE-SETS
@@ -484,19 +490,15 @@ public class Teleop extends OpMode {
         }
 
         outtake.periodic();
-        outtake.manualSlides(slidePower, overwriteBool);
+        if (outtake.getSlideTargetPosition() != Constants.Slides.safeSlidePos + 100) {
+            outtake.manualSlides(slidePower, overwriteBool);
+        }
 
 
         //TEMPORARY
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-
         telemetry.addData("climber pos", climberPos);
-
-
-        telemetry.addData("F", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
-        telemetry.addData("B", outtake.clawSensor.getBackDistance (DistanceUnit.INCH));
-
     }
 
     @Override

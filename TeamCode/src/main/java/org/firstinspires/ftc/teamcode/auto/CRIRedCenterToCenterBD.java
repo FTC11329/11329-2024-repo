@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 @Config
 public class CRIRedCenterToCenterBD extends OpMode {
     static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));
-    static Vector2d finalPlacePos2 = new Vector2d(73, -15);
+    static Vector2d finalPlacePos2 = new Vector2d(73, -12);
 
     static Pose2d pickupSpecial = new Pose2d(-16.5, -13, Math.toRadians(135));
     static Pose2d pickupSpecial2 = new Pose2d(-15,-10, Math.toRadians(135));

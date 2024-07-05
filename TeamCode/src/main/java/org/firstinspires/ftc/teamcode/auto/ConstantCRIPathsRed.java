@@ -27,9 +27,9 @@ public class ConstantCRIPathsRed {
     Vector2d finalPlacePos2Right = new Vector2d(73, -35.25);
     Vector2d finalPlacePos3Right = new Vector2d(73, -40);
 
-    Vector2d finalPlacePos1Center = new Vector2d(70, -32.25);
-    Vector2d finalPlacePos2Center = new Vector2d(70, -32.25);
-    Vector2d finalPlacePos3Center = new Vector2d(70, -37);
+    Vector2d finalPlacePos1Center = new Vector2d(70, -31.75);
+    Vector2d finalPlacePos2Center = new Vector2d(70, -33.75);
+    Vector2d finalPlacePos3Center = new Vector2d(70, -38.5);
 
     Vector2d finalPlacePos1Left = new Vector2d(75, -35.25);
     Vector2d finalPlacePos2Left = new Vector2d(75, -41.5);
@@ -242,9 +242,9 @@ public class ConstantCRIPathsRed {
         };
         SequenceFunction CenterPlacePos2 = (prev) -> {
             prev
-                    .lineToSplineHeading(new Pose2d(-13, -36, Math.toRadians(180)))
-                    .lineToSplineHeading(new Pose2d(-12.5, -24, Math.toRadians(180)))
-                    .lineToSplineHeading(new Pose2d(-16, -14, Math.toRadians(145)))
+                    .splineToSplineHeading(new Pose2d(-13, -36, Math.toRadians(180)), Math.toRadians(90))
+                    .splineToSplineHeading(new Pose2d(-12.5, -24, Math.toRadians(180)), Math.toRadians(90))
+                    .splineToSplineHeading(new Pose2d(-16, -14, Math.toRadians(145)), Math.toRadians(90))
 
                     .addTemporalMarkerOffset(-0.5, () -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
@@ -856,22 +856,6 @@ public class ConstantCRIPathsRed {
                     .waitSeconds(0.2)
                     .addTemporalMarkerOffset(0, () -> {
                         double distance = 30.0;
-                        while (distance > 25.0) {
-                            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
-                            boolean present = optionalPose.isPresent();
-                            if (present) {
-                                distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
-                                if (distance < 25.0) {
-                                    drivetrain.setPoseEstimate(optionalPose.get());
-                                }
-                            }
-                            telemetry.addData("distance = ", distance);
-                            telemetry.addData("did see one", optionalPose.isPresent());
-                            telemetry.update();
-                        }
-                    })
-                    .addTemporalMarkerOffset(0, () -> {
-                        double distance = 30.0;
                         while (distance > 15.0) {
                             Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                             boolean present = optionalPose.isPresent();
@@ -932,7 +916,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarkerOffset(-2, () -> {
                         intake.setIntakePower(0, 0);
                         intake.setIntakeServoPower(0);
-                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
+                        outtake.createPresetThread(Constants.Slides.superLow + 300, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
                     })
                     .addTemporalMarkerOffset(0.2, () -> {
                         outtake.holdClaw(false);
@@ -975,7 +959,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarkerOffset(-2, () -> {
                         intake.setIntakePower(0, 0);
                         intake.setIntakeServoPower(0);
-                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
+                        outtake.createPresetThread(Constants.Slides.superLow + 300, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
                     })
                     .addTemporalMarkerOffset(0.05, () -> {
                         outtake.holdClaw(false);
@@ -1018,7 +1002,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarkerOffset(-2, () -> {
                         intake.setIntakePower(0, 0);
                         intake.setIntakeServoPower(0);
-                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
+                        outtake.createPresetThread(Constants.Slides.superLow + 300, Constants.Arm.placePos, 5, Constants.Extendo.half, true);
                     })
                     .addTemporalMarkerOffset(0.05, () -> {
                         outtake.holdClaw(false);
