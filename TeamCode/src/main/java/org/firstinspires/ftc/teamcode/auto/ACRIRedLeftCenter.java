@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A CRI Red Left Center", group = " Testing")
+@Autonomous(name = "A Red Left Center CRI", group = " Testing")
 @Config
 public class ACRIRedLeftCenter extends OpMode {
     static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));

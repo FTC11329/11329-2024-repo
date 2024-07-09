@@ -27,10 +27,10 @@ import java.util.Optional;
 public class ACRIRedLeftWall extends OpMode {
     static Pose2d startingPose = new Pose2d(-64.25, -63, Math.toRadians(90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(73, -15);
 
     static Pose2d pickupSpecial = new Pose2d(-78,-37, Math.toRadians(180));
-    static Pose2d pickupSpecial2 = new Pose2d(-75,-32, Math.toRadians(180));
+
+    int wristRot;
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -66,7 +66,7 @@ public class ACRIRedLeftWall extends OpMode {
         distanceSensors = new DistanceSensors(hardwareMap);
         outtake.holdBackClaw(true);
 
-        constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, pickupSpecial2, finalPlacePos2);
+        constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, pickupSpecial, new Pose2d(0,0, Math.toRadians(0)), new Vector2d(0,0));
         placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
         parkPath = constantCRIPaths.parkPath;
@@ -121,16 +121,15 @@ public class ACRIRedLeftWall extends OpMode {
 
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(72, -28.75); //left wrong
-            finalPlacePos = new Vector2d(72, -31.75); //right
-
+            finalPlacePos = new Vector2d(70, -35); //wrong
+            wristRot = 5;
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(72, -33.75); //left
-            finalPlacePos = new Vector2d(72, -36.75); //right wrong
+            finalPlacePos = new Vector2d(70, -41); // wrong
+            wristRot = 5;
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Vector2d(72, -38.5); //left
-            finalPlacePos = new Vector2d(72, -41.5); //right wrong
+            finalPlacePos = new Vector2d(70, -44); //wrong
+            wristRot = 1;
 
         }
         restOfIt
@@ -144,7 +143,7 @@ public class ACRIRedLeftWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
                 .splineTo(new Vector2d(0,-57), Math.toRadians(0))
-                .splineTo(new Vector2d(50,-50), Math.toRadians(0))
+                .splineTo(new Vector2d(50,-45), Math.toRadians(0))
                 .addTemporalMarkerOffset(-2, () -> {
                     outtake.holdClaw(true);
                 })
@@ -184,11 +183,11 @@ public class ACRIRedLeftWall extends OpMode {
                         telemetry.update();
                     }
                 })
-                .splineTo(finalPlacePos2, Math.toRadians(0))
+                .splineTo(finalPlacePos, Math.toRadians(0))
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.superLow + 200, Constants.Arm.placePos, wristRot, Constants.Extendo.extended, true);
                 })
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdClaw(false);
@@ -200,8 +199,8 @@ public class ACRIRedLeftWall extends OpMode {
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
                 })
-                .lineTo(new Vector2d(70, -50))
-                .lineTo(new Vector2d(80, -50));
+                .lineTo(new Vector2d(70, -64))
+                .lineTo(new Vector2d(85, -64));
 
         restOfIt.waitSeconds(10);
 

@@ -147,7 +147,7 @@ public class Constants {
 
         public static int whileIntaking = 15;
 
-        public static int intake = 0;
+        public static int intake = -4;
         public static int autoPurple = 200;
         public static int superLow = 310;
         public static int low = 850;
@@ -176,11 +176,11 @@ public class Constants {
 
     @Config
     public static class Climber {
-        public static double manualClimberPower = 50;
+        public static double manualClimberPower = 25;
 
 
         public static int down = 0;
-        public static int climberFire = -650;//1215
+        public static int climberFire = -1350;//650 //1200 far lineup under truss with allience marker on line
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

@@ -317,6 +317,8 @@ public class Teleop extends OpMode {
         if (planeFire) {
             plane.fire();
             intakeDroneTime = elapsedTime.milliseconds() + 250;
+        }else if (gamepad1.back) { //REMOVEEEEEEEEEEEEEE
+            plane.fire();
         } else {
             plane.hold();
         }

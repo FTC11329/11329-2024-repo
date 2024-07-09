@@ -233,13 +233,19 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarkerOffset(0.15, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
+                    .addTemporalMarkerOffset(0.5, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    })
                     .waitSeconds(0.15)
-                    .setReversed(true)
-                    .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(180)), Math.toRadians(0));
+                    .turn(Math.toRadians(90))
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,0, 0)));
         };
         SequenceFunction CenterPlacePos2 = (prev) -> {
             prev
-                    .lineToLinearHeading(new Pose2d(-8, -36, Math.toRadians(-90)))
+                    .lineToSplineHeading(new Pose2d(-13, -36, Math.toRadians(180)))
+                    .lineToSplineHeading(new Pose2d(-12.5, -24, Math.toRadians(180)))
+                    .lineToSplineHeading(new Pose2d(-16, -14, Math.toRadians(145)))
+
                     .addTemporalMarkerOffset(-0.5, () -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
@@ -250,27 +256,35 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
+                    .addTemporalMarkerOffset(0.5, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    })
                     .waitSeconds(0.15)
-                    .setReversed(true)
-                    .splineToSplineHeading(new Pose2d(12, -55, Math.toRadians(180)), Math.toRadians(0));
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,0, 125)));
         };
         SequenceFunction CenterPlacePos3 = (prev) -> {
             prev
-                    .lineToLinearHeading(new Pose2d(0, -30, Math.toRadians(-90)))
-                    .splineTo(new Vector2d(1, -50), Math.toRadians(-90))
-                    .addTemporalMarkerOffset(-0.5, () -> {
-                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, true, true, true);
+                    .setConstraints(
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                    )
+                    .addTemporalMarker(() -> {
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .waitSeconds(0.2)
-                    .addTemporalMarkerOffset(0, () -> {
+                    .lineToLinearHeading(new Pose2d(-14, -33, Math.toRadians(180)))
+                    .waitSeconds(0.1)
+                    .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
-                    .addTemporalMarkerOffset(0.1, () -> {
+                    .addTemporalMarkerOffset(0.15, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
                     .waitSeconds(0.15)
-                    .setReversed(true)
-                    .lineToLinearHeading(new Pose2d(12, -55, Math.toRadians(180)));
+                    .turn(Math.toRadians(-90))
+                    .addTemporalMarkerOffset(0, () -> {
+                        specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
+                    })
+                    .splineToLinearHeading(pickupSpecial.plus(new Pose2d(4,0, 0)), Math.toRadians(90));
         };
         //Right **************************************************************************************************************************************************************************************************************************************
 
@@ -283,7 +297,7 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                     )
-                    .lineToLinearHeading(new Pose2d(45, -34.5, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(47, -34.5, Math.toRadians(0)))
                     .addTemporalMarkerOffset(0, () -> {
                         outtake.holdBackClaw(false);
                     })
