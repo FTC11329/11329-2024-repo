@@ -102,7 +102,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-58, -15, Math.toRadians(90)))
+                    .lineToLinearHeading(new Pose2d(-63, -15, Math.toRadians(90)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
@@ -113,8 +113,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarkerOffset(0.5, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .waitSeconds(0.15)
-                    .lineToLinearHeading((new Pose2d(-61,-15, Math.toRadians(180))));
+                    .waitSeconds(0.15);
         };
         SequenceFunction LeftPlacePos3Center = (prev) -> { //untested
             prev
@@ -134,12 +133,9 @@ public class ConstantCRIPathsRed {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
                     .waitSeconds(0.15)
-                    .turn(Math.toRadians(-90))
                     .addTemporalMarkerOffset(0, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
-                    })
-                    .lineToLinearHeading((new Pose2d(-61,-15, Math.toRadians(180))));
-
+                    });
         };
 
         SequenceFunction LeftPlacePos1Left = (prev) -> {//untested
@@ -163,7 +159,6 @@ public class ConstantCRIPathsRed {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .turn(Math.toRadians(90))
                     .lineToLinearHeading(pickupSpecial);
 
         };
@@ -196,22 +191,22 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                     )
-                    .addTemporalMarker(() -> {
+                    .addTemporalMarkerOffset(0.2, () -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-62, -35, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-60, -35, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
-                    .addTemporalMarkerOffset(0.15, () -> {
+                    .addTemporalMarkerOffset(0.2, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
-                    .waitSeconds(0.15)
+                    .waitSeconds(0.2)
                     .addTemporalMarkerOffset(0, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .lineToLinearHeading(pickupSpecial);
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(-1, 0, 0)));
 
         };
         //Center **************************************************************************************************************************************************************************************************************************************

@@ -26,7 +26,7 @@ import java.util.Optional;
 @Config
 public class ACRIRedLeftWall extends OpMode {
     static Pose2d startingPose = new Pose2d(-64.25, -63, Math.toRadians(90));
-    static Vector2d finalPlacePos;
+    static Pose2d finalPlacePos;
 
     static Pose2d pickupSpecial = new Pose2d(-78,-37, Math.toRadians(180));
 
@@ -105,7 +105,7 @@ public class ACRIRedLeftWall extends OpMode {
 
         drivetrain.setPoseEstimate(startingPose);
 
-        TrajectorySequence placeSpikeMarkActual = null;
+        TrajectorySequence placeSpikeMarkActual;
 
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMarkActual = placeSpikeMark1.build();
@@ -121,14 +121,14 @@ public class ACRIRedLeftWall extends OpMode {
 
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(70, -35); //wrong
+            finalPlacePos = new Pose2d(68, -34, Math.toRadians(180));
             wristRot = 5;
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(70, -41); // wrong
+            finalPlacePos = new Pose2d(68, -39.5, Math.toRadians(180));
             wristRot = 5;
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Vector2d(70, -44); //wrong
+            finalPlacePos = new Pose2d(68, -42, Math.toRadians(180));
             wristRot = 1;
 
         }
@@ -137,18 +137,21 @@ public class ACRIRedLeftWall extends OpMode {
                     cameras.setCameraSideThreaded(true);
                 })
                 .lineToSplineHeading(new Pose2d(-72, -57, Math.toRadians(180)))
-                .splineToSplineHeading(new Pose2d(-60, -60, Math.toRadians(180)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-60, -57, Math.toRadians(180)), Math.toRadians(0))
                 .setConstraints(
                         (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
-                .splineTo(new Vector2d(0,-57), Math.toRadians(0))
+                .splineTo(new Vector2d(0,-55), Math.toRadians(0))
                 .splineTo(new Vector2d(50,-45), Math.toRadians(0))
+                .addTemporalMarkerOffset(-2.5, () -> {
+                    outtake.presetSlides(-300);
+                })
                 .addTemporalMarkerOffset(-2, () -> {
                     outtake.holdClaw(true);
                 })
                 .resetConstraints()
-                .splineToLinearHeading(new Pose2d(60,-43, Math.toRadians(215)), Math.toRadians(45))
+                .splineToLinearHeading(new Pose2d(60,-43, Math.toRadians(215)), Math.toRadians(0))
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
@@ -167,28 +170,13 @@ public class ACRIRedLeftWall extends OpMode {
                     }
                 })
                 .waitSeconds(0.2)
-                .addTemporalMarkerOffset(0, () -> {
-                    double distance = 30.0;
-                    while (distance > 25.0) {
-                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
-                        boolean present = optionalPose.isPresent();
-                        if (present) {
-                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
-                            if (distance < 25.0) {
-                                drivetrain.setPoseEstimate(optionalPose.get());
-                            }
-                        }
-                        telemetry.addData("distance = ", distance);
-                        telemetry.addData("did see one", optionalPose.isPresent());
-                        telemetry.update();
-                    }
-                })
-                .splineTo(finalPlacePos, Math.toRadians(0))
+                .lineToLinearHeading(finalPlacePos)
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(Constants.Slides.superLow + 200, Constants.Arm.placePos, wristRot, Constants.Extendo.extended, true);
                 })
+                .waitSeconds(0.2)
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdClaw(false);
                     outtake.extend(false);
@@ -199,8 +187,13 @@ public class ACRIRedLeftWall extends OpMode {
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
                 })
+                /*// right Park
                 .lineTo(new Vector2d(70, -64))
                 .lineTo(new Vector2d(85, -64));
+                 */
+                //center Park
+                .waitSeconds(0.5)
+                .lineTo(new Vector2d(74 , -19));
 
         restOfIt.waitSeconds(10);
 

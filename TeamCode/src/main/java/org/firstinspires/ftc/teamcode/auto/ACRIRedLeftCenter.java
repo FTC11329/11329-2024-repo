@@ -112,6 +112,19 @@ public class ACRIRedLeftCenter extends OpMode {
             placeSpikeMarkActual = placeSpikeMark3.build();
         }
 
+        if (barcodePosition == BarcodePosition.One) {
+            finalPlacePos = new Vector2d(67, -28.75); //left wrong
+            finalPlacePos = new Vector2d(67, -31.75); //right
+
+        } else if (barcodePosition == BarcodePosition.Two) {
+            finalPlacePos = new Vector2d(67, -36.75); // wrong
+
+        } else {//if barcodePosition == BarcodePosition.Three
+            finalPlacePos = new Vector2d(67, -38.5); //left
+            finalPlacePos = new Vector2d(67, -41.5); //right wrong
+
+        }
+
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
         restOfIt
@@ -137,28 +150,15 @@ public class ACRIRedLeftCenter extends OpMode {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     outtake.presetSlides(0);
                     clawSensor.setRunInAuto(false);
-                    outtake.presetSlides(-1);
+                    outtake.presetSlides(-5);
+                    outtake.holdClaw(true);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
-                });
-
-            if (barcodePosition == BarcodePosition.One) {
-                finalPlacePos = new Vector2d(67, -28.75); //left wrong
-                finalPlacePos = new Vector2d(67, -31.75); //right
-
-            } else if (barcodePosition == BarcodePosition.Two) {
-                finalPlacePos = new Vector2d(67, -33.75); //left
-                finalPlacePos = new Vector2d(67, -36.75); //right wrong
-
-            } else {//if barcodePosition == BarcodePosition.Three
-                finalPlacePos = new Vector2d(67, -38.5); //left
-                finalPlacePos = new Vector2d(67, -41.5); //right wrong
-
-            }
-        restOfIt
-                .lineToLinearHeading(new Pose2d(-12, -12, Math.toRadians(180)))
-                .splineTo(new Vector2d(40, -12), Math.toRadians(0))
+                    intake.setIntakeServoPower(0);
+                })
+                .lineToSplineHeading(new Pose2d(-12, -14, Math.toRadians(180)))
+                .splineTo(new Vector2d(40, -14), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
@@ -177,7 +177,7 @@ public class ACRIRedLeftCenter extends OpMode {
                     }
                 })
 
-                .splineTo(finalPlacePos, Math.toRadians(0))//final place pos 1*******************
+                .splineTo(finalPlacePos, Math.toRadians(0))
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
@@ -212,12 +212,13 @@ public class ACRIRedLeftCenter extends OpMode {
                 .waitSeconds(0.1)
                 .forward(2.75)
                 .addTemporalMarkerOffset(0.5 , () -> {
-                    outtake.presetSlides(0);
+                    outtake.presetSlides(-50);
                 })
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     clawSensor.setRunInAuto(false);
+                    outtake.holdClaw(true);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -231,6 +232,7 @@ public class ACRIRedLeftCenter extends OpMode {
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
                 })
+                .waitSeconds(0.2)
                 .addTemporalMarkerOffset(0.2, () -> {
                     outtake.holdClaw(false);
                     outtake.extend(false);
