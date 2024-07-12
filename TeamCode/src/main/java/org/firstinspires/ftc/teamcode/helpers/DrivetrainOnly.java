@@ -23,12 +23,12 @@ public class DrivetrainOnly extends LinearOpMode {
             drivetrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, speed);
             telemetry.addData("Drivetrain pose", drivetrain.getPoseEstimate().toString());
 
-            temp += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.001;
+            temp += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.01;
             telemetry.addData("temp", temp);
-            outtake.extend(true);
             outtake.setWristPos(1);
-
-            outtake.claw.setBackClawServo(temp);
+            outtake.setExtendo(outtake.extendo.mmToRotation(temp));
+            telemetry.addData("mm", outtake.extendo.mmToRotation(temp));
+            telemetry.addData("Funny:", Class.class.getClasses());
 
             telemetry.update();
         }

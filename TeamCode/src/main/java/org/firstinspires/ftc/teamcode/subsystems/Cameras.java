@@ -97,7 +97,7 @@ public class Cameras {
         Optional<AprilTagDetection> desiredTag = Optional.empty();
         if (id == 0) {
             //for cycling through all of them
-            for (int i = 1; i < 10; i++) {
+            for (int i = 1; i < 13; i++) {
                 desiredTag = AprilTagDetectionPipeline.getDesiredTag(aprilTagProcessor.getDetections(), i);
                 if (desiredTag.isPresent()) {
                     break;

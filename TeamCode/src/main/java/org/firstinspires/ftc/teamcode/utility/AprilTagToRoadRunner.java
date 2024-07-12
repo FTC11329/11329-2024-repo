@@ -37,7 +37,7 @@ public class AprilTagToRoadRunner {
 
         Pose2d runnerPose = new Pose2d(Rx, Ry * VxSign, Rh);
 
-        if (tag.id <= 6) {
+        if (tag.id <= 6 || tag.id > 10) {
             //Backdrop Tags
             runnerPose = new Pose2d(runnerPose.getX() * -1, runnerPose.getY() , runnerPose.getHeading());
         } else {

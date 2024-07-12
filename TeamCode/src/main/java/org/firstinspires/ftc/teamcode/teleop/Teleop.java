@@ -500,7 +500,9 @@ public class Teleop extends OpMode {
         //TEMPORARY
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-        telemetry.addData("climber pos", climberPos);
+        telemetry.addData("Climber pos", climberPos);
+        telemetry.addData("TempL",  backDistanceSensors.getBLeftState());
+        telemetry.addData("TempR",  backDistanceSensors.getBRightState());
     }
 
     @Override

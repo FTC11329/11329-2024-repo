@@ -34,8 +34,8 @@ public class Extendo {
         this.doesExtend = doesExtend;
     }
 
-    double a = 106.733;
-    double c = 170.940;
+    double a = 106.733; //mm
+    double c = 170.940; //mm
     public double rotationToMM(double rot) {
         double radians = ((rot * 270 * 3 * Math.PI)/(4 * 180));
         //solving law of cos
@@ -43,11 +43,10 @@ public class Extendo {
     }
 
     public double mmToRotation(double mm) {
-        mm+=64;
-        double radians = -(Math.acos(-(Math.pow(c, 2) - Math.pow(a, 2) - Math.pow(mm, 2)) / (2 * a * mm))) + Math.PI;
+        mm+=64.2071;
+        double radians = Math.PI - (Math.acos((Math.pow(a, 2) + Math.pow(mm, 2) - Math.pow(c, 2) ) / (2 * a * mm)));
 
         return (radians * 4 * 180 * 0.46)/(270 * 3 * Math.PI);
-
     }
 
     public void periodic() {

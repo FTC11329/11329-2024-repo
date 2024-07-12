@@ -71,26 +71,23 @@ public class ConstantCRIPathsRed {
          SequenceFunction LeftPlacePos1Center = (prev) -> {//untested
             prev
                     .setConstraints(
-                            (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
-                            (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
+                            (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
+                            (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                     )
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-63, -31, Math.toRadians(0)))
+                    .splineTo(new Vector2d(-61, -25), Math.toRadians(90))
+                    .splineToConstantHeading(new Vector2d(-71, -17), Math.toRadians(0)) //hehe planadrone like tacocat
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.15, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
-                    })
-                    .addTemporalMarkerOffset(0.5, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .waitSeconds(0.15)
-                    .turn(Math.toRadians(90))
-                    .lineToLinearHeading((new Pose2d(-61,-15, Math.toRadians(180))));
+                    .waitSeconds(0.15);
 
         };
         SequenceFunction LeftPlacePos2Center = (prev) -> {//untested

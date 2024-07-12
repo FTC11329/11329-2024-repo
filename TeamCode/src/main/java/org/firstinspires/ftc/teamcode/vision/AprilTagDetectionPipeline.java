@@ -8,10 +8,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Quaternion;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.utility.RunAfterTime;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagLibrary;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
@@ -26,12 +31,25 @@ public class AprilTagDetectionPipeline {
      * Initialize the AprilTag processor.
      */
     public static AprilTagProcessor createAprilTagProcessor() {
+        AprilTagLibrary myLibrary = new AprilTagLibrary.Builder()
+                .addTags(AprilTagGameDatabase.getCurrentGameTagLibrary())
+                .addTag(11, "SharedAllianceLeft",
+                        2, new VectorF(60.25f, 41.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(12, "SharedAllianceCenter",
+                        2, new VectorF(60.25f, 41.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .addTag(13, "SharedAllianceRight",
+                        2, new VectorF(60.25f, 41.41f, 4f), DistanceUnit.INCH,
+                        new Quaternion(0.3536f, -0.6124f, 0.6124f, -0.3536f, 0))
+                .build();
         // Create the AprilTag processor.
         return new AprilTagProcessor.Builder()
                 .setDrawAxes(true)
                 .setDrawCubeProjection(true)
                 .setDrawTagOutline(true)
                 .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setTagLibrary(myLibrary)
                 //.setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
 
                 // == CAMERA CALIBRATION ==

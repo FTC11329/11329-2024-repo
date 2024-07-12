@@ -21,15 +21,17 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
+import javax.security.auth.callback.Callback;
+
 @Autonomous(name = "A Red Left Center CRI", group = " Testing")
 @Config
 public class ACRIRedLeftCenter extends OpMode {
     static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(70, -10);
+    static Vector2d finalPlacePos2 = new Vector2d(70, -18);
 
-    static Pose2d pickupSpecial = new Pose2d(-72, -13, Math.toRadians(90));
-    static Pose2d pickupSpecial2 = new Pose2d(-15,-10, Math.toRadians(135));
+    static Pose2d pickupSpecial = new Pose2d(-72, -14.5, Math.toRadians(90));
+    static Pose2d pickupSpecial2 = new Pose2d(-17,-12, Math.toRadians(135));
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -157,8 +159,9 @@ public class ACRIRedLeftCenter extends OpMode {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
                 })
-                .lineToSplineHeading(new Pose2d(-12, -14, Math.toRadians(180)))
-                .splineTo(new Vector2d(40, -14), Math.toRadians(0))
+                .lineToLinearHeading(new Pose2d(-65, -14, Math.toRadians(180)))
+                .splineTo(new Vector2d(-12, -12), Math.toRadians(0))
+                .splineTo(new Vector2d(40, -10), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
@@ -181,20 +184,20 @@ public class ACRIRedLeftCenter extends OpMode {
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.superLow + 200, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
                 })
                 .addTemporalMarkerOffset(0.2, () -> {
                     outtake.holdClaw(false);
                     outtake.extend(false);
                 })
                 .setReversed(false)
-                .addTemporalMarkerOffset(0.05, () -> {
+                .addTemporalMarkerOffset(0.5, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
                 })
-                .splineTo(new Vector2d(40, -13), Math.toRadians(180))
-                .splineTo(new Vector2d(0, -13), Math.toRadians(180))
+                .splineTo(new Vector2d(40, -15), Math.toRadians(180))
+                .splineTo(new Vector2d(0, -15), Math.toRadians(180))
                 .splineToSplineHeading(pickupSpecial2, Math.toRadians(180))
                 //stack intake
                 .addTemporalMarkerOffset(-0.5, () -> {
@@ -223,8 +226,8 @@ public class ACRIRedLeftCenter extends OpMode {
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
                 })
-                .splineTo(new Vector2d(0, -14), Math.toRadians(0))
-                .splineTo(new Vector2d(24, -14), Math.toRadians(0))
+                .splineTo(new Vector2d(0, -16), Math.toRadians(0))
+                .splineTo(new Vector2d(24, -16), Math.toRadians(0))
                 .splineTo(finalPlacePos2, Math.toRadians(0))
                 .addTemporalMarkerOffset(-2.4, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
@@ -243,8 +246,7 @@ public class ACRIRedLeftCenter extends OpMode {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
-                });
-        restOfIt
+                })
                 .waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());
@@ -255,7 +257,7 @@ public class ACRIRedLeftCenter extends OpMode {
         drivetrain.update();
         outtake.periodic();
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(Constants.Intake.outake, 0);
+            intake.setIntakePower(0.4, 0);
         }
     }
 }

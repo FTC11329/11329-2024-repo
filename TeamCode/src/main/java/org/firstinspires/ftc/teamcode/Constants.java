@@ -145,7 +145,7 @@ public class Constants {
         public static int manualSlidePower = 90;
         public static double slowManualSlidePower = 0.9; //this times manual slide power is the actual speed
 
-        public static int whileIntaking = 15;
+        public static int whileIntaking = 25;
 
         public static int intake = -4;
         public static int autoPurple = 200;
@@ -166,8 +166,8 @@ public class Constants {
         public static double armMin = 0;
 
         public static double placePos = 0.726;
-        public static double autoArmDrop = 0.408;
-        public static double intakePos = 0.127;//0.105
+        public static double autoArmDrop = 0.304;
+        public static double intakePos = 0.142;//0.105
 
         public static double manualPosition = 0.03;
 
