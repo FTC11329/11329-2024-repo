@@ -78,16 +78,16 @@ public class ConstantCRIPathsRed {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
                     .splineTo(new Vector2d(-61, -25), Math.toRadians(90))
-                    .splineToConstantHeading(new Vector2d(-71, -17), Math.toRadians(0)) //hehe planadrone like tacocat
+                    .splineToConstantHeading(new Vector2d(-73, -17), Math.toRadians(0)) //hehe planadrone like tacocat
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
-                    .addTemporalMarkerOffset(0.15, () -> {
+                    .addTemporalMarkerOffset(0.3, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .waitSeconds(0.15);
+                    .waitSeconds(0.3);
 
         };
         SequenceFunction LeftPlacePos2Center = (prev) -> {//untested
@@ -99,15 +99,14 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-63, -15, Math.toRadians(90)))
+                    .splineTo(new Vector2d(-70, -25), Math.toRadians(90))
+                    .splineToConstantHeading(new Vector2d(-66, -15), Math.toRadians(40))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.15, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
-                    })
-                    .addTemporalMarkerOffset(0.5, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15);
@@ -121,7 +120,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-62, -33, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-61, -33, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);

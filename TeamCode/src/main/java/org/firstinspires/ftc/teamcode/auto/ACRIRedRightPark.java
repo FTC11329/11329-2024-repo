@@ -174,7 +174,7 @@ public class ACRIRedRightPark extends OpMode {
         drivetrain.update();
         outtake.periodic();
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(Constants.Intake.outake, 0);
+            intake.setIntakePower(-0.4, 0);
         }
     }
 }

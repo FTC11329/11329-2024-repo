@@ -119,8 +119,8 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double fDistanceLimit = 0.8;//0.33 0.45 0.34 0.2
-        public static double bDistanceLimit = 1.0;//0.44, 0.74 0.8 0.5 0.56 0.7 0.5 1.5
+        public static double fDistanceLimit = 0.7;//0.33 0.45 0.34 0.2
+        public static double bDistanceLimit = 0.90;//0.44, 0.74 0.8 0.5 0.56 0.7 0.5 1.5
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
         public static Vector3D whiteBack   = new Vector3D(1425, 2950, 3600);

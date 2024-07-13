@@ -317,8 +317,6 @@ public class Teleop extends OpMode {
         if (planeFire) {
             plane.fire();
             intakeDroneTime = elapsedTime.milliseconds() + 250;
-        }else if (gamepad1.back) { //REMOVEEEEEEEEEEEEEE
-            plane.fire();
         } else {
             plane.hold();
         }
@@ -491,7 +489,7 @@ public class Teleop extends OpMode {
             endgameDebounce = true;
         }
 
-        outtake.periodic();
+        outtake.periodic(gamepad1.back);
         if (outtake.getSlideTargetPosition() != Constants.Slides.safeSlidePos + 100) {
             outtake.manualSlides(slidePower, overwriteBool);
         }
@@ -501,8 +499,8 @@ public class Teleop extends OpMode {
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
         telemetry.addData("Wrist Position", outtake.getTriedWristPos());
         telemetry.addData("Climber pos", climberPos);
-        telemetry.addData("TempL",  backDistanceSensors.getBLeftState());
-        telemetry.addData("TempR",  backDistanceSensors.getBRightState());
+        telemetry.addData("F", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
+        telemetry.addData("B", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
     }
 
     @Override

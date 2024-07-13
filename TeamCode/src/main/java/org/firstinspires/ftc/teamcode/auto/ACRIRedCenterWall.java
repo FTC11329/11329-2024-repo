@@ -21,10 +21,10 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Red Center Wall CRI", group = " Testing")
+@Autonomous(name = "A Red Center Wall CRI", group = " Testing") //aqua
 @Config
 public class ACRIRedCenterWall extends OpMode {
-    static Pose2d startingPose = new Pose2d(-6.75, -61, Math.toRadians(90));
+    static Pose2d startingPose = new Pose2d(-6.75, -61, Math.toRadians(90));  //starts agansed the pole
     static Pose2d finalPlacePos;
     static Pose2d finalPlacePos2 = new Pose2d(67, -38.5, Math.toRadians(180));
 
@@ -334,7 +334,7 @@ public class ACRIRedCenterWall extends OpMode {
         drivetrain.update();
         outtake.periodic();
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(Constants.Intake.outake, 0);
+            intake.setIntakePower(-0.4, 0);
         }
     }
 }

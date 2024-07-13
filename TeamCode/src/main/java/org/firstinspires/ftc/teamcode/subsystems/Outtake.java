@@ -10,8 +10,9 @@ public class Outtake {
     public Slides slides;
     public Extendo extendo;
     public ClawSensor clawSensor;
-
+    private BackDistanceSensors backDistanceSensors;
     private int wristPos = 3;
+    private double distance;
 
     public Outtake(HardwareMap hardwareMap) {
         arm = new Arm(hardwareMap);
@@ -19,12 +20,18 @@ public class Outtake {
         slides = new Slides(hardwareMap);
         extendo = new Extendo(hardwareMap);
         clawSensor = new ClawSensor(hardwareMap);
+        backDistanceSensors = new BackDistanceSensors(hardwareMap);
     }
 
     public void periodic() {
+        periodic(false);
+    }
+    public void periodic(boolean extend) {
         arm.periodic(slides.getPosition());
         claw.periodic();
         slides.slidesPeriodic();
+        distance = (backDistanceSensors.getBLeftState() + backDistanceSensors.getBRightState())/2;
+        extendo.periodic(distance, extend);
         if(getArmPosition() > Constants.Arm.safeArmPos) {
             if (wristPos <= 0) {
                 wristPos = 7;
@@ -65,6 +72,7 @@ public class Outtake {
             claw.setWristPosition(Constants.Claw.wrist3);
         }
     }
+
 
     //Arm
     public void manualArm(double manualPower) {

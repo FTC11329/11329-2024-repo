@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Red Left Wall CRI", group = " Testing")
+@Autonomous(name = "A Red Left Wall CRI", group = " Testing") //orange
 @Config
 public class ACRIRedLeftWall extends OpMode {
     static Pose2d startingPose = new Pose2d(-64.25, -63, Math.toRadians(90));
@@ -205,7 +205,7 @@ public class ACRIRedLeftWall extends OpMode {
         drivetrain.update();
         outtake.periodic();
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(Constants.Intake.outake, 0);
+            intake.setIntakePower(-0.4, 0);
         }
     }
 }

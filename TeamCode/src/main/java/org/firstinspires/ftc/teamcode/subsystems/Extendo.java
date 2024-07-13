@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.apache.commons.math3.exception.NotANumberException;
 import org.firstinspires.ftc.teamcode.Constants;
 
 public class Extendo {
@@ -36,19 +37,36 @@ public class Extendo {
 
     double a = 106.733; //mm
     double c = 170.940; //mm
-    public double rotationToMM(double rot) {
+    public double rotationToMM(double rot) { //not works
         double radians = ((rot * 270 * 3 * Math.PI)/(4 * 180));
         //solving law of cos
         return Math.acos(radians) + (Math.sqrt(Math.pow(a,2) * Math.pow(Math.cos(radians), 2) - Math.pow(a, 2) + Math.pow(c, 2)));
     }
 
+    //minimum 0, max 210
     public double mmToRotation(double mm) {
-        mm+=64.2071;
+        mm *= 1.1; //offset
+        mm += 64.2071 - /*arm*/ 114.3;
         double radians = Math.PI - (Math.acos((Math.pow(a, 2) + Math.pow(mm, 2) - Math.pow(c, 2) ) / (2 * a * mm)));
 
-        return (radians * 4 * 180 * 0.46)/(270 * 3 * Math.PI);
+        Double rot = (radians * 4 * 180 * 0.46)/(270 * 3 * Math.PI) * 1.23;
+        if (rot.isNaN()) {
+            return Constants.Extendo.extended;
+        } else if (rot < Constants.Extendo.closed) {
+            return Constants.Extendo.closed;
+        } else if (rot > Constants.Extendo.extended) {
+            return Constants.Extendo.extended;
+        }
+        return rot;
     }
 
-    public void periodic() {
+    public double inToRotation(double in) {
+        return mmToRotation(in * 25.4);
+    }
+
+    public void periodic(double distanceToBd, boolean extendToBd) {
+        if (extendToBd) {
+            setExtendo(inToRotation(distanceToBd));
+        }
     }
 }
