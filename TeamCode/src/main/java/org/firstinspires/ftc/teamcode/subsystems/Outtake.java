@@ -30,7 +30,15 @@ public class Outtake {
         arm.periodic(slides.getPosition());
         claw.periodic();
         slides.slidesPeriodic();
-        distance = (backDistanceSensors.getBLeftState() + backDistanceSensors.getBRightState())/2;
+        if (Math.abs(backDistanceSensors.getBLeftState() - backDistanceSensors.getBRightState()) > 2.5) {
+            distance = Math.max(backDistanceSensors.getBLeftState(), backDistanceSensors.getBRightState());
+        } else {
+            distance = (backDistanceSensors.getBLeftState() + backDistanceSensors.getBRightState()) / 2;
+        }
+        if (backDistanceSensors.getBLeftState() < 3 && backDistanceSensors.getBRightState() < 3) {
+            extend = false;
+            extend(false);
+        }
         extendo.periodic(distance, extend);
         if(getArmPosition() > Constants.Arm.safeArmPos) {
             if (wristPos <= 0) {
@@ -240,7 +248,7 @@ class PresetThread extends Thread{
             outtake.presetArm(armPos);
             outtake.holdClaw(false);
             try {
-                sleep(300);
+                sleep(350);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

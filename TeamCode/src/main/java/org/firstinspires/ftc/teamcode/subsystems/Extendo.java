@@ -46,7 +46,7 @@ public class Extendo {
     //minimum 0, max 210
     public double mmToRotation(double mm) {
         mm *= 1.1; //offset
-        mm += 64.2071 - /*arm*/ 114.3;
+        mm += 64.2071 - /*arm*/ 75.700000001;
         double radians = Math.PI - (Math.acos((Math.pow(a, 2) + Math.pow(mm, 2) - Math.pow(c, 2) ) / (2 * a * mm)));
 
         Double rot = (radians * 4 * 180 * 0.46)/(270 * 3 * Math.PI) * 1.23;

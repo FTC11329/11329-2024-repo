@@ -47,6 +47,7 @@ public class Teleop extends OpMode {
     double backRight;
     double backOffset;
     double intakeDroneTime = 2140000000;
+    boolean droneOnce = true;
 
     Plane plane;
     Lights lights;
@@ -143,9 +144,9 @@ public class Teleop extends OpMode {
             backRight = backDistanceSensors.getBRightState();
             backOffset = backRight - backLeft;
             //movement
-            if (Math.min(backLeft, backRight) > 11.5) {
+            if (Math.min(backLeft, backRight) > 9.5) {
                 driveForward -= 0.5;
-            } else if (Math.max(backLeft, backRight) < 11) {
+            } else if (Math.max(backLeft, backRight) < 8.5) {
                 driveForward += 0.5;
             }
             //starfing
@@ -235,8 +236,6 @@ public class Teleop extends OpMode {
 
         //SLIDES
         slidePower = slidePower + (slowSlidePower * Constants.Slides.slowManualSlidePower);
-        telemetry.addData("Slide Position", outtake.getSlidePosition());
-        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 
         //ARM
         outtake.manualArm(armPower);
@@ -247,7 +246,6 @@ public class Teleop extends OpMode {
             frontClawDropped = false;
             backClawDropped = true;
         }
-        telemetry.addData("Arm Position", outtake.getArmPosition());
 
         //CLAW
         if (wristClawPower < -0.5 && elapsedTime.milliseconds() > (Constants.Claw.msChange + wristTime)) {
@@ -297,12 +295,14 @@ public class Teleop extends OpMode {
                 outtake.extend(false);
                 backClawDropped = true;
                 frontClawDropped = true;
+                atPreset = false;
 
             } else if (dropFrontClaw && !frontClawDropped) {
                 outtake.holdFrontClaw(false);
                 frontClawDropped = true;
                 if (backClawDropped) {
                     outtake.extend(false);
+                    atPreset = false;
                 }
 
             } else if (dropBackClaw && !backClawDropped) {
@@ -310,6 +310,7 @@ public class Teleop extends OpMode {
                 backClawDropped = true;
                 if (frontClawDropped) {
                     outtake.extend(false);
+                    atPreset = false;
                 }
             }
         }
@@ -320,11 +321,16 @@ public class Teleop extends OpMode {
         } else {
             plane.hold();
         }
-        if (elapsedTime.milliseconds() > intakeDroneTime) {
-            intakeDroneTime = 2140000000;
-            intakePresetBool = true;
-            climberDownBool = true;
+        if (elapsedTime.milliseconds() > intakeDroneTime && droneOnce) {
             outtake.holdClaw(false);
+            outtake.extend(true);
+            climberDownBool = true;
+            droneOnce = false;
+        }
+        if (elapsedTime.milliseconds() > intakeDroneTime + 150) {
+            intakePresetBool = true;
+            droneOnce = true;
+            intakeDroneTime = 2140000000;
         }
 
         //CLIMBER
@@ -489,18 +495,24 @@ public class Teleop extends OpMode {
             endgameDebounce = true;
         }
 
-        outtake.periodic(gamepad1.back);
+        outtake.periodic(atPreset);
         if (outtake.getSlideTargetPosition() != Constants.Slides.safeSlidePos + 100) {
             outtake.manualSlides(slidePower, overwriteBool);
         }
 
+        //telemetry
+//        telemetry.addData("Slide Position", outtake.getSlidePosition());
+//        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
+//        telemetry.addData("Arm Position", outtake.getArmPosition());
+//        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
+//        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
+//        telemetry.addData("Climber pos", climberPos);
+//        telemetry.addData("F", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
+//        telemetry.addData("B", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
+//        telemetry.addData("BDL", backDistanceSensors.getBLeftState());
+//        telemetry.addData("BDR", backDistanceSensors.getBRightState());
 
         //TEMPORARY
-//        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
-        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-        telemetry.addData("Climber pos", climberPos);
-        telemetry.addData("F", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
-        telemetry.addData("B", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
     }
 
     @Override
