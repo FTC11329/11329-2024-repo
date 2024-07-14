@@ -165,13 +165,13 @@ public class Constants {
         public static double armMax = 1;
         public static double armMin = 0;
 
-        public static double placePos = 0.789;
-        public static double autoArmDrop = 0.304;
-        public static double intakePos = 0.155;//0.105
+        public static double placePos = 0.584;
+        public static double autoArmDrop = 0.181;
+        public static double intakePos = 0.0194;//0.155 //83
 
         public static double manualPosition = 0.03;
 
-        public static double safeArmPos = 0.534;
+        public static double safeArmPos = 0.396;
     }
 
     @Config
@@ -242,8 +242,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 40;
-        public static double MAX_ACCEL = 40;
+        public static double MAX_VEL = 35;
+        public static double MAX_ACCEL = 35;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }

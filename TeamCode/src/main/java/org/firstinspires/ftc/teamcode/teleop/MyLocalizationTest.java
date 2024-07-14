@@ -4,13 +4,16 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.Cameras;
+import org.firstinspires.ftc.teamcode.subsystems.ClawSensor;
+import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Drivetrain;
-import org.firstinspires.ftc.teamcode.utility.AprilTagToRoadRunner;
-import org.firstinspires.ftc.teamcode.vision.AprilTagDetectionPipeline;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.teamcode.subsystems.Intake;
+import org.firstinspires.ftc.teamcode.subsystems.Lights;
+import org.firstinspires.ftc.teamcode.subsystems.Outtake;
+import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 
 import java.util.Optional;
 
@@ -23,40 +26,82 @@ import java.util.Optional;
  */
 @TeleOp(name = "My Localization Test", group = "Allen op mode")
 public class MyLocalizationTest extends LinearOpMode {
-    Drivetrain drive;
+    Intake intake;
+    Lights lights;
+    Outtake outtake;
     Cameras cameras;
-    double temp;
+    ClawSensor clawSensor;
+    Drivetrain drivetrain;
+    SpecialIntake specialIntake;
+    DistanceSensors distanceSensors;
+    boolean picDe = false;
+    boolean see;
+    int id;
+    boolean idRDe = false;
+    boolean idLDe = false;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
-        drive = new Drivetrain(hardwareMap);
+        lights = new Lights(hardwareMap);
+        lights.setDumbLed(1);
+        intake = new Intake(hardwareMap);
+        outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        Servo frontClawServo = hardwareMap.get(Servo.class, "clawServoF");
+        clawSensor = new ClawSensor(hardwareMap);
+        drivetrain = new Drivetrain(hardwareMap);
+        specialIntake = new SpecialIntake(hardwareMap);
+        distanceSensors = new DistanceSensors(hardwareMap);
 
-        drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        frontClawServo.setDirection(Servo.Direction.REVERSE);
-
+        drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
             boolean isBack = gamepad1.y;
-            drive.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * -0.7, gamepad1.left_stick_x * -0.7, gamepad1.right_stick_x * -0.7));
+            drivetrain.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * -0.5, gamepad1.left_stick_x * -0.5, gamepad1.right_stick_x * -0.5));
 
-            drive.update();
-            frontClawServo.setPosition(temp);
-            temp+= (gamepad1.right_trigger- gamepad1.left_trigger)*0.005;
+            drivetrain.update();
 
-            Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, isBack);
-            optionalPose.ifPresent(pose2d -> drive.setPoseEstimate(pose2d));
+            if (gamepad1.b && picDe) {
+                Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(id, isBack);
+                optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                see = optionalPose.isPresent();
+                picDe = false;
+            }
+            if (!gamepad1.b) {
+                picDe = true;
+            }
 
-            Pose2d poseEstimate = drive.getPoseEstimate();
-            telemetry.addData("temp", temp);
+            if (gamepad1.right_bumper && idRDe) {
+                id += 1;
+                idRDe = true;
+            }
+            if (!gamepad1.right_bumper) {
+                idRDe = false;
+            }
+
+            if (gamepad1.left_bumper && idLDe) {
+                id -= 1;
+                idLDe = true;
+            }
+            if (!gamepad1.right_bumper) {
+                idLDe = false;
+            }
+
+            if (gamepad1.dpad_up) {
+                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, 5, true, true);
+            } else if (gamepad1.dpad_down) {
+                outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
+            }
+
+            Pose2d poseEstimate = drivetrain.getPoseEstimate();
             telemetry.addData("is back", isBack);
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("id", id);
             telemetry.addData("heading", Math.toDegrees(poseEstimate.getHeading()));
-            telemetry.addData("seas tag", optionalPose.isPresent());
+            telemetry.addData("seas tag", see);
 
             telemetry.update();
         }

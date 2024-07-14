@@ -25,15 +25,15 @@ import java.util.Optional;
 @Config
 public class ACRIBlueRightCenter extends OpMode {
     int wristPos;
-    static Pose2d startingPose = new Pose2d(-65.25, 63, Math.toRadians(-90));
+    static Pose2d startingPose = new Pose2d(-64.5, 63, Math.toRadians(-90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(71.5, 8);
+    static Vector2d finalPlacePos2 = new Vector2d(71.5, -2);
 
-    static Pose2d pickupSpecial = new Pose2d(-72, 14.5, Math.toRadians(-90));
+    static Pose2d pickupSpecial = new Pose2d(-74, 14.5, Math.toRadians(-90));
 
-    static Vector2d prePickup = new Vector2d(0, 15);
-    static Pose2d pickupSpecial2 = new Pose2d(-11,17.5, Math.toRadians(-135)); //normal ***********************************************
-    static double yComingBack = 18;
+    static Vector2d prePickup = new Vector2d(0, 0);
+    static Pose2d pickupSpecial2 = new Pose2d(-11,0, Math.toRadians(-135)); //normal ***********************************************
+    static double yComingBack = -5;
 //    static Vector2d prePickup = new Vector2d(-24, 18);
 //    static Pose2d pickupSpecial2 = new Pose2d(-34, 18, Math.toRadians(-135)); //far    ***********************************************
 //    static double yComingBack = 24;
@@ -43,7 +43,12 @@ public class ACRIBlueRightCenter extends OpMode {
     TrajectorySequenceBuilder placeSpikeMark2 = null;
     TrajectorySequenceBuilder placeSpikeMark3 = null;
 
-    TrajectorySequenceBuilder restOfIt = null;
+    TrajectorySequenceBuilder restOfIt1 = null;
+    TrajectorySequenceBuilder restOfIt2 = null;
+    TrajectorySequenceBuilder restOfIt3 = null;
+    TrajectorySequenceBuilder restOfIt4 = null;
+
+    Optional<Pose2d> optionalPose;
 
     Intake intake;
     Lights lights;
@@ -123,21 +128,21 @@ public class ACRIBlueRightCenter extends OpMode {
         }
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(68.5, 41.5);
+            finalPlacePos = new Vector2d(72, 39);
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(68.5, 38);
-            wristPos = 5;
+            finalPlacePos = new Vector2d(72, 34);
+            wristPos = 1;
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Vector2d(68.5, 32.75);
+            finalPlacePos = new Vector2d(72, 31);
             wristPos = 1;
         }
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
-        restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
-        restOfIt
+        restOfIt1 = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
+        restOfIt1
                 .resetConstraints()
                 .setReversed(true)
                 .lineToLinearHeading(pickupSpecial)
@@ -167,14 +172,19 @@ public class ACRIBlueRightCenter extends OpMode {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
                 })
-                .lineToLinearHeading(new Pose2d(-65, 14, Math.toRadians(180)))
-                .splineTo(new Vector2d(-12, 12), Math.toRadians(0))
-                .splineTo(new Vector2d(40, 12), Math.toRadians(0))
+
+                .lineToLinearHeading(new Pose2d(-65, 10, Math.toRadians(180)))
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
+                )
+                .splineTo(new Vector2d(-12, 4), Math.toRadians(0))
+                .splineTo(new Vector2d(40, 4), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
                     while (distance > 15.0) {
-                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                        optionalPose = cameras.getRunnerPoseEstimate(0, false);
                         boolean present = optionalPose.isPresent();
                         if (present) {
                             distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
@@ -186,8 +196,11 @@ public class ACRIBlueRightCenter extends OpMode {
                         telemetry.addData("did see one", optionalPose.isPresent());
                         telemetry.update();
                     }
-                })
-
+                });
+        drivetrain.followTrajectorySequence(restOfIt1.build());
+        restOfIt2 = drivetrain.trajectorySequenceBuilder(optionalPose.get());
+        restOfIt2
+                .resetConstraints()
                 .splineToConstantHeading(finalPlacePos, Math.toRadians(0))
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
@@ -205,11 +218,15 @@ public class ACRIBlueRightCenter extends OpMode {
                 })
                 .setReversed(false)
                 .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(40, 15), Math.toRadians(180))
-                .addTemporalMarkerOffset(0.05, () -> {
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
+                )
+                .splineToConstantHeading(new Vector2d(50, 0), Math.toRadians(180))
+                .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
                     while (distance > 15.0) {
-                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                        optionalPose = cameras.getRunnerPoseEstimate(0, false);
                         boolean present = optionalPose.isPresent();
                         if (present) {
                             distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
@@ -222,7 +239,11 @@ public class ACRIBlueRightCenter extends OpMode {
                         telemetry.update();
                     }
                 })
-                .waitSeconds(0.1)
+                .waitSeconds(0.1);
+        drivetrain.followTrajectorySequence(restOfIt2.build());
+        restOfIt3 = drivetrain.trajectorySequenceBuilder(optionalPose.get());
+        restOfIt3
+                .waitSeconds(0.25)
                 .splineToConstantHeading(prePickup, Math.toRadians(180))
                 .splineToSplineHeading(pickupSpecial2, Math.toRadians(180))
                 //stack intake
@@ -254,11 +275,10 @@ public class ACRIBlueRightCenter extends OpMode {
                 })
                 .lineToLinearHeading(new Pose2d(0, yComingBack, Math.toRadians(180)))
                 .lineTo(new Vector2d(40, yComingBack))
-                .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
                     while (distance > 20.0) {
-                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                        optionalPose = cameras.getRunnerPoseEstimate(0, false);
                         boolean present = optionalPose.isPresent();
                         if (present) {
                             distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
@@ -271,6 +291,10 @@ public class ACRIBlueRightCenter extends OpMode {
                         telemetry.update();
                     }
                 })
+                .waitSeconds(0.01);
+        drivetrain.followTrajectorySequence(restOfIt3.build());
+        restOfIt4 = drivetrain.trajectorySequenceBuilder(optionalPose.get());
+        restOfIt4
                 .splineToConstantHeading(finalPlacePos2, Math.toRadians(0))
                 .addTemporalMarkerOffset(-2.4, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
@@ -291,8 +315,7 @@ public class ACRIBlueRightCenter extends OpMode {
                     outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                 })
                 .waitSeconds(10);
-
-        drivetrain.followTrajectorySequenceAsync(restOfIt.build());
+        drivetrain.followTrajectorySequence(restOfIt4.build());
     }
 
     @Override

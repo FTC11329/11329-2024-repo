@@ -30,12 +30,12 @@ public class Outtake {
         arm.periodic(slides.getPosition());
         claw.periodic();
         slides.slidesPeriodic();
-        if (Math.abs(backDistanceSensors.getBLeftState() - backDistanceSensors.getBRightState()) > 2.5) {
+        if (extend && Math.abs(backDistanceSensors.getBLeftState() - backDistanceSensors.getBRightState()) > 2.5) {
             distance = Math.max(backDistanceSensors.getBLeftState(), backDistanceSensors.getBRightState());
-        } else {
+        } else if (extend) {
             distance = (backDistanceSensors.getBLeftState() + backDistanceSensors.getBRightState()) / 2;
         }
-        if (backDistanceSensors.getBLeftState() < 3 && backDistanceSensors.getBRightState() < 3) {
+        if (extend && backDistanceSensors.getBLeftState() < 3 && backDistanceSensors.getBRightState() < 3) {
             extend = false;
             extend(false);
         }

@@ -48,6 +48,8 @@ public class Teleop extends OpMode {
     double backOffset;
     double intakeDroneTime = 2140000000;
     boolean droneOnce = true;
+    DriveSpeedEnum driveSpeed;
+
 
     Plane plane;
     Lights lights;
@@ -127,7 +129,6 @@ public class Teleop extends OpMode {
         boolean endgameButton = gamepad1.x;
 
         //DRIVETRAIN
-        DriveSpeedEnum driveSpeed;
         if (fastDriveSpeed) {
             driveSpeed = DriveSpeedEnum.Fast;
         } else {
@@ -161,8 +162,6 @@ public class Teleop extends OpMode {
             } else if (backOffset < -0.6) {
                 driveTurn += 0.4;
             }
-
-
         }
         drivetrain.drive(driveForward, driveStrafe, driveTurn, driveSpeed);
 
@@ -501,9 +500,9 @@ public class Teleop extends OpMode {
         }
 
         //telemetry
-//        telemetry.addData("Slide Position", outtake.getSlidePosition());
-//        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
-//        telemetry.addData("Arm Position", outtake.getArmPosition());
+        telemetry.addData("Slide Position", outtake.getSlidePosition());
+        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
+        telemetry.addData("Arm Position", outtake.getArmPosition());
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
 //        telemetry.addData("Climber pos", climberPos);
