@@ -57,7 +57,7 @@ public class Extendo {
         } else if (rot > Constants.Extendo.extended) {
             return Constants.Extendo.extended;
         }
-        return rot;
+        return rot * 1.2;
     }
 
     public double inToRotation(double in) {

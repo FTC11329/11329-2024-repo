@@ -56,8 +56,6 @@ public class Claw {
         backClawServo.setPosition(pos);
     }
 
-    public void periodic() {
-    }
     public void stopClaw() {
     }
 }

@@ -4,11 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.checkerframework.checker.units.qual.C;
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
-import org.firstinspires.ftc.teamcode.subsystems.AutoServo;
 import org.firstinspires.ftc.teamcode.subsystems.BackDistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
 import org.firstinspires.ftc.teamcode.subsystems.DistanceSensors;
@@ -169,6 +165,7 @@ public class Teleop extends OpMode {
         //INTAKE
         if (intakeBool && !atPreset) {
             outtake.presetSlides(Constants.Slides.whileIntaking);
+            outtake.setExtendo(Constants.Extendo.whileIntaking);
         }
         if (intakeOuttakeBool && atPreset) {
             intake.setIntakePower(Constants.Intake.outake, outtake.getSlideTargetPosition());
@@ -281,6 +278,7 @@ public class Teleop extends OpMode {
             frontClawDropped = false;
             backClawDropped = false;
             slidePower = -2;
+            outtake.extend(false);
         } else if (outtake.isEmpty() && !atPreset && (outtake.getSlidePosition() < 50)) {
             outtake.holdClaw(false);
         }
@@ -500,9 +498,9 @@ public class Teleop extends OpMode {
         }
 
         //telemetry
-        telemetry.addData("Slide Position", outtake.getSlidePosition());
-        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
-        telemetry.addData("Arm Position", outtake.getArmPosition());
+//        telemetry.addData("Slide Position", outtake.getSlidePosition());
+//        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
+//        telemetry.addData("Arm Position", outtake.getArmPosition());
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
 //        telemetry.addData("Climber pos", climberPos);

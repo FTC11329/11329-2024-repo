@@ -9,7 +9,6 @@ public class Arm {
     public Servo armServoR;
     public Servo armServoL;
 
-    public int slidesPos;
     public double currentPos;
 
 
@@ -42,9 +41,5 @@ public class Arm {
         }
         armServoL.setPosition(1.0 - currentPos);
         armServoR.setPosition(currentPos);
-    }
-
-    public void periodic(int tempSlidesPos) {
-        slidesPos = tempSlidesPos;
     }
 }

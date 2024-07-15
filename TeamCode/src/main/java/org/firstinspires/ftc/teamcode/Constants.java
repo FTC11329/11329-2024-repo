@@ -93,11 +93,12 @@ public class Constants {
 
     @Config
     public static class Extendo {
-        public static double extended = 0.50;
-        public static double half = 0.235;
-        public static double clearClimber = 0.25;
-        public static double closed = 0.07;
-        public static double auto = 0.2;
+        public static double extended = 0.6;
+        public static double half = 0.335;
+        public static double clearClimber = 0.35;
+        public static double whileIntaking = 0.25;
+        public static double closed = 0.17;
+        public static double auto = 0.3;
     }
 
     @Config
@@ -114,7 +115,7 @@ public class Constants {
         public static double wrist5 = 6.0/9.0;
         public static double wrist6 = 8.0/9.0;
         public static double wrist7 = 1;
-        public static int msChange = 150; //TODO: change this
+        public static int msChange = 150;
     }
 
     @Config
@@ -187,8 +188,8 @@ public class Constants {
 
     @Config
     public static class DistanceSensors {
-        public static int longTolerance = 40;//40
-        public static int shortTolerance = 25;
+        public static int longTolerance = 40;
+        public static int shortTolerance = 27;
     }
 
     @Config
@@ -242,8 +243,8 @@ public class Constants {
          * small and gradually increase them later after everything is working. All distance units are
          * inches.
          */
-        public static double MAX_VEL = 35;
-        public static double MAX_ACCEL = 35;
+        public static double MAX_VEL = 40;
+        public static double MAX_ACCEL = 40;
         public static double MAX_ANG_VEL = Math.toRadians(120);
         public static double MAX_ANG_ACCEL = Math.toRadians(120);
     }

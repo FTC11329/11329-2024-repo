@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Left Park CRI", group = "Comp") //purple
+@Autonomous(name = "A Blue Left Park CRI", group = " Testing") //purple
 @Config
 public class ACRIBlueLeftPark extends OpMode {
     boolean whiteLeft;
@@ -44,10 +44,10 @@ public class ACRIBlueLeftPark extends OpMode {
     SpecialIntake specialIntake;
     DistanceSensors distanceSensors;
 
-    ConstantCRIPathsRed constantCRIPaths;
-    ConstantCRIPathsRed.PlacePurplePaths placePurplePathsRed;
-    ConstantCRIPathsRed.PickupWhitePixelStack pickupWhitePixelStack;
-    ConstantCRIPathsRed.PlaceOnBackDrop placeOnBackDrop;
+    ConstantCRIPathsBlue constantCRIPaths;
+    ConstantCRIPathsBlue.PlacePurplePaths placePurplePaths;
+    ConstantCRIPathsBlue.PickupWhitePixelStack pickupWhitePixelStack;
+    ConstantCRIPathsBlue.PlaceOnBackDrop placeOnBackDrop;
 
 
     public void init() {
@@ -62,20 +62,20 @@ public class ACRIBlueLeftPark extends OpMode {
         distanceSensors = new DistanceSensors(hardwareMap);
         outtake.holdClaw(true);
 
-        constantCRIPaths = new ConstantCRIPathsRed(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, new Pose2d(0,0, Math.toRadians(0)), new Pose2d(0,0, Math.toRadians(0)), new Vector2d(0,0));
-        placePurplePathsRed = constantCRIPaths.placePurplePathsRed;
+        constantCRIPaths = new ConstantCRIPathsBlue(telemetry, intake, outtake, cameras, clawSensor, drivetrain, specialIntake, new Pose2d(0,0, Math.toRadians(0)), new Pose2d(0,0, Math.toRadians(0)), new Vector2d(0,0));
+        placePurplePaths = constantCRIPaths.placePurplePathsBlue;
         pickupWhitePixelStack = constantCRIPaths.pickupWhitePixelStack;
         placeOnBackDrop = constantCRIPaths.placeOnBackDrop;
         lights.setDumbLed(0);
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.RightPlacePos1.run(placeSpikeMark1);
+        placePurplePaths.LeftPlacePos1.run(placeSpikeMark1);
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.RightPlacePos2.run(placeSpikeMark2);
+        placePurplePaths.LeftPlacePos2.run(placeSpikeMark2);
         //3**************************************************************************
         placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePathsRed.RightPlacePos3.run(placeSpikeMark3);
+        placePurplePaths.LeftPlacePos3.run(placeSpikeMark3);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class ACRIBlueLeftPark extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(isBack);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
@@ -95,7 +95,7 @@ public class ACRIBlueLeftPark extends OpMode {
     @Override
     public void start() {
         cameras.setCameraSideThreaded(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
 
         drivetrain.setPoseEstimate(startingPose);
 
@@ -114,17 +114,16 @@ public class ACRIBlueLeftPark extends OpMode {
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(67.5, 26); //left wrong
-            finalPlacePos = new Vector2d(67.5, 29); //right
-
-        } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(67.5, 33.5); //left
-            finalPlacePos = new Vector2d(67.5, 36.5); //right wrong
-
-        } else {
-            finalPlacePos = new Vector2d(67.5, 38); //left
+            finalPlacePos = new Vector2d(67.5, 45); //left
             finalPlacePos = new Vector2d(67.5, 43); //right
 
+        } else if (barcodePosition == BarcodePosition.Two) {
+            finalPlacePos = new Vector2d(67.5, 39.5); //left
+            finalPlacePos = new Vector2d(67.5, 36.5); //right
+
+        } else {
+            finalPlacePos = new Vector2d(67.5, 32.5); //left
+            finalPlacePos = new Vector2d(67.5, 27); //right
         }
         restOfIt
                 .setReversed(true)

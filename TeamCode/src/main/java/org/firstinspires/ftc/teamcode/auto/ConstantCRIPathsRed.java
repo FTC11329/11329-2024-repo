@@ -231,7 +231,6 @@ public class ConstantCRIPathsRed {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-//                    .turn(Math.toRadians(90))
                     .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,-12, 0)));
         };
         SequenceFunction CenterPlacePos2 = (prev) -> {

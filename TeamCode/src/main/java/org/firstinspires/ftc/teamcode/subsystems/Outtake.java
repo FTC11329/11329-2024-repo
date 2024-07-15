@@ -27,8 +27,6 @@ public class Outtake {
         periodic(false);
     }
     public void periodic(boolean extend) {
-        arm.periodic(slides.getPosition());
-        claw.periodic();
         slides.slidesPeriodic();
         if (extend && Math.abs(backDistanceSensors.getBLeftState() - backDistanceSensors.getBRightState()) > 2.5) {
             distance = Math.max(backDistanceSensors.getBLeftState(), backDistanceSensors.getBRightState());
