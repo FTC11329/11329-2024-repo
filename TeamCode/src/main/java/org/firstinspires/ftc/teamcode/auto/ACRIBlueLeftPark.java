@@ -173,7 +173,8 @@ public class ACRIBlueLeftPark extends OpMode {
         drivetrain.update();
         outtake.periodic();
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(-0.4, 0);
+            intake.setIntakePower(-0.5, 0);
+            outtake.presetSlides(-5);
         }
     }
 }

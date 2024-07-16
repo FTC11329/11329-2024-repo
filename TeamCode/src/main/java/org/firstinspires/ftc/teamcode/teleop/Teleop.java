@@ -44,11 +44,12 @@ public class Teleop extends OpMode {
     double backOffset;
     double intakeDroneTime = 2140000000;
     boolean droneOnce = true;
+    boolean lightDe = true;
     DriveSpeedEnum driveSpeed;
 
 
     Plane plane;
-    Lights lights;
+    volatile Lights lights;
     Intake intake;
     Climber climber;
     volatile Outtake outtake;
@@ -477,10 +478,22 @@ public class Teleop extends OpMode {
         //LIGHTS
         if (outtake.isFull()) {
             lights.setDumbLed(1);
+            if (!lightDe) {
+                lights.stopDumbWaveThread();
+            }
+            lightDe = true;
         } else if (!outtake.isEmpty()) {
             lights.setDumbFlash(0.2);
+            if (!lightDe) {
+                lights.stopDumbWaveThread();
+            }
+            lightDe = true;
+
         } else {
-            lights.setDumbWave(1,0, 1);
+            if (lightDe) {
+                lights.startDumbWaveThread();
+            }
+            lightDe = false;
         }
 
         //FINALE
@@ -517,5 +530,6 @@ public class Teleop extends OpMode {
         intake.stopIntake();
         outtake.stopOuttake();
         drivetrain.stopDrive();
+        lights.killDumbWaveThread();
     }
 }

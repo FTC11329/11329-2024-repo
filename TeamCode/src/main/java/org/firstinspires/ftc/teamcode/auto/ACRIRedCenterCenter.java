@@ -137,6 +137,7 @@ public class ACRIRedCenterCenter extends OpMode {
                 .addTemporalMarkerOffset(-0.2, () -> {
                     clawSensor.setRunInAuto(true);
                     outtake.presetSlides(Constants.Slides.whileIntaking);
+                    outtake.setExtendo(Constants.Extendo.whileIntaking);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -219,6 +220,7 @@ public class ACRIRedCenterCenter extends OpMode {
                 .addTemporalMarkerOffset(-0.5, () -> {
                     clawSensor.setRunInAuto(true);
                     outtake.presetSlides(Constants.Slides.whileIntaking);
+                    outtake.setExtendo(Constants.Extendo.whileIntaking);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
@@ -293,7 +295,8 @@ public class ACRIRedCenterCenter extends OpMode {
         drivetrain.update();
         outtake.periodic(extend);
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(0, 0);
+            intake.setIntakePower(-0.5, 0);
+            outtake.presetSlides(-5);
         }
     }
 }

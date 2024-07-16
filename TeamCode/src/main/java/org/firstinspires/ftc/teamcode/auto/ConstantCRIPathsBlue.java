@@ -364,6 +364,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(-0.2, () -> {
                         clawSensor.setRunInAuto(true);
                         outtake.presetSlides(Constants.Slides.whileIntaking);
+                        outtake.setExtendo(Constants.Extendo.whileIntaking);
                         intake.setIntakePower(Constants.Intake.intake, 0);
                         intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -391,6 +392,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(-0.2, () -> {
                         clawSensor.setRunInAuto(true);
                         outtake.presetSlides(Constants.Slides.whileIntaking);
+                        outtake.setExtendo(Constants.Extendo.whileIntaking);
                         intake.setIntakePower(Constants.Intake.intake, 0);
                         intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -442,6 +444,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(-0.2, () -> {
                         clawSensor.setRunInAuto(true);
                         outtake.presetSlides(Constants.Slides.whileIntaking);
+                        outtake.setExtendo(Constants.Extendo.whileIntaking);
                         intake.setIntakePower(Constants.Intake.intake, 0);
                         intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -471,6 +474,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(-0.2, () -> {
                         clawSensor.setRunInAuto(true);
                         outtake.presetSlides(Constants.Slides.whileIntaking);
+                        outtake.setExtendo(Constants.Extendo.whileIntaking);
                         intake.setIntakePower(Constants.Intake.intake, 0);
                         intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
@@ -498,6 +502,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(-0.5, () -> {
                         clawSensor.setRunInAuto(true);
                         outtake.presetSlides(Constants.Slides.whileIntaking);
+                        outtake.setExtendo(Constants.Extendo.whileIntaking);
                         intake.setIntakePower(Constants.Intake.intake, 0);
                         intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.down4);

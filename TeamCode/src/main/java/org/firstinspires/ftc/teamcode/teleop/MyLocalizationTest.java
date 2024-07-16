@@ -26,38 +26,31 @@ import java.util.Optional;
  */
 @TeleOp(name = "My Localization Test", group = "Allen op mode")
 public class MyLocalizationTest extends LinearOpMode {
-    Intake intake;
     Lights lights;
     Outtake outtake;
     Cameras cameras;
-    ClawSensor clawSensor;
     Drivetrain drivetrain;
     SpecialIntake specialIntake;
-    DistanceSensors distanceSensors;
     boolean picDe = false;
     boolean see;
     int id;
     boolean idRDe = false;
     boolean idLDe = false;
 
-
     @Override
     public void runOpMode() throws InterruptedException {
         lights = new Lights(hardwareMap);
-        lights.setDumbLed(1);
-        intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
         cameras = new Cameras(hardwareMap);
-        clawSensor = new ClawSensor(hardwareMap);
         drivetrain = new Drivetrain(hardwareMap);
         specialIntake = new SpecialIntake(hardwareMap);
-        distanceSensors = new DistanceSensors(hardwareMap);
 
         drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         waitForStart();
 
         while (!isStopRequested()) {
+
             boolean isBack = gamepad1.y;
             drivetrain.setWeightedDrivePower(new Pose2d(gamepad1.left_stick_y * -0.5, gamepad1.left_stick_x * -0.5, gamepad1.right_stick_x * -0.5));
 
@@ -71,22 +64,6 @@ public class MyLocalizationTest extends LinearOpMode {
             }
             if (!gamepad1.b) {
                 picDe = true;
-            }
-
-            if (gamepad1.right_bumper && idRDe) {
-                id += 1;
-                idRDe = true;
-            }
-            if (!gamepad1.right_bumper) {
-                idRDe = false;
-            }
-
-            if (gamepad1.left_bumper && idLDe) {
-                id -= 1;
-                idLDe = true;
-            }
-            if (!gamepad1.right_bumper) {
-                idLDe = false;
             }
 
             if (gamepad1.dpad_up) {
