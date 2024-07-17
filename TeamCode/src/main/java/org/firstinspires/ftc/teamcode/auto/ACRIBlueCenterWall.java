@@ -28,7 +28,7 @@ public class ACRIBlueCenterWall extends OpMode {
     static Pose2d finalPlacePos;
     static Pose2d finalPlacePos2 = new Pose2d(70, 46, Math.toRadians(180));
 
-    static Pose2d pickupSpecial = new Pose2d(-80,42, Math.toRadians(180));
+    static Pose2d pickupSpecial = new Pose2d(-80,40, Math.toRadians(180));
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -174,19 +174,19 @@ public class ACRIBlueCenterWall extends OpMode {
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Pose2d(70, 42.5, Math.toRadians(180)); //Left
+//            finalPlacePos = new Pose2d(70, 42.5, Math.toRadians(180)); //Left
             finalPlacePos = new Pose2d(70, 41.75, Math.toRadians(180)); //Center
-            finalPlacePos = new Pose2d(70, 41, Math.toRadians(180)); //right
+//            finalPlacePos = new Pose2d(70, 41, Math.toRadians(180)); //right
 
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Pose2d(70, 34.25, Math.toRadians(180)); //left
-            finalPlacePos = new Pose2d(70, 33, Math.toRadians(180)); //Center
-            finalPlacePos = new Pose2d(70, 31.75, Math.toRadians(180)); //right
+//            finalPlacePos = new Pose2d(70, 34.25, Math.toRadians(180)); //left
+            finalPlacePos = new Pose2d(70, 33.75, Math.toRadians(180)); //Center
+//            finalPlacePos = new Pose2d(70, 31.75, Math.toRadians(180)); //right
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Pose2d(70, 29, Math.toRadians(180)); //left
+//            finalPlacePos = new Pose2d(70, 29, Math.toRadians(180)); //left
             finalPlacePos = new Pose2d(70, 28, Math.toRadians(180)); //center
-            finalPlacePos = new Pose2d(70, 26.5, Math.toRadians(180)); //right
+//            finalPlacePos = new Pose2d(70, 26.5, Math.toRadians(180)); //right
 
         }
 
@@ -237,10 +237,10 @@ public class ACRIBlueCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 50, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 50  //acc
                 )
-                .splineTo(new Vector2d(-24, 53), Math.toRadians(180))
-                .splineTo(new Vector2d(-48, 53), Math.toRadians(180))
+                .splineTo(new Vector2d(-24, 50), Math.toRadians(180))
+                .splineTo(new Vector2d(-48, 50), Math.toRadians(180))
                 .resetConstraints()
-                .splineToSplineHeading(new Pose2d(-72, 55, Math.toRadians(200)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-72, 50, Math.toRadians(200)), Math.toRadians(180))
                 .addTemporalMarkerOffset(0.05, () -> {
                     double distance = 30.0;
                     while (distance > 15.0) {

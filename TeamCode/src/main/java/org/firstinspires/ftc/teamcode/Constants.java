@@ -96,7 +96,7 @@ public class Constants {
         public static double extended = 0.6;
         public static double half = 0.335;
         public static double clearClimber = 0.35;
-        public static double whileIntaking = 0.25;
+        public static double whileIntaking = 0.23;
         public static double closed = 0.17;
         public static double auto = 0.3;
     }
@@ -181,7 +181,8 @@ public class Constants {
 
 
         public static int down = 0;
-        public static int climberFire = -1350;//650 //1200 far lineup under truss with allience marker on line
+        public static int climberFireClose = -1350;//650 //1200 far lineup under truss with allience marker on line
+        public static int climberFireFar = 1200;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

@@ -279,7 +279,6 @@ public class Drivetrain extends MecanumDrive {
     // TODO: Refactor this out
     public void stopDrive() {
         drive(0, 0, 0, DriveSpeedEnum.Slow);
-        telemetry.addLine("Drivetrain Stopped");
     }
 
     @NonNull

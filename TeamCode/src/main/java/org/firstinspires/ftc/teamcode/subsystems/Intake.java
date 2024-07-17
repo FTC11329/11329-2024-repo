@@ -37,6 +37,5 @@ public class Intake {
 
     public void stopIntake() {
         intakeMotor.setPower(0);
-        telemetry.addLine("stopped");
     }
 }

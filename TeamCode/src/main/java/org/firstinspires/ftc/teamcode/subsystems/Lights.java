@@ -25,8 +25,6 @@ public class Lights {
         dumbLights = hardwareMap.get(DcMotor.class, "dumbLed");
         dumbLights.setDirection(DcMotorSimple.Direction.REVERSE);
         dumbLights.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        lightWaveThread = new LightWaveThread(this);
-        lightWaveThread.start();
     }
 
     //Dumb dump
@@ -43,13 +41,11 @@ public class Lights {
         }
     }
     public void startDumbWaveThread() {
-        lightWaveThread.setRunning(true);
+//        lightWaveThread = new LightWaveThread(this);
+//        lightWaveThread.start();
     }
     public void killDumbWaveThread() {
-        lightWaveThread.setStopped();
-    }
-    public void stopDumbWaveThread() {
-        lightWaveThread.setRunning(false);
+//        lightWaveThread.setStopped();
     }
 
     public void setDumbWave(double speed, double min, double max) {
@@ -65,26 +61,33 @@ public class Lights {
     }
 }
 class LightWaveThread extends Thread{
+    ElapsedTime elapsedTime = new ElapsedTime();
     volatile Lights lights;
-    private boolean isRunning;
     private boolean stopped;
+    double speed = 1;
+    double min = 0;
+    double max = 1;
     public LightWaveThread(Lights lights) {
         super();
         this.lights = lights;
-        isRunning = false;
         stopped = false;
     }
 
     @Override
     public void run() {
-        while (isRunning && !stopped) {
-            lights.setDumbWave(1,0, 1);
+        while (!stopped) {
+            max = max / 2;
+            min = min + max;
+            speed = speed * 2 * Math.PI;
+            lights.setDumbLed(-max * (Math.cos(speed * elapsedTime.seconds())) + min);
+            try {
+                wait(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    public void setRunning(boolean isRunning) {
-        this.isRunning = isRunning;
-    }
 
     public void setStopped() {
         stopped = true;

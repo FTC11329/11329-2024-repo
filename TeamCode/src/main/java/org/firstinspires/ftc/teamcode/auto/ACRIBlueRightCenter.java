@@ -124,15 +124,15 @@ public class ACRIBlueRightCenter extends OpMode {
         }
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(72, 38);
+            finalPlacePos = new Vector2d(72, 30);
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlacePos = new Vector2d(72, 36);
-            wristPos = 1;
+            wristPos = 5;
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Vector2d(72, 30);
+            finalPlacePos = new Vector2d(72, 38);
             wristPos = 1;
         }
 

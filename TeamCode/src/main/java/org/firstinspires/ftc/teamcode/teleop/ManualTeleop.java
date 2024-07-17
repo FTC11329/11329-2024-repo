@@ -81,7 +81,7 @@ public class ManualTeleop extends OpMode {
             isClimberUp = true;
 
         } else if (climberFireBool) {
-            climberPos = Constants.Climber.climberFire;
+            climberPos = Constants.Climber.climberFireFar;
             isClimberUp = true;
 
         } else if (climberDownBool) {

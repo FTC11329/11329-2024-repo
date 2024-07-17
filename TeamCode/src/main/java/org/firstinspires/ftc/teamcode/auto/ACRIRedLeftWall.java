@@ -117,7 +117,29 @@ public class ACRIRedLeftWall extends OpMode {
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
-        pickupWhitePixelStack.Left1stToWallStack.run(restOfIt);
+        restOfIt
+                .addTemporalMarkerOffset(0, () -> {
+                    clawSensor.setRunInAuto(true);
+                    outtake.presetSlides(Constants.Slides.whileIntaking);
+                    outtake.setExtendo(Constants.Extendo.whileIntaking);
+                    intake.setIntakePower(Constants.Intake.intake, 0);
+                    intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                })
+                .addTemporalMarkerOffset(0.4, () -> {
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
+                })
+                .waitSeconds(0.3)
+                .forward(2.75)
+                .setReversed(true)
+                .addTemporalMarkerOffset(1.5, () -> {
+                    intake.setIntakePower(Constants.Intake.outake, 0);
+                    outtake.presetSlides(-20);
+                    clawSensor.setRunInAuto(false);
+                })
+                .addTemporalMarkerOffset(3, () -> {
+                    intake.setIntakePower(0, 0);
+                });
 
 
         if (barcodePosition == BarcodePosition.One) {

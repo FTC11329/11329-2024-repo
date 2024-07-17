@@ -21,23 +21,15 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Center Center CRI", group = " Testing")//Dark Blue
+@Autonomous(name = "A Blue Right Wall CRI", group = "  Testing") //orange
 @Config
-public class ACRIBlueCenterCenter extends OpMode {
-    int wristPos;
-    boolean extend = false;
-    static Pose2d startingPose = new Pose2d(-7, 61.5, Math.toRadians(-90));//starts againsed the wall
-    static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(70, 6);
+public class ACRIBlueRightWall extends OpMode {
+    static Pose2d startingPose = new Pose2d(-64.25, 63, Math.toRadians(-90));
+    static Pose2d finalPlacePos;
 
-    static Pose2d pickupSpecial = new Pose2d(-16.5, 13.5, Math.toRadians(-135));
+    static Pose2d pickupSpecial = new Pose2d(-79.5,39, Math.toRadians(180));
 
-//    static Vector2d prePickup = new Vector2d(0, 8.5);
-//    static Pose2d pickupSpecial2 = new Pose2d(-13,8, Math.toRadians(-135)); //normal ***********************************************
-//    static double yComingBack = 8.5;
-    static Vector2d prePickup = new Vector2d(-24, 12);
-    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
-    static double yComingBack = 8.5;
+    int wristRot;
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -62,7 +54,6 @@ public class ACRIBlueCenterCenter extends OpMode {
 
     public void init() {
         lights = new Lights(hardwareMap);
-
         lights.setDumbLed(1);
         intake = new Intake(hardwareMap);
         outtake = new Outtake(hardwareMap);
@@ -80,13 +71,13 @@ public class ACRIBlueCenterCenter extends OpMode {
 
         //1**************************************************************************
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePaths.CenterPlacePos1.run(placeSpikeMark1);
+        placePurplePaths.RightPlacePos1Right.run(placeSpikeMark1);
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePaths.CenterPlacePos2.run(placeSpikeMark2);
+        placePurplePaths.RightPlacePos2Right.run(placeSpikeMark2);
         //3**************************************************************************
         placeSpikeMark3 = drivetrain.trajectorySequenceBuilder(startingPose);
-        placePurplePaths.CenterPlacePos3.run(placeSpikeMark3);
+        placePurplePaths.RightPlacePos3Right.run(placeSpikeMark3);
         lights.setDumbLed(0);
     }
 
@@ -95,7 +86,7 @@ public class ACRIBlueCenterCenter extends OpMode {
         boolean isBack = gamepad1.a;
         cameras.setCameraSide(isBack);
 
-        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(true);
         telemetry.addData("Barcode Position", barcodePosition);
         telemetry.addData("FPS", cameras.switchingCamera.getFps());
         telemetry.addData("Is back", isBack);
@@ -107,35 +98,24 @@ public class ACRIBlueCenterCenter extends OpMode {
     @Override
     public void start() {
         cameras.setCameraSideThreaded(true);
-        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(false);
+        BarcodePosition barcodePosition = distanceSensors.getDirectionBlue(true);
 
         drivetrain.setPoseEstimate(startingPose);
 
-        TrajectorySequence placeSpikeMarkActual = null;
+        TrajectorySequence placeSpikeMarkActual;
 
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMarkActual = placeSpikeMark1.build();
-            finalPlacePos = new Vector2d(72, 38);
-            wristPos = 5;
-
         } else if (barcodePosition == BarcodePosition.Two) {
             placeSpikeMarkActual = placeSpikeMark2.build();
-            finalPlacePos = new Vector2d(72, 35.75);
-            wristPos = 1;
         } else {
             placeSpikeMarkActual = placeSpikeMark3.build();
-            finalPlacePos = new Vector2d(72, 30.5);
-            wristPos = 1;
-            pickupSpecial = pickupSpecial.plus(new Pose2d(1,-3, Math.toRadians(0)));
         }
 
         drivetrain.followTrajectorySequence(placeSpikeMarkActual);
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
         restOfIt
-                .resetConstraints()
-                .setReversed(true)
-                .lineToLinearHeading(pickupSpecial)
-                .addTemporalMarkerOffset(-0.2, () -> {
+                .addTemporalMarkerOffset(0, () -> {
                     clawSensor.setRunInAuto(true);
                     outtake.presetSlides(Constants.Slides.whileIntaking);
                     outtake.setExtendo(Constants.Extendo.whileIntaking);
@@ -143,34 +123,64 @@ public class ACRIBlueCenterCenter extends OpMode {
                     intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
                     specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                 })
-                .addTemporalMarkerOffset(0.1, () -> {
+                .addTemporalMarkerOffset(0.4, () -> {
                     specialIntake.setIntakeServo(Constants.SpecialIntake.up);
                 })
-                .waitSeconds(0.1)
-                .forward(3)
+                .waitSeconds(0.3)
+                .forward(2.75)
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    outtake.presetSlides(0);
+                    outtake.extend(false);
+                    outtake.presetSlides(-20);
                     clawSensor.setRunInAuto(false);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
                 })
+                .lineTo(new Vector2d(-80, 55));
+
+        if (barcodePosition == BarcodePosition.One) {
+            finalPlacePos = new Pose2d(68, 41.75, Math.toRadians(180));
+            wristRot = 5;
+        } else if (barcodePosition == BarcodePosition.Two) {
+            finalPlacePos = new Pose2d(68, 35.25, Math.toRadians(180));
+            wristRot = 5;
+
+        } else {//if barcodePosition == BarcodePosition.Three
+            finalPlacePos = new Pose2d(68, 28.75, Math.toRadians(180));
+            wristRot = 1;
+
+        }
+        restOfIt
                 .addTemporalMarkerOffset(0, () -> {
                     cameras.setCameraSideThreaded(true);
                 })
-                .splineTo(new Vector2d(0, 12), Math.toRadians(0))
-                .splineTo(new Vector2d(40, 12), Math.toRadians(0))
-                .waitSeconds(0.01)
+                .lineToSplineHeading(new Pose2d(-72, 56, Math.toRadians(180)))
+                .splineToSplineHeading(new Pose2d(-60, 56, Math.toRadians(180)), Math.toRadians(0))
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
+                )
+                .splineTo(new Vector2d(0,51), Math.toRadians(0))
+                .splineTo(new Vector2d(50,51), Math.toRadians(0))
+                .addTemporalMarkerOffset(-2.5, () -> {
+                    outtake.presetSlides(-300);
+                })
+                .addTemporalMarkerOffset(-2, () -> {
+                    outtake.holdClaw(true);
+                })
+                .resetConstraints()
+                .splineToLinearHeading(new Pose2d(60,50, Math.toRadians(-200)), Math.toRadians(0))
+                .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
-                    while (distance > 15.0) {
-                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
+                    while (distance > 25.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                         boolean present = optionalPose.isPresent();
                         if (present) {
                             distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
-                            if (distance < 15.0) {
+                            if (distance < 25.0) {
                                 drivetrain.setPoseEstimate(optionalPose.get());
                             }
                         }
@@ -179,103 +189,61 @@ public class ACRIBlueCenterCenter extends OpMode {
                         telemetry.update();
                     }
                 })
-
-                .splineToConstantHeading(finalPlacePos, Math.toRadians(0))
+                .waitSeconds(0.2)
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 26, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 26  //acc
+                )
+                .lineToLinearHeading(finalPlacePos)
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow + 200, Constants.Arm.placePos, wristPos, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, 7, Constants.Extendo.extended, true);
                 })
+                .resetConstraints()
+                .waitSeconds(0.2)
                 .addTemporalMarkerOffset(0, () -> {
+                    outtake.presetSlides(650);
+                })
+                .addTemporalMarkerOffset(0.2, () -> {
+                    double distance = 30.0;
+                    while (distance > 25.0) {
+                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
+                        boolean present = optionalPose.isPresent();
+                        if (present) {
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            if (distance < 25.0) {
+                                drivetrain.setPoseEstimate(optionalPose.get());
+                            }
+                        }
+                        telemetry.addData("distance = ", distance);
+                        telemetry.addData("did see one", optionalPose.isPresent());
+                        telemetry.update();
+                    }
+                })
+                .addTemporalMarkerOffset(0.8, () -> {
                     outtake.holdClaw(false);
                     outtake.extend(false);
                 })
+                .waitSeconds(1)
+                .setReversed(false)
                 .addTemporalMarkerOffset(0.5, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
                     outtake.createPresetThread(5, Constants.Arm.intakePos, 3, false, false);
                 })
-                .setReversed(false)
-                .splineToConstantHeading(new Vector2d(50, 10), Math.toRadians(180))
-                .setConstraints(
-                        (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
-                        (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
-                )
-                .splineToConstantHeading(prePickup, Math.toRadians(180))
-                .splineToSplineHeading(pickupSpecial2, Math.toRadians(180))
-                //stack intake
-                .addTemporalMarkerOffset(-0.5, () -> {
-                    clawSensor.setRunInAuto(true);
-                    outtake.presetSlides(Constants.Slides.whileIntaking);
-                    outtake.setExtendo(Constants.Extendo.whileIntaking);
-                    intake.setIntakePower(Constants.Intake.intake, 0);
-                    intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
-                })
-                .addTemporalMarkerOffset(0.05 , () -> {
-                    intake.setIntakePower(Constants.Intake.intake, 0);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
+                // Left Park
+//                .lineTo(new Vector2d(70, 64))
+//                .lineTo(new Vector2d(85, 64));
 
-                })
-                .waitSeconds(0.1)
-                .forward(2.75)
-                .waitSeconds(0.5)
-                .addTemporalMarkerOffset(0.5 , () -> {
-                    outtake.presetSlides(-50);
-                })
-                .setReversed(true)
-                .addTemporalMarkerOffset(1.5, () -> {
-                    intake.setIntakePower(Constants.Intake.outake, 0);
-                    clawSensor.setRunInAuto(false);
-                    outtake.holdClaw(true);
-                })
-                .addTemporalMarkerOffset(3, () -> {
-                    intake.setIntakePower(0, 0);
-                })
+                // Center
+                .lineTo(new Vector2d(70, 40));
 
-                .lineToLinearHeading(new Pose2d(0, yComingBack, Math.toRadians(180)))
-                .lineTo(new Vector2d(40, yComingBack))
-                .waitSeconds(0.01)
-                .addTemporalMarkerOffset(0, () -> {
-                    double distance = 30.0;
-                    while (distance > 20.0) {
-                        Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                        boolean present = optionalPose.isPresent();
-                        if (present) {
-                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
-                            if (distance < 20.0) {
-                                drivetrain.setPoseEstimate(optionalPose.get());
-                            }
-                        }
-                        telemetry.addData("distance = ", distance);
-                        telemetry.addData("did see one", optionalPose.isPresent());
-                        telemetry.update();
-                    }
-                })
-                .splineToConstantHeading(finalPlacePos2, Math.toRadians(0))
-                .addTemporalMarkerOffset(-2.4, () -> {
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.up);
-                    intake.setIntakePower(0, 0);
-                    intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
-                })
-                .waitSeconds(0.2)
-                .addTemporalMarkerOffset(-0.2, () -> {
-                    extend = true;
-                })
-                .addTemporalMarkerOffset(0.2, () -> {
-                    extend = false;
-                    outtake.holdClaw(false);
-                    outtake.extend(false);
-                })
-                .waitSeconds(0.1)
-                .strafeRight(13)
-                .addTemporalMarkerOffset(-0.5, () -> {
-                    intake.setIntakePower(0, 0);
-                    intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
-                })
-                .waitSeconds(10);
+                // Right Park
+//                .waitSeconds(0.5)
+//                .lineTo(new Vector2d(74 , 19));
+
+        restOfIt.waitSeconds(10);
 
         drivetrain.followTrajectorySequenceAsync(restOfIt.build());
     }
@@ -283,7 +251,7 @@ public class ACRIBlueCenterCenter extends OpMode {
     @Override
     public void loop() {
         drivetrain.update();
-        outtake.periodic(extend);
+        outtake.periodic();
         if (clawSensor.autoSense()) {
             intake.setIntakePower(-0.5, 0);
             outtake.presetSlides(-5);

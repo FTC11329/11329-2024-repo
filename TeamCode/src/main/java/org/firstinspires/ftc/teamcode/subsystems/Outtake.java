@@ -208,6 +208,7 @@ class PresetThread extends Thread{
     public void run() {
         if (goingUp) {
             if (!grabbed) {
+                outtake.extend(false);
                 outtake.presetSlides(-20);
                 outtake.holdClaw(true);
                 try {
@@ -231,6 +232,7 @@ class PresetThread extends Thread{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             outtake.setWristPos(wristPos);
         } else {
             outtake.presetArm(Constants.Arm.safeArmPos + 0.001);

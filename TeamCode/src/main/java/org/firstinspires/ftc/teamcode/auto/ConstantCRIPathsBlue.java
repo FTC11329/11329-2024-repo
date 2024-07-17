@@ -136,9 +136,9 @@ public class ConstantCRIPathsBlue {
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                     )
                     .addTemporalMarker(() -> {
-                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-81, 35, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-81, 29, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdClaw(false);
@@ -150,8 +150,7 @@ public class ConstantCRIPathsBlue {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .turn(Math.toRadians(-90))
-                    .lineToLinearHeading((new Pose2d(-80,35, Math.toRadians(180))));
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(-0.5)));
 
         };
         SequenceFunction RightPlacePos2Right = (prev) -> {//untested
@@ -161,9 +160,9 @@ public class ConstantCRIPathsBlue {
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                     )
                     .addTemporalMarker(() -> {
-                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-81, 24.5, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-75, 24, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdClaw(false);
@@ -175,7 +174,7 @@ public class ConstantCRIPathsBlue {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .lineToLinearHeading((new Pose2d(-80,35, Math.toRadians(180))));
+                    .lineToLinearHeading(pickupSpecial);
         };
         SequenceFunction RightPlacePos1Right = (prev) -> { //untested
             prev
@@ -184,9 +183,9 @@ public class ConstantCRIPathsBlue {
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                     )
                     .addTemporalMarker(() -> {
-                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true);
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-62, 35, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-59, 35, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdClaw(false);
@@ -198,7 +197,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(0, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .lineToLinearHeading((new Pose2d(-80, 35, Math.toRadians(180))));
+                    .lineToLinearHeading(pickupSpecial);
 
         };
         //Center **************************************************************************************************************************************************************************************************************************************
