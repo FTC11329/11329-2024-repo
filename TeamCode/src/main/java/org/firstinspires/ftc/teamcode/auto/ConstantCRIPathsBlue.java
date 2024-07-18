@@ -95,7 +95,7 @@ public class ConstantCRIPathsBlue {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
                     .splineTo(new Vector2d(-70, 25), Math.toRadians(-90))
-                    .splineToConstantHeading(new Vector2d(-66, 15), Math.toRadians(-40))
+                    .splineToConstantHeading(new Vector2d(-64, 15), Math.toRadians(-40))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
@@ -212,7 +212,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half + 0.12, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-14, 35, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-14, 30, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdClaw(false);
@@ -231,22 +231,23 @@ public class ConstantCRIPathsBlue {
             prev
                     .splineToSplineHeading(new Pose2d(-13, 36, Math.toRadians(180)), Math.toRadians(-90))
                     .splineToSplineHeading(new Pose2d(-11.9, 14, Math.toRadians(180)), Math.toRadians(-90))
-                    .lineToLinearHeading(new Pose2d(-16, 14, Math.toRadians(-90)))
+                    .lineToLinearHeading(new Pose2d(-16, 12, Math.toRadians(-90)))
 
-                    .addTemporalMarkerOffset(-0.5, () -> {
-                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
+                    .addTemporalMarkerOffset(-0.8, () -> {
+                        outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.half + 0.1, true, true);
                     })
                     .waitSeconds(0.2)
                     .addTemporalMarkerOffset(0, () -> {
                         outtake.holdBackClaw(false);
+                        outtake.setExtendo(Constants.Extendo.half);
                     })
-                    .addTemporalMarkerOffset(0.1, () -> {
+                    .addTemporalMarkerOffset(0.5, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
-                    .addTemporalMarkerOffset(0.1, () -> {
+                    .addTemporalMarkerOffset(0.5, () -> {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .waitSeconds(0.1);
+                    .waitSeconds(0.5);
         };
         SequenceFunction CenterPlacePos3 = (prev) -> {
             prev
@@ -257,7 +258,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, false, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-10, 35, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(-10, 33, Math.toRadians(0)))
                     .addTemporalMarkerOffset(-0.4, () -> {
                         outtake.setExtendo(Constants.Extendo.half + 0.05);
                     })

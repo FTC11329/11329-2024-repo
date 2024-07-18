@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Center Wall CRI", group = " Testing") //aqua
+@Autonomous(name = "A Blue Center Wall CRI", group = " Competition") //aqua ~1.75 sec left
 @Config
 public class ACRIBlueCenterWall extends OpMode {
     static Pose2d startingPose = new Pose2d(-6.75, 61, Math.toRadians(-90));  //starts agansed the pole
@@ -76,8 +76,8 @@ public class ACRIBlueCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 30, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 30  //acc
                 )
-                .lineToLinearHeading(new Pose2d(-5, 43, Math.toRadians(91)))
-                .addTemporalMarkerOffset(-0.5, () -> {
+                .lineToLinearHeading(new Pose2d(-5, 46, Math.toRadians(91)))
+                .addTemporalMarkerOffset(-1, () -> {
                     outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                 })
                 .waitSeconds(0.2)
@@ -100,7 +100,7 @@ public class ACRIBlueCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
                 .lineToLinearHeading(new Pose2d(-9, 36, Math.toRadians(91)))
-                .addTemporalMarkerOffset(-0.5, () -> {
+                .addTemporalMarkerOffset(-0.75, () -> {
                     outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto + 0.12, true, true);
                 })
                 .waitSeconds(0.2)
@@ -218,7 +218,7 @@ public class ACRIBlueCenterWall extends OpMode {
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow + 250/*+200 for 2nd row*/, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.superLow + 250/*+250 for 2nd row*/, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
                 })
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdClaw(false);
@@ -237,10 +237,10 @@ public class ACRIBlueCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 50, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 50  //acc
                 )
-                .splineTo(new Vector2d(-24, 50), Math.toRadians(180))
-                .splineTo(new Vector2d(-48, 50), Math.toRadians(180))
+                .splineTo(new Vector2d(-24, 55), Math.toRadians(180))
+                .splineTo(new Vector2d(-48, 55), Math.toRadians(180))
                 .resetConstraints()
-                .splineToSplineHeading(new Pose2d(-72, 50, Math.toRadians(200)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-72, 55, Math.toRadians(200)), Math.toRadians(180))
                 .addTemporalMarkerOffset(0.05, () -> {
                     double distance = 30.0;
                     while (distance > 15.0) {
@@ -290,7 +290,7 @@ public class ACRIBlueCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 50  //acc
                 )
                 .lineTo(new Vector2d(-60, 58))
-                .splineTo(new Vector2d(30,53), Math.toRadians(0))
+                .splineTo(new Vector2d(30,58), Math.toRadians(0))
                 .addTemporalMarkerOffset(-2, () -> {
                     outtake.holdClaw(true);
                 })

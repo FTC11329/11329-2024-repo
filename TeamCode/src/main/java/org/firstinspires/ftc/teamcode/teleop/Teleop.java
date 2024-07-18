@@ -48,6 +48,8 @@ public class Teleop extends OpMode {
     boolean lightDe = true;
     boolean droneClimbDe = false;
     boolean droneClimbTogg = false;
+    boolean lastIntake = false;
+
     DriveSpeedEnum driveSpeed;
 
 
@@ -196,6 +198,10 @@ public class Teleop extends OpMode {
             intake.setIntakeServoPower(0);
         }
 
+        if (!intakeBool && lastIntake) {
+            outtake.extend(false);
+            outtake.presetSlides(0);
+        }
         //SPECIAL INTAKE
         if (SIntakeUp && SIntakeDebounce) {
             intakeLevel = 6;
@@ -449,15 +455,15 @@ public class Teleop extends OpMode {
         } else if (goingPreset && presetThreadDebounce && !isClimberUp && !endgameToggle && goingToPreset) {
             if (highPresetBool && !isDroneing) {
                 intakeLevel = 6;
-                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
+                outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true, true);
 
             } else if (medPresetBool && !isDroneing) {
                 intakeLevel = 6;
-                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
+                outtake.createPresetThread(Constants.Slides.med, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true, true);
 
             } else if (lowPresetBool && !isDroneing) {
                 intakeLevel = 6;
-                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, !backClawDropped, true);
+                outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, outtake.getTriedWristPos(), true, true, true);
 
             } else if (intakePresetBool && !isDroneing) {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
@@ -535,10 +541,11 @@ public class Teleop extends OpMode {
 
 
 
+        lastIntake = intakeBool;
         //telemetry
-//        telemetry.addData("Slide Position", outtake.getSlidePosition());
-//        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
-//        telemetry.addData("Arm Position", outtake.getArmPosition());
+        telemetry.addData("Slide Position", outtake.getSlidePosition());
+        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
+        telemetry.addData("Arm Position", outtake.getArmPosition());
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
 //        telemetry.addData("Climber pos", climberPos);

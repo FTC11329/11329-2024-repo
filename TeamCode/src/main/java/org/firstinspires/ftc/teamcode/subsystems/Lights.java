@@ -63,7 +63,7 @@ public class Lights {
 class LightWaveThread extends Thread{
     ElapsedTime elapsedTime = new ElapsedTime();
     volatile Lights lights;
-    private boolean stopped;
+    volatile private boolean stopped;
     double speed = 1;
     double min = 0;
     double max = 1;

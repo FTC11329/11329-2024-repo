@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Right Center CRI", group = " Testing") //yellow
+@Autonomous(name = "A Blue Right Center CRI", group = " Competition") //yellow ~1.5 sec left
 @Config
 public class ACRIBlueRightCenter extends OpMode {
     int wristPos;
@@ -124,15 +124,15 @@ public class ACRIBlueRightCenter extends OpMode {
         }
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(72, 30);
+            finalPlacePos = new Vector2d(72, 38);
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(72, 36);
+            finalPlacePos = new Vector2d(72, 33);
             wristPos = 5;
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Vector2d(72, 38);
+            finalPlacePos = new Vector2d(72, 30);
             wristPos = 1;
         }
 

@@ -21,10 +21,9 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Red Right Park CRI", group = "Comp") //purple
+@Autonomous(name = "A Red Right Park CRI", group = " Testing") //purple
 @Config
 public class ACRIRedRightPark extends OpMode {
-    boolean whiteLeft;
     static Pose2d startingPose = new Pose2d(41, -63, Math.toRadians(90));
 
     static Vector2d finalPlacePos;

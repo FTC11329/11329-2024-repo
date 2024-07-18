@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Right Wall CRI", group = "  Testing") //orange
+@Autonomous(name = "A Blue Right Wall CRI", group = " Competition") //orange ~9.75 sec left
 @Config
 public class ACRIBlueRightWall extends OpMode {
     static Pose2d startingPose = new Pose2d(-64.25, 63, Math.toRadians(-90));
@@ -141,7 +141,7 @@ public class ACRIBlueRightWall extends OpMode {
                 .lineTo(new Vector2d(-80, 55));
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Pose2d(68, 41.75, Math.toRadians(180));
+            finalPlacePos = new Pose2d(68, 41, Math.toRadians(180));
             wristRot = 5;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlacePos = new Pose2d(68, 35.25, Math.toRadians(180));

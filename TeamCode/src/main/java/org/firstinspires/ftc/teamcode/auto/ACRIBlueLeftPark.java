@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Left Park CRI", group = " Testing") //purple
+@Autonomous(name = "A Blue Left Park CRI", group = " Competition") //purple ~20 sec left
 @Config
 public class ACRIBlueLeftPark extends OpMode {
     boolean whiteLeft;
@@ -115,15 +115,15 @@ public class ACRIBlueLeftPark extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             finalPlacePos = new Vector2d(67.5, 45); //left
-            finalPlacePos = new Vector2d(67.5, 43); //right
+//            finalPlacePos = new Vector2d(67.5, 43); //right
 
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlacePos = new Vector2d(67.5, 39.5); //left
-            finalPlacePos = new Vector2d(67.5, 36.5); //right
+//            finalPlacePos = new Vector2d(67.5, 36.5); //right
 
         } else {
             finalPlacePos = new Vector2d(67.5, 32.5); //left
-            finalPlacePos = new Vector2d(67.5, 27); //right
+//            finalPlacePos = new Vector2d(67.5, 27); //right
         }
         restOfIt
                 .setReversed(true)
@@ -147,7 +147,7 @@ public class ACRIBlueLeftPark extends OpMode {
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.extended, true, true);
                 })
                 .addTemporalMarkerOffset(0.4, () -> {
                     outtake.holdClaw(false);

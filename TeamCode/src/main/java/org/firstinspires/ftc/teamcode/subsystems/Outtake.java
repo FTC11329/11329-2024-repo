@@ -210,9 +210,17 @@ class PresetThread extends Thread{
             if (!grabbed) {
                 outtake.extend(false);
                 outtake.presetSlides(-20);
+                while (outtake.getSlidePosition() > -4) {
+                    outtake.manualSlides(-1, false);
+                    try {
+                        sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 outtake.holdClaw(true);
                 try {
-                    sleep(200);
+                    sleep(125);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

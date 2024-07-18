@@ -29,19 +29,19 @@ public class ACRIRedLeftCenter extends OpMode {
     int wristPos;
     static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(71.5, -8);
+    static Vector2d finalPlacePos2 = new Vector2d(71.5, -6);
 
     static Pose2d pickupSpecial = new Pose2d(-72, -14.5, Math.toRadians(90));
 
-    static Vector2d prePickup = new Vector2d(0, -15);
-    static Pose2d pickupSpecial2 = new Pose2d(-11,-17.5, Math.toRadians(135)); //normal ***********************************************
-    static double yComingBack = -18;
-//    static Vector2d prePickup = new Vector2d(-24, -18);
-//    static Pose2d pickupSpecial2 = new Pose2d(-34,-18, Math.toRadians(135)); //far    ***********************************************
-//    static double yComingBack = -24;
+//    static Vector2d prePickup = new Vector2d(0, -8.5);
+//    static Pose2d pickupSpecial2 = new Pose2d(-11,-6, Math.toRadians(135)); //normal ***********************************************
+//    static double yComingBack = -8.5;
+    static Vector2d prePickup = new Vector2d(-24, -12);
+    static Pose2d pickupSpecial2 = new Pose2d(-37, -10.5, Math.toRadians(135)); //far    ***********************************************
+    static double yComingBack = -12;
 
 
-        TrajectorySequenceBuilder placeSpikeMark1 = null;
+    TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
     TrajectorySequenceBuilder placeSpikeMark3 = null;
 
@@ -123,7 +123,7 @@ public class ACRIRedLeftCenter extends OpMode {
         }
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(68.5, -32.75);
+            finalPlacePos = new Vector2d(68.5, -31);
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
@@ -233,11 +233,11 @@ public class ACRIRedLeftCenter extends OpMode {
                     outtake.setExtendo(Constants.Extendo.whileIntaking);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
                 })
                 .addTemporalMarkerOffset(0.05 , () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
 
                 })
                 .waitSeconds(0.1)

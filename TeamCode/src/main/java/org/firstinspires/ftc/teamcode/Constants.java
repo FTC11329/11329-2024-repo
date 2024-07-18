@@ -96,7 +96,7 @@ public class Constants {
         public static double extended = 0.6;
         public static double half = 0.335;
         public static double clearClimber = 0.35;
-        public static double whileIntaking = 0.23;
+        public static double whileIntaking = 0.25;
         public static double closed = 0.17;
         public static double auto = 0.3;
     }
@@ -155,7 +155,7 @@ public class Constants {
         public static int med = 1800;
         public static int high = 3000;
 
-        public static int safeSlidePos = 175;
+        public static int safeSlidePos = 200;
 
         public static int slideMax = 3200;
         public static int slideMin = -5;
@@ -166,7 +166,7 @@ public class Constants {
         public static double armMax = 1;
         public static double armMin = 0;
 
-        public static double placePos = 0.584;
+        public static double placePos = 0.653;
         public static double autoArmDrop = 0.181;
         public static double intakePos = 0.0194;//0.155 //83
 

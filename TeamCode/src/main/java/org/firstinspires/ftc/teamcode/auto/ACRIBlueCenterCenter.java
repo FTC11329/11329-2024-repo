@@ -21,7 +21,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 
 import java.util.Optional;
 
-@Autonomous(name = "A Blue Center Center CRI", group = " Testing")//Dark Blue
+@Autonomous(name = "A Blue Center Center CRI", group = " Competition")//Dark Blue ~2 sec left
 @Config
 public class ACRIBlueCenterCenter extends OpMode {
     int wristPos;
@@ -30,7 +30,7 @@ public class ACRIBlueCenterCenter extends OpMode {
     static Vector2d finalPlacePos;
     static Vector2d finalPlacePos2 = new Vector2d(70, 6);
 
-    static Pose2d pickupSpecial = new Pose2d(-16.5, 13.5, Math.toRadians(-135));
+    static Pose2d pickupSpecial = new Pose2d(-16.5, 12.5, Math.toRadians(-135));
 
 //    static Vector2d prePickup = new Vector2d(0, 8.5);
 //    static Pose2d pickupSpecial2 = new Pose2d(-13,8, Math.toRadians(-135)); //normal ***********************************************
@@ -160,7 +160,7 @@ public class ACRIBlueCenterCenter extends OpMode {
                 .addTemporalMarkerOffset(0, () -> {
                     cameras.setCameraSideThreaded(true);
                 })
-                .splineTo(new Vector2d(0, 12), Math.toRadians(0))
+                .splineTo(new Vector2d(-12, 12), Math.toRadians(0))
                 .splineTo(new Vector2d(40, 12), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
@@ -214,26 +214,24 @@ public class ACRIBlueCenterCenter extends OpMode {
                 })
                 .addTemporalMarkerOffset(0.05 , () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down2);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
 
                 })
                 .waitSeconds(0.1)
                 .forward(2.75)
                 .waitSeconds(0.5)
                 .addTemporalMarkerOffset(0.5 , () -> {
-                    outtake.presetSlides(-50);
                 })
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     clawSensor.setRunInAuto(false);
-                    outtake.holdClaw(true);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
                 })
 
-                .lineToLinearHeading(new Pose2d(0, yComingBack, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(-12, yComingBack, Math.toRadians(180)))
                 .lineTo(new Vector2d(40, yComingBack))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
@@ -286,7 +284,8 @@ public class ACRIBlueCenterCenter extends OpMode {
         outtake.periodic(extend);
         if (clawSensor.autoSense()) {
             intake.setIntakePower(-0.5, 0);
-            outtake.presetSlides(-5);
+            outtake.manualSlides(-1, false);
+            outtake.extend(false);
         }
     }
 }
