@@ -371,11 +371,12 @@ public class Teleop extends OpMode {
         }
         if (isDroneing) {
             outtake.extendo.setExtendo(Constants.Extendo.clearClimber);
-            if (climberPos < 10) {
+            if (planeFire) {
                 isDroneing = false;
             }
             if (intakePresetBool) {
                 climberPos = Constants.Climber.down;
+                isDroneing = false;
             }
 
             if (climberFireBool && droneClimbDe) {

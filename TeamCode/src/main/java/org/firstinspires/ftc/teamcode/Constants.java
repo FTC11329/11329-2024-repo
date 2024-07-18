@@ -182,7 +182,7 @@ public class Constants {
 
         public static int down = 0;
         public static int climberFireClose = -1350;//650 //1200 far lineup under truss with allience marker on line
-        public static int climberFireFar = 1200;
+        public static int climberFireFar = -1200;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }
