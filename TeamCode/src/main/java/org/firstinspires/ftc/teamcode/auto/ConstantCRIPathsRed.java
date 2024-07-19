@@ -143,7 +143,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-81, -35, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-83, -35, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
@@ -216,7 +216,7 @@ public class ConstantCRIPathsRed {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, false, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-10, -35, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(-12, -35, Math.toRadians(0)))
                     .addTemporalMarkerOffset(-0.4, () -> {
                         outtake.setExtendo(Constants.Extendo.half + 0.05);
                     })
@@ -231,7 +231,7 @@ public class ConstantCRIPathsRed {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,-12, 0)));
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(4.5,-11, 0)));
         };
         SequenceFunction CenterPlacePos2 = (prev) -> {
             prev

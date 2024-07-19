@@ -26,18 +26,18 @@ import java.util.Optional;
 public class ACRIRedCenterCenter extends OpMode {
     int wristPos;
     boolean extend = false;
-    static Pose2d startingPose = new Pose2d(-8, -63, Math.toRadians(90));//starts againsed the wall
+    static Pose2d startingPose = new Pose2d(-6.75, -61, Math.toRadians(90));  //starts agansed the pole
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(70, -6);
+    static Vector2d finalPlacePos2 = new Vector2d(70, -4);
 
     static Pose2d pickupSpecial = new Pose2d(-16.5, -12, Math.toRadians(135));
 
-//    static Vector2d prePickup = new Vector2d(0, -15);
-//    static Pose2d pickupSpecial2 = new Pose2d(-11,-14, Math.toRadians(135)); //normal ***********************************************
-//    static double yComingBack = -16;
-    static Vector2d prePickup = new Vector2d(-24, -15);
-    static Pose2d pickupSpecial2 = new Pose2d(-35.5,-14.5, Math.toRadians(135)); //far    ***********************************************
-    static double yComingBack = -21;
+//    static Vector2d prePickup = new Vector2d(0, -8.5);
+//    static Pose2d pickupSpecial2 = new Pose2d(-11,-6, Math.toRadians(135)); //normal ***********************************************
+//    static double yComingBack = -8.5;
+    static Vector2d prePickup = new Vector2d(-24, -12);
+    static Pose2d pickupSpecial2 = new Pose2d(-37, -10.5, Math.toRadians(135)); //far    ***********************************************
+    static double yComingBack = -12;
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
     TrajectorySequenceBuilder placeSpikeMark3 = null;
@@ -114,16 +114,16 @@ public class ACRIRedCenterCenter extends OpMode {
 
         if (barcodePosition == BarcodePosition.One) {
             placeSpikeMarkActual = placeSpikeMark1.build();
-            finalPlacePos = new Vector2d(72, -33.5); //right wrong
+            finalPlacePos = new Vector2d(75, -31.5); //center
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
             placeSpikeMarkActual = placeSpikeMark2.build();
-            finalPlacePos = new Vector2d(72, -39.5); //center
+            finalPlacePos = new Vector2d(75, -39.5); //center
             wristPos = 5;
         } else {
             placeSpikeMarkActual = placeSpikeMark3.build();
-            finalPlacePos = new Vector2d(72, -41.5); //center
+            finalPlacePos = new Vector2d(75, -41.5); //center
             wristPos = 1;
 
         }
@@ -183,7 +183,7 @@ public class ACRIRedCenterCenter extends OpMode {
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow + 300, Constants.Arm.placePos, wristPos, Constants.Extendo.half, true);
+                    outtake.createPresetThread(Constants.Slides.superLow + 250, Constants.Arm.placePos, wristPos, Constants.Extendo.half, true);
                 })
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdClaw(false);

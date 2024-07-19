@@ -166,6 +166,7 @@ public class Constants {
         public static double armMax = 1;
         public static double armMin = 0;
 
+        public static double fixPos = 0.776;
         public static double placePos = 0.653;
         public static double autoArmDrop = 0.181;
         public static double intakePos = 0.0194;//0.155 //83
@@ -182,7 +183,7 @@ public class Constants {
 
         public static int down = 0;
         public static int climberFireClose = -1350;//650 //1200 far lineup under truss with allience marker on line
-        public static int climberFireFar = -1200;
+        public static int climberFireFar = -1111;
         public static int climbButSlightlyDown = -1400;
         public static int climb = -1700;
     }

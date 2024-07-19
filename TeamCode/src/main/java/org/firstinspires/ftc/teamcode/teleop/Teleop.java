@@ -45,10 +45,8 @@ public class Teleop extends OpMode {
     double backOffset;
     double intakeDroneTime = 2140000000;
     boolean droneOnce = true;
-    boolean lightDe = true;
-    boolean droneClimbDe = false;
-    boolean droneClimbTogg = false;
     boolean lastIntake = false;
+    boolean isDroneingDe = false;
 
     DriveSpeedEnum driveSpeed;
 
@@ -96,7 +94,7 @@ public class Teleop extends OpMode {
         boolean slowStrafeRight = gamepad1.dpad_right;
         boolean align = gamepad1.b;
 
-        boolean intakeBool = gamepad2.y || gamepad1.right_stick_button;
+        boolean intakeBool = (gamepad2.y || gamepad1.right_stick_button) && outtake.getSlidePosition() < Constants.Slides.safeSlidePos;
         boolean intakeOuttakeBool = gamepad2.x;
 
         boolean SIntakeUp = gamepad2.left_bumper && !goingToPreset;
@@ -198,7 +196,7 @@ public class Teleop extends OpMode {
             intake.setIntakeServoPower(0);
         }
 
-        if (!intakeBool && lastIntake) {
+        if (!intakeBool && lastIntake && !goingToPreset) {
             outtake.extend(false);
             outtake.presetSlides(0);
         }
@@ -246,7 +244,8 @@ public class Teleop extends OpMode {
         //ARM
         outtake.manualArm(armPower);
         if (armFix) {
-            outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 3, true, true, true);
+            outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.fixPos, 3, true, true, true);
+            goingToPreset = true;
             outtake.holdFrontClaw(true);
             outtake.holdBackClaw(false);
             frontClawDropped = false;
@@ -264,7 +263,7 @@ public class Teleop extends OpMode {
             wristTime = -100;
         }
         //for preset of claw
-        if (intakeBool) {
+        if (gamepad2.y) {
             outtake.setWristPos(3);
         }
         //for flipping 180
@@ -346,11 +345,11 @@ public class Teleop extends OpMode {
             climberDebounce = true;
             intakeLevel = 5;
 
-        } else if (!climberUpBool && climbed) {
+        } else if (climbed && climber.getPosition() < -1700) {
             climberPos = Constants.Climber.climbButSlightlyDown;
             climbed = false;
 
-        } else if (climberFireBool) {
+        } else if (climberFireBool && isDroneingDe) {
             isDroneing = true;
 
         } else if (climberDownBool){
@@ -369,33 +368,26 @@ public class Teleop extends OpMode {
             climbed = true;
             isClimberUp = true;
         }
-        if (isDroneing) {
+        if (!climberUpBool) {
+            climberDebounce = false;
+        }
+
+        if (intakePresetBool && isDroneing) {
+            climberPos = Constants.Climber.down;
+            isDroneing = false;
+        }
+        if (isDroneing && isDroneingDe) {
             outtake.extendo.setExtendo(Constants.Extendo.clearClimber);
-            if (planeFire) {
-                isDroneing = false;
-            }
-            if (intakePresetBool) {
-                climberPos = Constants.Climber.down;
-                isDroneing = false;
-            }
 
-            if (climberFireBool && droneClimbDe) {
-                droneClimbTogg = !droneClimbTogg;
-                droneClimbDe = false;
-            }
             if (!climberFireBool) {
-                droneClimbDe = true;
-            }
-
-            if (droneClimbDe) {
                 climberPos = Constants.Climber.climberFireFar;
             } else {
                 climberPos = Constants.Climber.climberFireClose;
             }
+            isDroneingDe = false;
         }
-
-        if (!climberUpBool) {
-            climberDebounce = false;
+        if (!climberFireBool) {
+            isDroneingDe = true;
         }
 
         //PRE-SETS
@@ -546,10 +538,11 @@ public class Teleop extends OpMode {
         //telemetry
         telemetry.addData("Slide Position", outtake.getSlidePosition());
         telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
-        telemetry.addData("Arm Position", outtake.getArmPosition());
+//        telemetry.addData("Arm Position", outtake.getArmPosition());
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-//        telemetry.addData("Climber pos", climberPos);
+        telemetry.addData("Climber pos", climberPos);
+//        telemetry.addData("Climber actual", climber.getPosition());
 //        telemetry.addData("F", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
 //        telemetry.addData("B", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
 //        telemetry.addData("BDL", backDistanceSensors.getBLeftState());

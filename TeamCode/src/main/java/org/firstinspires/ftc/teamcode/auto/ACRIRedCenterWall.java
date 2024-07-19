@@ -28,7 +28,7 @@ public class ACRIRedCenterWall extends OpMode {
     static Pose2d finalPlacePos;
     static Pose2d finalPlacePos2 = new Pose2d(67, -38.5, Math.toRadians(180));
 
-    static Pose2d pickupSpecial = new Pose2d(-75,-32, Math.toRadians(180));
+    static Pose2d pickupSpecial = new Pose2d(-73,-32, Math.toRadians(180));
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -79,7 +79,7 @@ public class ACRIRedCenterWall extends OpMode {
                 .addTemporalMarker(() -> {
                     outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                 })
-                .lineToLinearHeading(new Pose2d(-15, -31, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-13, -34, Math.toRadians(0)))
                 .waitSeconds(0.1)
                 .addTemporalMarkerOffset(0.1, () -> {
                     outtake.holdBackClaw(false);
@@ -173,17 +173,17 @@ public class ACRIRedCenterWall extends OpMode {
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Pose2d(67, -47, Math.toRadians(180)); //left wrong
-            finalPlacePos = new Pose2d(67, -47, Math.toRadians(180)); //right wrong
+//            finalPlacePos = new Pose2d(67, -47, Math.toRadians(180)); //left wrong
+            finalPlacePos = new Pose2d(68, -46, Math.toRadians(180)); //right
 
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Pose2d(67, -36.25, Math.toRadians(180)); //left
-            finalPlacePos = new Pose2d(67, -39.75, Math.toRadians(180)); //right
+//            finalPlacePos = new Pose2d(68, -36.25, Math.toRadians(180)); //left
+            finalPlacePos = new Pose2d(68, -39.75, Math.toRadians(180)); //right
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Pose2d(67, -43, Math.toRadians(180)); //left
-            finalPlacePos = new Pose2d(67, -44.5, Math.toRadians(180)); //center
-            finalPlacePos = new Pose2d(67, -46, Math.toRadians(180)); //right
+//            finalPlacePos = new Pose2d(68, -43, Math.toRadians(180)); //left
+//            finalPlacePos = new Pose2d(68, -44.5, Math.toRadians(180)); //center
+            finalPlacePos = new Pose2d(68, -46, Math.toRadians(180)); //right
 
         }
 
@@ -234,10 +234,10 @@ public class ACRIRedCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 50, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 50  //acc
                 )
-                .splineTo(new Vector2d(-24, -57), Math.toRadians(180))
-                .splineTo(new Vector2d(-48, -57), Math.toRadians(180))
+                .splineTo(new Vector2d(-24, -55), Math.toRadians(180))
+                .splineTo(new Vector2d(-48, -55), Math.toRadians(180))
                 .resetConstraints()
-                .splineToSplineHeading(new Pose2d(-65, -55, Math.toRadians(125)), Math.toRadians(180))
+                .splineToSplineHeading(new Pose2d(-65, -50, Math.toRadians(125)), Math.toRadians(180))
                 .addTemporalMarkerOffset(0.25, () -> {
                     double distance = 30.0;
                     while (distance > 15.0) {
@@ -283,11 +283,11 @@ public class ACRIRedCenterWall extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
                 )
                 .lineTo(new Vector2d(-60, -55))
-                .splineTo(new Vector2d(30,-57), Math.toRadians(0))
+                .splineTo(new Vector2d(30,-54), Math.toRadians(0))
                 .addTemporalMarkerOffset(-2, () -> {
                     outtake.holdClaw(true);
                 })
-                .splineToSplineHeading(new Pose2d(60,-50, Math.toRadians(215)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(60,-47, Math.toRadians(215)), Math.toRadians(0))
                 .waitSeconds(0.2)
                 .resetConstraints()
                 .addTemporalMarkerOffset(0, () -> {
@@ -332,7 +332,7 @@ public class ACRIRedCenterWall extends OpMode {
     @Override
     public void loop() {
         drivetrain.update();
-        outtake.periodic();
+        outtake.periodic(false);
         if (clawSensor.autoSense()) {
             intake.setIntakePower(-0.5, 0);
             outtake.presetSlides(-5);

@@ -143,7 +143,7 @@ public class ACRIRedLeftWall extends OpMode {
 
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Pose2d(68, -34, Math.toRadians(180));
+            finalPlacePos = new Pose2d(68, -32, Math.toRadians(180));
             wristRot = 5;
         } else if (barcodePosition == BarcodePosition.Two) {
             finalPlacePos = new Pose2d(68, -39.5, Math.toRadians(180));
@@ -175,6 +175,10 @@ public class ACRIRedLeftWall extends OpMode {
                 .resetConstraints()
                 .splineToLinearHeading(new Pose2d(60,-43, Math.toRadians(215)), Math.toRadians(0))
                 .waitSeconds(0.5)
+                .setConstraints(
+                        (displacement, pose, derivative, baseRobotVelocity) -> 26, //vel
+                        (displacement, pose, derivative, baseRobotVelocity) -> 26  //acc
+                )
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
                     while (distance > 25.0) {
@@ -196,9 +200,12 @@ public class ACRIRedLeftWall extends OpMode {
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow + 200, Constants.Arm.placePos, wristRot, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.low, Constants.Arm.placePos, 7, Constants.Extendo.extended, true);
                 })
                 .waitSeconds(0.2)
+                .addTemporalMarkerOffset(0, () -> {
+                    outtake.presetSlides(650);
+                })
                 .addTemporalMarkerOffset(0, () -> {
                     outtake.holdClaw(false);
                     outtake.extend(false);
