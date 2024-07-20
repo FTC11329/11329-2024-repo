@@ -113,16 +113,16 @@ public class ACRIRedRightPark extends OpMode {
         restOfIt = drivetrain.trajectorySequenceBuilder(placeSpikeMarkActual.end());
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(67.5, -26); //left wrong
-            finalPlacePos = new Vector2d(67.5, -29); //right
+            finalPlacePos = new Vector2d(69, -26); //left wrong
+            finalPlacePos = new Vector2d(69, -28.5); //right
 
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(67.5, -33.5); //left
-            finalPlacePos = new Vector2d(67.5, -36.5); //right wrong
+            finalPlacePos = new Vector2d(69, -33.5); //left
+            finalPlacePos = new Vector2d(69, -36.5); //right wrong
 
         } else {
-            finalPlacePos = new Vector2d(67.5, -38); //left
-            finalPlacePos = new Vector2d(67.5, -43); //right
+            finalPlacePos = new Vector2d(69, -38); //left
+            finalPlacePos = new Vector2d(69, -43); //right
 
         }
         restOfIt
@@ -147,7 +147,7 @@ public class ACRIRedRightPark extends OpMode {
                 .addTemporalMarkerOffset(-2, () -> {
                     intake.setIntakePower(0, 0);
                     intake.setIntakeServoPower(0);
-                    outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.extended, true);
+                    outtake.createPresetThread(Constants.Slides.superLow - 50, Constants.Arm.placePos, 5, Constants.Extendo.extended, true, true);
                 })
                 .addTemporalMarkerOffset(0.4, () -> {
                     outtake.holdClaw(false);

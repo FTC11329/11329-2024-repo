@@ -174,7 +174,7 @@ public class ConstantCRIPathsBlue {
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15)
-                    .lineToLinearHeading(pickupSpecial);
+                    .lineToLinearHeading(pickupSpecial.plus(new Pose2d(2,0)));
         };
         SequenceFunction RightPlacePos1Right = (prev) -> { //untested
             prev

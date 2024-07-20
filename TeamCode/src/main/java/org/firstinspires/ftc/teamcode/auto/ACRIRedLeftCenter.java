@@ -36,9 +36,9 @@ public class ACRIRedLeftCenter extends OpMode {
 //    static Vector2d prePickup = new Vector2d(0, -8.5);
 //    static Pose2d pickupSpecial2 = new Pose2d(-11,-6, Math.toRadians(135)); //normal ***********************************************
 //    static double yComingBack = -8.5;
-    static Vector2d prePickup = new Vector2d(-24, -12);
-    static Pose2d pickupSpecial2 = new Pose2d(-37, -10.5, Math.toRadians(135)); //far    ***********************************************
-    static double yComingBack = -12;
+    static Vector2d prePickup = new Vector2d(-24, -16);
+    static Pose2d pickupSpecial2 = new Pose2d(-37, -13, Math.toRadians(135)); //far    ***********************************************
+    static double yComingBack = -15;
 
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;

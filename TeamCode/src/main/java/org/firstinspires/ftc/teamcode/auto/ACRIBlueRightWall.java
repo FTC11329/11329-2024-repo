@@ -141,14 +141,14 @@ public class ACRIBlueRightWall extends OpMode {
                 .lineTo(new Vector2d(-80, 55));
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Pose2d(68, 41, Math.toRadians(180));
+            finalPlacePos = new Pose2d(70, 41, Math.toRadians(180));
             wristRot = 5;
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Pose2d(68, 35.25, Math.toRadians(180));
+            finalPlacePos = new Pose2d(70, 34.25, Math.toRadians(180));
             wristRot = 5;
 
         } else {//if barcodePosition == BarcodePosition.Three
-            finalPlacePos = new Pose2d(68, 28.75, Math.toRadians(180));
+            finalPlacePos = new Pose2d(70, 28.75, Math.toRadians(180));
             wristRot = 1;
 
         }

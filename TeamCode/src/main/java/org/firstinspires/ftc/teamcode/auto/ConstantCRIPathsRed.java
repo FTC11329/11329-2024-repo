@@ -289,12 +289,12 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                     )
-                    .lineToLinearHeading(new Pose2d(47, -34.5, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(43, -33, Math.toRadians(0)))
                     .addTemporalMarkerOffset(0, () -> {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.5, () -> {
-                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true, true);
                     })
                     .lineToLinearHeading(new Pose2d(62, -36, Math.toRadians(180)));
         };
@@ -307,7 +307,7 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                     )
-                    .lineToLinearHeading(new Pose2d(55, -23.5, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(53, -23.5, Math.toRadians(0)))
                     .addTemporalMarkerOffset(0, () -> {
                         outtake.holdBackClaw(false);
                     })
@@ -315,7 +315,7 @@ public class ConstantCRIPathsRed {
                         outtake.presetArm(Constants.Arm.placePos);
                     })
                     .addTemporalMarkerOffset(0.5, () -> {
-                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true, true);
                     })
                     .lineToLinearHeading(new Pose2d(62, -36, Math.toRadians(181)));
         };
@@ -328,12 +328,12 @@ public class ConstantCRIPathsRed {
                             (displacement, pose, derivative, baseRobotVelocity) -> 45, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 45  //acc
                     )
-                    .lineToLinearHeading(new Pose2d(61, -33, Math.toRadians(0)))
+                    .lineToLinearHeading(new Pose2d(59, -33, Math.toRadians(0)))
                     .addTemporalMarkerOffset(0, () -> {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.25, () -> {
-                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true);
+                        outtake.createPresetThread(Constants.Slides.superLow, Constants.Arm.placePos, 5, Constants.Extendo.half + 0.05, true, true);
                     })
                     .lineToLinearHeading(new Pose2d(62, -36, Math.toRadians(181)));
         };
