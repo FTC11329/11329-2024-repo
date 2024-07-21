@@ -33,7 +33,7 @@ public class ACRIBlueRightCenter extends OpMode {
     static Pose2d pickupSpecial = new Pose2d(-74, 14.5, Math.toRadians(-90));
 
     static Vector2d prePickup = new Vector2d(0, 8.5);
-    static Pose2d pickupSpecial2 = new Pose2d(-11.5,11, Math.toRadians(-135)); //normal ***********************************************
+    static Pose2d pickupSpecial2 = new Pose2d(-11,9, Math.toRadians(-135)); //normal ***********************************************
     static double yComingBack = 8.5;
 //    static Vector2d prePickup = new Vector2d(-24, 12);
 //    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
@@ -174,8 +174,8 @@ public class ACRIBlueRightCenter extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineTo(new Vector2d(-12, 7), Math.toRadians(0))
-                .splineTo(new Vector2d(40, 8), Math.toRadians(0))
+                .splineTo(new Vector2d(-12, 8), Math.toRadians(0))
+                .splineTo(new Vector2d(40, 10), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
