@@ -95,10 +95,10 @@ public class Constants {
     public static class Extendo {
         public static double extended = 0.6;
         public static double half = 0.335;
-        public static double clearClimber = 0.35;
-        public static double whileIntaking = 0.25;
+        public static double clearClimber = 0.38;
+        public static double whileIntaking = 0.21;
         public static double closed = 0.17;
-        public static double auto = 0.3;
+        public static double auto = 0.35;
     }
 
     @Config
@@ -120,7 +120,7 @@ public class Constants {
 
     @Config
     public static class ClawSensor {
-        public static double fDistanceLimit = 0.7;//0.33 0.45 0.34 0.2
+        public static double fDistanceLimit = 0.8;//0.33 0.45 0.34 0.2
         public static double bDistanceLimit = 0.90;//0.44, 0.74 0.8 0.5 0.56 0.7 0.5 1.5
 
         public static Vector3D whiteFront  = new Vector3D(1782, 3420, 4120);
@@ -143,10 +143,10 @@ public class Constants {
 
     @Config
     public static class Slides {
-        public static int manualSlidePower = 90;
-        public static double slowManualSlidePower = 0.9; //this times manual slide power is the actual speed
+        public static int manualSlidePower = 120;
+        public static double slowManualSlidePower = 0.8; //this times manual slide power is the actual speed
 
-        public static int whileIntaking = 20;
+        public static int whileIntaking = 23;
 
         public static int intake = -4;
         public static int autoPurple = 200;
@@ -169,7 +169,7 @@ public class Constants {
         public static double fixPos = 0.776;
         public static double placePos = 0.653;
         public static double autoArmDrop = 0.181;
-        public static double intakePos = 0.0194;//0.155 //83
+        public static double intakePos = 0.0538;
 
         public static double manualPosition = 0.03;
 

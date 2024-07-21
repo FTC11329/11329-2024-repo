@@ -84,7 +84,7 @@ public class ConstantCRIPathsRed {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.3, () -> {
-                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.3);
@@ -106,7 +106,7 @@ public class ConstantCRIPathsRed {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.15, () -> {
-                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.15);
@@ -126,7 +126,7 @@ public class ConstantCRIPathsRed {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.15, () -> {
-                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                     })
                     .waitSeconds(0.15)
                     .addTemporalMarkerOffset(0, () -> {

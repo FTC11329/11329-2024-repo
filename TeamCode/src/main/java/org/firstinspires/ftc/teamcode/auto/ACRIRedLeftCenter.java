@@ -29,7 +29,7 @@ public class ACRIRedLeftCenter extends OpMode {
     int wristPos;
     static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(71.5, -6);
+    static Vector2d finalPlacePos2 = new Vector2d(71.5, -4);
 
     static Pose2d pickupSpecial = new Pose2d(-72, -14.5, Math.toRadians(90));
 
@@ -37,7 +37,7 @@ public class ACRIRedLeftCenter extends OpMode {
 //    static Pose2d pickupSpecial2 = new Pose2d(-11,-6, Math.toRadians(135)); //normal ***********************************************
 //    static double yComingBack = -8.5;
     static Vector2d prePickup = new Vector2d(-24, -16);
-    static Pose2d pickupSpecial2 = new Pose2d(-37, -13, Math.toRadians(135)); //far    ***********************************************
+    static Pose2d pickupSpecial2 = new Pose2d(-36, -14, Math.toRadians(135)); //far    ***********************************************
     static double yComingBack = -15;
 
 
@@ -157,9 +157,8 @@ public class ACRIRedLeftCenter extends OpMode {
                 .waitSeconds(0.1)
                 .forward(2.75)
                 .setReversed(true)
-                .addTemporalMarkerOffset(1.5, () -> {
+                .addTemporalMarkerOffset(1.25, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    outtake.presetSlides(0);
                     clawSensor.setRunInAuto(false);
                     outtake.presetSlides(-5);
                     outtake.holdClaw(true);
@@ -281,10 +280,14 @@ public class ACRIRedLeftCenter extends OpMode {
                     outtake.createPresetThread(Constants.Slides.high, Constants.Arm.placePos, 1, Constants.Extendo.half, true);
                 })
                 .waitSeconds(0.2)
+                .addTemporalMarkerOffset(-0.2, () -> {
+                    outtake.setExtendo(Constants.Extendo.extended);
+                })
                 .addTemporalMarkerOffset(0.2, () -> {
                     outtake.holdClaw(false);
                     outtake.extend(false);
                 })
+
                 .waitSeconds(0.1)
                 .strafeLeft(13)
                 .addTemporalMarkerOffset(-0.5, () -> {
@@ -304,6 +307,7 @@ public class ACRIRedLeftCenter extends OpMode {
         if (clawSensor.autoSense()) {
             intake.setIntakePower(-0.5, 0);
             outtake.presetSlides(-5);
+            outtake.extend(false);
         }
     }
 }

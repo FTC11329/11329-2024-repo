@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.subsystems.BackDistanceSensors;
 import org.firstinspires.ftc.teamcode.subsystems.Climber;
@@ -536,16 +537,16 @@ public class Teleop extends OpMode {
 
         lastIntake = intakeBool;
         //telemetry
-        telemetry.addData("Slide Position", outtake.getSlidePosition());
-        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
+//        telemetry.addData("Slide Position", outtake.getSlidePosition());
+//        telemetry.addData("Slide Target Position", outtake.getSlideTargetPosition());
 //        telemetry.addData("Arm Position", outtake.getArmPosition());
 //        telemetry.addData("Slide motor amps", outtake.slides.getCurrent(CurrentUnit.AMPS));
 //        telemetry.addData("Wrist Position", outtake.getTriedWristPos());
-        telemetry.addData("Climber pos", climberPos);
+//        telemetry.addData("Climber pos", climberPos);
 //        telemetry.addData("Climber actual", climber.getPosition());
 //        telemetry.addData("F", outtake.clawSensor.getFrontDistance(DistanceUnit.INCH));
 //        telemetry.addData("B", outtake.clawSensor.getBackDistance(DistanceUnit.INCH));
-//        telemetry.addData("BDL", backDistanceSensors.getBLeftState());
+//        telemetry.addData("BDL", backDi stanceSensors.getBLeftState());
 //        telemetry.addData("BDR", backDistanceSensors.getBRightState());
 
 //        telemetry.addData("drone", isDroneing);

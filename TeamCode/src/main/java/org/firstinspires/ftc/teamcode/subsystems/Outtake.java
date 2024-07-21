@@ -254,7 +254,9 @@ class PresetThread extends Thread{
                 e.printStackTrace();
             }
             outtake.presetArm(armPos);
-            outtake.holdClaw(false);
+            if (!grabbed) {
+                outtake.holdClaw(false);
+            }
             try {
                 sleep(350);
             } catch (InterruptedException e) {

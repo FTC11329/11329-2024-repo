@@ -26,18 +26,18 @@ import java.util.Optional;
 public class ACRIBlueCenterCenter extends OpMode {
     int wristPos;
     boolean extend = false;
-    static Pose2d startingPose = new Pose2d(-7, 61.5, Math.toRadians(-90));//starts againsed the wall
+    static Pose2d startingPose = new Pose2d(-7, 61.5, Math.toRadians(-90));//starts againsed the pole
     static Vector2d finalPlacePos;
     static Vector2d finalPlacePos2 = new Vector2d(70, 6);
 
     static Pose2d pickupSpecial = new Pose2d(-16.5, 12.5, Math.toRadians(-135));
 
-//    static Vector2d prePickup = new Vector2d(0, 8.5);
-//    static Pose2d pickupSpecial2 = new Pose2d(-13,8, Math.toRadians(-135)); //normal ***********************************************
-//    static double yComingBack = 8.5;
-    static Vector2d prePickup = new Vector2d(-24, 12);
-    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
+    static Vector2d prePickup = new Vector2d(0, 8.5);
+    static Pose2d pickupSpecial2 = new Pose2d(-13,8, Math.toRadians(-135)); //normal ***********************************************
     static double yComingBack = 8.5;
+//    static Vector2d prePickup = new Vector2d(-24, 12);
+//    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
+//    static double yComingBack = 8.5;
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
     TrajectorySequenceBuilder placeSpikeMark2 = null;
@@ -151,7 +151,8 @@ public class ACRIBlueCenterCenter extends OpMode {
                 .setReversed(true)
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    outtake.presetSlides(0);
+                    outtake.extend(false);
+                    outtake.presetSlides(-5);
                     clawSensor.setRunInAuto(false);
                 })
                 .addTemporalMarkerOffset(3, () -> {
@@ -210,11 +211,11 @@ public class ACRIBlueCenterCenter extends OpMode {
                     outtake.setExtendo(Constants.Extendo.whileIntaking);
                     intake.setIntakePower(Constants.Intake.intake, 0);
                     intake.setIntakeServoPower(Constants.Intake.intakeServoIntake);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down5);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
                 })
                 .addTemporalMarkerOffset(0.05 , () -> {
                     intake.setIntakePower(Constants.Intake.intake, 0);
-                    specialIntake.setIntakeServo(Constants.SpecialIntake.down4);
+                    specialIntake.setIntakeServo(Constants.SpecialIntake.down3);
 
                 })
                 .waitSeconds(0.1)
@@ -226,6 +227,8 @@ public class ACRIBlueCenterCenter extends OpMode {
                 .addTemporalMarkerOffset(1.5, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
                     clawSensor.setRunInAuto(false);
+                    outtake.extend(false);
+                    outtake.presetSlides(-5);
                 })
                 .addTemporalMarkerOffset(3, () -> {
                     intake.setIntakePower(0, 0);
@@ -283,9 +286,7 @@ public class ACRIBlueCenterCenter extends OpMode {
         drivetrain.update();
         outtake.periodic(extend);
         if (clawSensor.autoSense()) {
-            intake.setIntakePower(-0.5, 0);
-            outtake.manualSlides(-1, false);
-            outtake.extend(false);
+            intake.setIntakePower(-0.25, 0);
         }
     }
 }

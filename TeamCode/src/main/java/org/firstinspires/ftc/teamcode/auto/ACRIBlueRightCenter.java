@@ -28,16 +28,16 @@ public class ACRIBlueRightCenter extends OpMode {
     boolean extend = false;
     static Pose2d startingPose = new Pose2d(-64.5, 63, Math.toRadians(-90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(71.5, 8);
+    static Vector2d finalPlacePos2 = new Vector2d(71.5, 3);
 
     static Pose2d pickupSpecial = new Pose2d(-74, 14.5, Math.toRadians(-90));
 
-//    static Vector2d prePickup = new Vector2d(0, 8.5);
-//    static Pose2d pickupSpecial2 = new Pose2d(-11,6, Math.toRadians(-135)); //normal ***********************************************
-//    static double yComingBack = 8.5;
-    static Vector2d prePickup = new Vector2d(-24, 12);
-    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
+    static Vector2d prePickup = new Vector2d(0, 8.5);
+    static Pose2d pickupSpecial2 = new Pose2d(-11,8, Math.toRadians(-135)); //normal ***********************************************
     static double yComingBack = 8.5;
+//    static Vector2d prePickup = new Vector2d(-24, 12);
+//    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
+//    static double yComingBack = 8.5;
 
 
     TrajectorySequenceBuilder placeSpikeMark1 = null;
@@ -159,11 +159,9 @@ public class ACRIBlueRightCenter extends OpMode {
                 .forward(2.75)
                 .waitSeconds(0.5)
                 .setReversed(true)
-                .addTemporalMarkerOffset(1.5, () -> {
+                .addTemporalMarkerOffset(1, () -> {
                     intake.setIntakePower(Constants.Intake.outake, 0);
-                    outtake.presetSlides(0);
                     clawSensor.setRunInAuto(false);
-                    outtake.presetSlides(-5);
                     outtake.holdClaw(true);
                 })
                 .addTemporalMarkerOffset(3, () -> {
@@ -176,8 +174,8 @@ public class ACRIBlueRightCenter extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineTo(new Vector2d(-12, 7), Math.toRadians(0))
-                .splineTo(new Vector2d(40, 6), Math.toRadians(0))
+                .splineTo(new Vector2d(-12, 3), Math.toRadians(0))
+                .splineTo(new Vector2d(40, 3), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
@@ -277,10 +275,11 @@ public class ACRIBlueRightCenter extends OpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarkerOffset(-0.2, () -> {
-                    extend = true;
+                    outtake.setExtendo(Constants.Extendo.half);
+//                    extend = true;
                 })
                 .addTemporalMarkerOffset(0.2, () -> {
-                    extend = false;
+//                    extend = false;
                     outtake.holdClaw(false);
                     outtake.extend(false);
                 })
@@ -303,6 +302,7 @@ public class ACRIBlueRightCenter extends OpMode {
         if (clawSensor.autoSense()) {
             intake.setIntakePower(-0.5, 0);
             outtake.presetSlides(-5);
+            outtake.extend(false);
         }
     }
 }

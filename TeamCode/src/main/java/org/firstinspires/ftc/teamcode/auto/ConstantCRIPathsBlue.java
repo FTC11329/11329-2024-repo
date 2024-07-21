@@ -77,7 +77,7 @@ public class ConstantCRIPathsBlue {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.15, () -> {
-                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                     })
                     .waitSeconds(0.15)
                     .addTemporalMarkerOffset(0, () -> {
@@ -100,11 +100,11 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
-                    .addTemporalMarkerOffset(0.15, () -> {
-                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
+                    .addTemporalMarkerOffset(0.25, () -> {
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false,false);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
-                    .waitSeconds(0.15);
+                    .waitSeconds(0.25);
         };
         SequenceFunction RightPlacePos3Center = (prev) -> { //untested
             prev
@@ -122,7 +122,7 @@ public class ConstantCRIPathsBlue {
                         outtake.holdBackClaw(false);
                     })
                     .addTemporalMarkerOffset(0.3, () -> {
-                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
+                        outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
                         specialIntake.setIntakeServo(Constants.SpecialIntake.ready);
                     })
                     .waitSeconds(0.3);
