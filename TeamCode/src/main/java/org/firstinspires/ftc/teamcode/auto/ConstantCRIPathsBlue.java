@@ -71,7 +71,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarker(() -> {
                         outtake.createPresetThread(Constants.Slides.autoPurple, Constants.Arm.autoArmDrop, 3, Constants.Extendo.auto, true, true);
                     })
-                    .lineToLinearHeading(new Pose2d(-59, 35, Math.toRadians(180)))
+                    .lineToLinearHeading(new Pose2d(-61, 35, Math.toRadians(180)))
                     .waitSeconds(0.1)
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
@@ -131,6 +131,7 @@ public class ConstantCRIPathsBlue {
 
         SequenceFunction RightPlacePos3Right = (prev) -> {//untested
             prev
+                    .waitSeconds(8.5)
                     .setConstraints(
                             (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
@@ -155,6 +156,7 @@ public class ConstantCRIPathsBlue {
         };
         SequenceFunction RightPlacePos2Right = (prev) -> {//untested
             prev
+                    .waitSeconds(8.5)
                     .setConstraints(
                             (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
@@ -178,6 +180,7 @@ public class ConstantCRIPathsBlue {
         };
         SequenceFunction RightPlacePos1Right = (prev) -> { //untested
             prev
+                    .waitSeconds(8.5)
                     .setConstraints(
                             (displacement, pose, derivative, baseRobotVelocity) -> 60, //vel
                             (displacement, pose, derivative, baseRobotVelocity) -> 60  //acc
@@ -266,7 +269,7 @@ public class ConstantCRIPathsBlue {
                     .addTemporalMarkerOffset(0.1, () -> {
                         outtake.holdBackClaw(false);
                     })
-                    .addTemporalMarkerOffset(0.15, () -> {
+                    .addTemporalMarkerOffset(0.25, () -> {
                         outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, true,false);
                     })
                     .addTemporalMarkerOffset(0.5, () -> {

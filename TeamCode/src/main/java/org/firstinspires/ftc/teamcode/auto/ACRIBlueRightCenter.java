@@ -28,12 +28,12 @@ public class ACRIBlueRightCenter extends OpMode {
     boolean extend = false;
     static Pose2d startingPose = new Pose2d(-64.5, 63, Math.toRadians(-90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(71.5, 3);
+    static Vector2d finalPlacePos2 = new Vector2d(71.5, 7);
 
     static Pose2d pickupSpecial = new Pose2d(-74, 14.5, Math.toRadians(-90));
 
     static Vector2d prePickup = new Vector2d(0, 8.5);
-    static Pose2d pickupSpecial2 = new Pose2d(-11,8, Math.toRadians(-135)); //normal ***********************************************
+    static Pose2d pickupSpecial2 = new Pose2d(-11.5,11, Math.toRadians(-135)); //normal ***********************************************
     static double yComingBack = 8.5;
 //    static Vector2d prePickup = new Vector2d(-24, 12);
 //    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************
@@ -128,7 +128,7 @@ public class ACRIBlueRightCenter extends OpMode {
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
-            finalPlacePos = new Vector2d(72, 33);
+            finalPlacePos = new Vector2d(72, 34.5);
             wristPos = 5;
 
         } else {//if barcodePosition == BarcodePosition.Three
@@ -174,8 +174,8 @@ public class ACRIBlueRightCenter extends OpMode {
                         (displacement, pose, derivative, baseRobotVelocity) -> 55, //vel
                         (displacement, pose, derivative, baseRobotVelocity) -> 55  //acc
                 )
-                .splineTo(new Vector2d(-12, 3), Math.toRadians(0))
-                .splineTo(new Vector2d(40, 3), Math.toRadians(0))
+                .splineTo(new Vector2d(-12, 7), Math.toRadians(0))
+                .splineTo(new Vector2d(40, 8), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
@@ -275,7 +275,7 @@ public class ACRIBlueRightCenter extends OpMode {
                 })
                 .waitSeconds(0.2)
                 .addTemporalMarkerOffset(-0.2, () -> {
-                    outtake.setExtendo(Constants.Extendo.half);
+                    outtake.setExtendo(Constants.Extendo.extended);
 //                    extend = true;
                 })
                 .addTemporalMarkerOffset(0.2, () -> {

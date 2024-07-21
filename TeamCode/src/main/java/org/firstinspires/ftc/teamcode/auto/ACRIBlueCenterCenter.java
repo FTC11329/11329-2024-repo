@@ -30,10 +30,10 @@ public class ACRIBlueCenterCenter extends OpMode {
     static Vector2d finalPlacePos;
     static Vector2d finalPlacePos2 = new Vector2d(70, 6);
 
-    static Pose2d pickupSpecial = new Pose2d(-16.5, 12.5, Math.toRadians(-135));
+    static Pose2d pickupSpecial = new Pose2d(-15, 14, Math.toRadians(-135));
 
     static Vector2d prePickup = new Vector2d(0, 8.5);
-    static Pose2d pickupSpecial2 = new Pose2d(-13,8, Math.toRadians(-135)); //normal ***********************************************
+    static Pose2d pickupSpecial2 = new Pose2d(-11,7, Math.toRadians(-135)); //normal ***********************************************
     static double yComingBack = 8.5;
 //    static Vector2d prePickup = new Vector2d(-24, 12);
 //    static Pose2d pickupSpecial2 = new Pose2d(-36.5, 11, Math.toRadians(-135)); //far    ***********************************************

@@ -29,7 +29,7 @@ public class ACRIRedLeftCenter extends OpMode {
     int wristPos;
     static Pose2d startingPose = new Pose2d(-65.25, -63, Math.toRadians(90));
     static Vector2d finalPlacePos;
-    static Vector2d finalPlacePos2 = new Vector2d(71.5, -4);
+    static Vector2d finalPlacePos2 = new Vector2d(71.5, -2);
 
     static Pose2d pickupSpecial = new Pose2d(-72, -14.5, Math.toRadians(90));
 
@@ -80,8 +80,10 @@ public class ACRIRedLeftCenter extends OpMode {
         placeOnBackDrop = constantCRIPaths.placeOnBackDrop;
 
         //1**************************************************************************
+        lights.setDumbLed(0);
         placeSpikeMark1 = drivetrain.trajectorySequenceBuilder(startingPose);
         placePurplePathsRed.LeftPlacePos1Center.run(placeSpikeMark1);
+        lights.setDumbLed(1);
         //2**************************************************************************
         placeSpikeMark2 = drivetrain.trajectorySequenceBuilder(startingPose);
         placePurplePathsRed.LeftPlacePos2Center.run(placeSpikeMark2);
@@ -123,7 +125,7 @@ public class ACRIRedLeftCenter extends OpMode {
         }
 
         if (barcodePosition == BarcodePosition.One) {
-            finalPlacePos = new Vector2d(68.5, -31);
+            finalPlacePos = new Vector2d(68.5, -29);
             wristPos = 5;
 
         } else if (barcodePosition == BarcodePosition.Two) {
@@ -169,7 +171,7 @@ public class ACRIRedLeftCenter extends OpMode {
                 })
                 .lineToLinearHeading(new Pose2d(-65, -14, Math.toRadians(180)))
                 .splineTo(new Vector2d(-12, -12), Math.toRadians(0))
-                .splineTo(new Vector2d(40, -12), Math.toRadians(0))
+                .splineTo(new Vector2d(55, -12), Math.toRadians(0))
                 .waitSeconds(0.01)
                 .addTemporalMarkerOffset(0, () -> {
                     double distance = 30.0;
@@ -205,7 +207,7 @@ public class ACRIRedLeftCenter extends OpMode {
                 })
                 .setReversed(false)
                 .waitSeconds(0.1)
-                .splineToConstantHeading(new Vector2d(40, -15), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(55, -15), Math.toRadians(180))
                 .addTemporalMarkerOffset(0.05, () -> {
                     double distance = 30.0;
                     while (distance > 15.0) {
