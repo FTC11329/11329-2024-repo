@@ -58,7 +58,7 @@ public class MyLocalizationTest extends LinearOpMode {
 
             if (gamepad1.b && picDe) {
                 Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(id, isBack);
-                optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimate(pose2d));
+                optionalPose.ifPresent(pose2d -> drivetrain.getPoseEstimateOptical(pose2d));
                 see = optionalPose.isPresent();
                 picDe = false;
             }
@@ -72,7 +72,7 @@ public class MyLocalizationTest extends LinearOpMode {
                 outtake.createPresetThread(Constants.Slides.intake, Constants.Arm.intakePos, 3, false, false);
             }
 
-            Pose2d poseEstimate = drivetrain.getPoseEstimate();
+            Pose2d poseEstimate = drivetrain.getPoseEstimateOptical();
             telemetry.addData("is back", isBack);
             telemetry.addData("x", poseEstimate.getX());
             telemetry.addData("y", poseEstimate.getY());

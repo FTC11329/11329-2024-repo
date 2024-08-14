@@ -67,7 +67,7 @@ public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
 
         MovingStatistics forwardOffsetStats = new MovingStatistics(NUM_TRIALS);
         for (int i = 0; i < NUM_TRIALS; i++) {
-            drive.setPoseEstimate(new Pose2d());
+            drive.getPoseEstimateOptical(new Pose2d());
 
             // it is important to handle heading wraparounds
             double headingAccumulator = 0;
@@ -76,7 +76,7 @@ public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
             drive.turnAsync(Math.toRadians(ANGLE));
 
             while (!isStopRequested() && drive.isBusy()) {
-                double heading = drive.getPoseEstimate().getHeading();
+                double heading = drive.getPoseEstimateOptical().getHeading();
                 headingAccumulator += Angle.norm(heading - lastHeading);
                 lastHeading = heading;
 
@@ -84,7 +84,7 @@ public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
             }
 
             double forwardOffset = StandardTrackingWheelLocalizer.FORWARD_OFFSET +
-                    drive.getPoseEstimate().getY() / headingAccumulator;
+                    drive.getPoseEstimateOptical().getY() / headingAccumulator;
             forwardOffsetStats.add(forwardOffset);
 
             sleep(DELAY);

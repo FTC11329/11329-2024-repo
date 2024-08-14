@@ -13,6 +13,7 @@ import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kA;
 import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kStatic;
 import static org.firstinspires.ftc.teamcode.Constants.Roadrunner.kV;
 
+
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -30,6 +31,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -39,6 +41,8 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Constants;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
@@ -66,7 +70,7 @@ public class Drivetrain extends MecanumDrive {
     public static double OMEGA_WEIGHT = 1;
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
-
+    SparkFunOTOS myOtos;
     public final DcMotorEx leftFront;
     public final DcMotorEx leftRear;
     public final DcMotorEx rightRear;
@@ -117,6 +121,21 @@ public class Drivetrain extends MecanumDrive {
                 follower, HEADING_PID, batteryVoltageSensor,
                 lastEncoderPositions, lastEncoderVelocities, lastTrackingEncoderPositions, lastTrackingEncoderVelocities
         );
+
+
+        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        myOtos.setLinearUnit(DistanceUnit.INCH);
+        myOtos.setAngularUnit(AngleUnit.DEGREES);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, 0);
+        myOtos.setOffset(offset);
+        myOtos.setLinearScalar(1.00908);
+        myOtos.setAngularScalar(0.99319);
+        myOtos.calibrateImu();
+
+        // Reset the tracking algorithm - this resets the position to the origin,
+        // but can also be used to recover from some rare tracking errors
+        myOtos.resetTracking();
+
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
@@ -167,7 +186,7 @@ public class Drivetrain extends MecanumDrive {
 
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
-                trajectorySequenceBuilder(getPoseEstimate())
+                trajectorySequenceBuilder(getPoseEstimateOptical())
                         .turn(angle)
                         .build()
         );
@@ -206,7 +225,7 @@ public class Drivetrain extends MecanumDrive {
 
     public void update() {
         updatePoseEstimate();
-        DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimate(), getPoseVelocity());
+        DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimateOptical(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
 
@@ -270,6 +289,13 @@ public class Drivetrain extends MecanumDrive {
         rightFront.setPower(v3);
     }
 
+    public SparkFunOTOS.Pose2D getPoseEstimateOpticalOptical(){
+        return myOtos.getPosition();
+    }
+    public void getPoseEstimateOpticalOptical(Pose2d newPose){
+        SparkFunOTOS.Pose2D fancyPose = new SparkFunOTOS.Pose2D(newPose.getX(), newPose.getY(), newPose.getHeading());
+        myOtos.setPosition(fancyPose);
+    }
     //  This is an artifact that we don't use due to 3 wheel odometry
     @Override
     protected double getRawExternalHeading() {

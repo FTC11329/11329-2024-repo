@@ -21,7 +21,7 @@ public class DrivetrainOnly extends LinearOpMode {
         while (opModeIsActive()) {
             DriveSpeedEnum speed = gamepad1.right_bumper ? DriveSpeedEnum.Fast : DriveSpeedEnum.Slow;
             drivetrain.drive(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, speed);
-            telemetry.addData("Drivetrain pose", drivetrain.getPoseEstimate().toString());
+            telemetry.addData("Drivetrain pose", drivetrain.getPoseEstimateOptical().toString());
 
             temp += (gamepad1.right_trigger - gamepad1.left_trigger) * 0.01;
             telemetry.addData("temp", temp);

@@ -96,7 +96,7 @@ public class ACRIRedRightPark extends OpMode {
         cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
-        drivetrain.setPoseEstimate(startingPose);
+        drivetrain.getPoseEstimateOptical(startingPose);
 
         TrajectorySequence placeSpikeMarkActual;
 
@@ -133,9 +133,9 @@ public class ACRIRedRightPark extends OpMode {
                         Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
                         boolean present = optionalPose.isPresent();
                         if (present) {
-                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimate().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimate().getY() - optionalPose.get().getY(), 2));
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOptical().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOptical().getY() - optionalPose.get().getY(), 2));
                             if (distance < 15.0) {
-                                drivetrain.setPoseEstimate(optionalPose.get());
+                                drivetrain.getPoseEstimateOptical(optionalPose.get());
                             }
                         }
                         telemetry.addData("distance = ", distance);
