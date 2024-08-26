@@ -35,7 +35,7 @@ public class StraightTest extends LinearOpMode {
 
         drive.followTrajectory(trajectory);
 
-        Pose2d poseEstimate = drive.getPoseEstimateOptical();
+        Pose2d poseEstimate = drive.getPoseEstimateOpticalRegular();
         telemetry.addData("finalX", poseEstimate.getX());
         telemetry.addData("finalY", poseEstimate.getY());
         telemetry.addData("finalHeading", poseEstimate.getHeading());

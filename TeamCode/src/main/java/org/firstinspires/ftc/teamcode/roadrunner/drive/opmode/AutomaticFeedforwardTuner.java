@@ -102,7 +102,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
         List<Double> positionSamples = new ArrayList<>();
         List<Double> powerSamples = new ArrayList<>();
 
-        drive.getPoseEstimateOptical(new Pose2d());
+        drive.setPoseEstimateOptical(new Pose2d());
 
         double startTime = clock.seconds();
         while (!isStopRequested()) {
@@ -114,7 +114,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
             double power = vel / maxVel;
 
             timeSamples.add(elapsedTime);
-            positionSamples.add(drive.getPoseEstimateOptical().getX());
+            positionSamples.add(drive.getPoseEstimateOpticalRegular().getX());
             powerSamples.add(power);
 
             drive.setDrivePower(new Pose2d(power, 0.0, 0.0));
@@ -180,7 +180,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
             positionSamples.clear();
             powerSamples.clear();
 
-            drive.getPoseEstimateOptical(new Pose2d());
+            drive.setPoseEstimateOptical(new Pose2d());
             drive.setDrivePower(new Pose2d(MAX_POWER, 0.0, 0.0));
 
             startTime = clock.seconds();
@@ -191,7 +191,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
                 }
 
                 timeSamples.add(elapsedTime);
-                positionSamples.add(drive.getPoseEstimateOptical().getX());
+                positionSamples.add(drive.getPoseEstimateOpticalRegular().getX());
                 powerSamples.add(MAX_POWER);
 
                 drive.updatePoseEstimate();

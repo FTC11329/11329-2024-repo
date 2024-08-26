@@ -53,7 +53,7 @@ public class TrackWidthTuner extends LinearOpMode {
 
         MovingStatistics trackWidthStats = new MovingStatistics(NUM_TRIALS);
         for (int i = 0; i < NUM_TRIALS; i++) {
-            drive.getPoseEstimateOptical(new Pose2d());
+            drive.setPoseEstimateOptical(new Pose2d());
 
             // it is important to handle heading wraparounds
             double headingAccumulator = 0;
@@ -62,7 +62,7 @@ public class TrackWidthTuner extends LinearOpMode {
             drive.turnAsync(Math.toRadians(ANGLE));
 
             while (!isStopRequested() && drive.isBusy()) {
-                double heading = drive.getPoseEstimateOptical().getHeading();
+                double heading = drive.getPoseEstimateOpticalRegular().getHeading();
                 headingAccumulator += Angle.normDelta(heading - lastHeading);
                 lastHeading = heading;
 

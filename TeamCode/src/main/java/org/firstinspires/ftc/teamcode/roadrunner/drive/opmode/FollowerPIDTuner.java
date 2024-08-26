@@ -32,7 +32,7 @@ public class FollowerPIDTuner extends LinearOpMode {
 
         Pose2d startPose = new Pose2d(-DISTANCE / 2, -DISTANCE / 2, 0);
 
-        drive.getPoseEstimateOptical(startPose);
+        drive.setPoseEstimateOptical(startPose);
 
         waitForStart();
 

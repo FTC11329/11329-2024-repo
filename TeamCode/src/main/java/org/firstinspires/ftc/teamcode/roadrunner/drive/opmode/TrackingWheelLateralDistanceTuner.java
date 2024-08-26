@@ -101,7 +101,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
 
             drive.update();
 
-            double heading = drive.getPoseEstimateOptical().getHeading();
+            double heading = drive.getPoseEstimateOpticalRegular().getHeading();
             double deltaHeading = heading - lastHeading;
 
             headingAccumulator += Angle.normDelta(deltaHeading);

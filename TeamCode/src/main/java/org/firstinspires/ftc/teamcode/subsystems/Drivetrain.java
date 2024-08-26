@@ -186,7 +186,7 @@ public class Drivetrain extends MecanumDrive {
 
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
-                trajectorySequenceBuilder(getPoseEstimateOptical())
+                trajectorySequenceBuilder(getPoseEstimateOpticalRegular())
                         .turn(angle)
                         .build()
         );
@@ -225,7 +225,7 @@ public class Drivetrain extends MecanumDrive {
 
     public void update() {
         updatePoseEstimate();
-        DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimateOptical(), getPoseVelocity());
+        DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimateOpticalRegular(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
 
@@ -289,10 +289,13 @@ public class Drivetrain extends MecanumDrive {
         rightFront.setPower(v3);
     }
 
-    public SparkFunOTOS.Pose2D getPoseEstimateOpticalOptical(){
+    public Pose2d getPoseEstimateOpticalRegular() {
+        return new Pose2d(myOtos.getPosition().x, myOtos.getPosition().y, myOtos.getPosition().h);
+    }
+    public SparkFunOTOS.Pose2D getPoseEstimateOptical(){
         return myOtos.getPosition();
     }
-    public void getPoseEstimateOpticalOptical(Pose2d newPose){
+    public void setPoseEstimateOptical(Pose2d newPose){
         SparkFunOTOS.Pose2D fancyPose = new SparkFunOTOS.Pose2D(newPose.getX(), newPose.getY(), newPose.getHeading());
         myOtos.setPosition(fancyPose);
     }

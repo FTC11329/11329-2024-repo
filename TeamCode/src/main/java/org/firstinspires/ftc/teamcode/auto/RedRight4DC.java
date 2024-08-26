@@ -133,7 +133,7 @@ public class RedRight4DC extends OpMode {
         cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
-        drivetrain.getPoseEstimateOptical(startingPose);
+        drivetrain.setPoseEstimateOptical(startingPose);
 
         TrajectorySequence placeSpikeMarkActual = null;
 
@@ -174,7 +174,7 @@ public class RedRight4DC extends OpMode {
                 .setReversed(true)
                 .addTemporalMarker(() -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, true);
-                    optionalPose.ifPresent(pose2d -> drivetrain.getPoseEstimateOptical(pose2d));
+                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimateOptical(pose2d));
                     telemetry.addData("did see one", optionalPose.isPresent());
                     telemetry.update();
                     cameras.setCameraSideThreaded(false);
@@ -202,7 +202,7 @@ public class RedRight4DC extends OpMode {
                 .waitSeconds(0.1)
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.getPoseEstimateOptical(pose2d));
+                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimateOptical(pose2d));
                     telemetry.addData("did see two", optionalPose.isPresent());
                     telemetry.update();
                 })
@@ -255,7 +255,7 @@ public class RedRight4DC extends OpMode {
                 .splineToSplineHeading(new Pose2d(-30, -6, Math.toRadians(195)), Math.toRadians(180))
                 .addTemporalMarkerOffset(0, () -> {
                     Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
-                    optionalPose.ifPresent(pose2d -> drivetrain.getPoseEstimateOptical(pose2d));
+                    optionalPose.ifPresent(pose2d -> drivetrain.setPoseEstimateOptical(pose2d));
                     telemetry.addData("did see four", optionalPose.isPresent());
                     telemetry.update();
                     cameras.kill();

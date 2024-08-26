@@ -98,7 +98,7 @@ public class CRIRedCenterToCenterBD extends OpMode {
         cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(false);
 
-        drivetrain.getPoseEstimateOptical(startingPose);
+        drivetrain.setPoseEstimateOptical(startingPose);
 
         TrajectorySequence placeSpikeMarkActual = null;
 

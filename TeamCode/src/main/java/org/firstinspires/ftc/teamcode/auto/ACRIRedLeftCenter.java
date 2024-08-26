@@ -112,7 +112,7 @@ public class ACRIRedLeftCenter extends OpMode {
         cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
-        drivetrain.getPoseEstimateOptical(startingPose);
+        drivetrain.setPoseEstimateOptical(startingPose);
 
         TrajectorySequence placeSpikeMarkActual;
 
@@ -179,9 +179,9 @@ public class ACRIRedLeftCenter extends OpMode {
                         Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
                         boolean present = optionalPose.isPresent();
                         if (present) {
-                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOptical().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOptical().getY() - optionalPose.get().getY(), 2));
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOpticalRegular().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOpticalRegular().getY() - optionalPose.get().getY(), 2));
                             if (distance < 15.0) {
-                                drivetrain.getPoseEstimateOptical(optionalPose.get());
+                                drivetrain.setPoseEstimateOptical(optionalPose.get());
                             }
                         }
                         telemetry.addData("distance = ", distance);
@@ -214,9 +214,9 @@ public class ACRIRedLeftCenter extends OpMode {
                         Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
                         boolean present = optionalPose.isPresent();
                         if (present) {
-                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOptical().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOptical().getY() - optionalPose.get().getY(), 2));
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOpticalRegular().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOpticalRegular().getY() - optionalPose.get().getY(), 2));
                             if (distance < 15.0) {
-                                drivetrain.getPoseEstimateOptical(optionalPose.get());
+                                drivetrain.setPoseEstimateOptical(optionalPose.get());
                             }
                         }
                         telemetry.addData("distance = ", distance);
@@ -264,9 +264,9 @@ public class ACRIRedLeftCenter extends OpMode {
                         Optional<Pose2d> optionalPose = cameras.getRunnerPoseEstimate(0, false);
                         boolean present = optionalPose.isPresent();
                         if (present) {
-                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOptical().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOptical().getY() - optionalPose.get().getY(), 2));
+                            distance = Math.sqrt(Math.pow(drivetrain.getPoseEstimateOpticalRegular().getX() - optionalPose.get().getX(), 2) + Math.pow(drivetrain.getPoseEstimateOpticalRegular().getY() - optionalPose.get().getY(), 2));
                             if (distance < 20.0) {
-                                drivetrain.getPoseEstimateOptical(optionalPose.get());
+                                drivetrain.setPoseEstimateOptical(optionalPose.get());
                             }
                         }
                         telemetry.addData("distance = ", distance);

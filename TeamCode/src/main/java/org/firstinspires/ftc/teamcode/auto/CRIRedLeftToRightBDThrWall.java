@@ -100,7 +100,7 @@ public class CRIRedLeftToRightBDThrWall extends OpMode {
         cameras.setCameraSideThreaded(true);
         BarcodePosition barcodePosition = distanceSensors.getDirectionRed(true);
 
-        drivetrain.getPoseEstimateOptical(startingPose);
+        drivetrain.setPoseEstimateOptical(startingPose);
 
         TrajectorySequence placeSpikeMarkActual = null;
 
