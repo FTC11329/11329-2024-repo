@@ -125,8 +125,8 @@ public class Drivetrain extends MecanumDrive {
 
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         myOtos.setLinearUnit(DistanceUnit.INCH);
-        myOtos.setAngularUnit(AngleUnit.DEGREES);
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, 0);
+        myOtos.setAngularUnit(AngleUnit.RADIANS);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, Math.toRadians(90));
         myOtos.setOffset(offset);
         myOtos.setLinearScalar(1.00908);
         myOtos.setAngularScalar(0.99319);
