@@ -124,6 +124,7 @@ public class Drivetrain extends MecanumDrive {
 
 
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
+        /*
         myOtos.setLinearUnit(DistanceUnit.INCH);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
         SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, Math.toRadians(90));
@@ -135,6 +136,8 @@ public class Drivetrain extends MecanumDrive {
         // Reset the tracking algorithm - this resets the position to the origin,
         // but can also be used to recover from some rare tracking errors
         myOtos.resetTracking();
+         */
+        configureOtos();
 
     }
 
@@ -314,5 +317,32 @@ public class Drivetrain extends MecanumDrive {
     @Override
     public List<Double> getWheelPositions() {
         return null;
+    }
+
+    private void configureOtos() {
+//         myOtos.setLinearUnit(DistanceUnit.METER);
+        myOtos.setLinearUnit(DistanceUnit.INCH);
+        myOtos.setAngularUnit(AngleUnit.RADIANS);
+//        myOtos.setAngularUnit(AngleUnit.DEGREES);
+
+        myOtos.calibrateImu();
+
+
+//        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, 0);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0,0, 0);
+        myOtos.setOffset(offset);
+
+        myOtos.setLinearScalar(1.00908);
+        myOtos.setAngularScalar(0.99319);
+
+        myOtos.resetTracking();
+
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(17, 64, Math.toRadians(-90));
+        myOtos.setPosition(currentPosition);
+
+        // Get the hardware and firmware version
+        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
+        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
+        myOtos.getVersionInfo(hwVersion, fwVersion);
     }
 }
