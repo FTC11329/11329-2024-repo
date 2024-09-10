@@ -326,18 +326,17 @@ public class Drivetrain extends MecanumDrive {
 //        myOtos.setAngularUnit(AngleUnit.DEGREES);
 
         myOtos.calibrateImu();
+        myOtos.resetTracking();
 
-
-//        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, 0);
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0,0, 0);
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, Math.toRadians(-90));
+//        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0,0, Math.toRadians(-90));
         myOtos.setOffset(offset);
 
         myOtos.setLinearScalar(1.00908);
         myOtos.setAngularScalar(0.99319);
 
-        myOtos.resetTracking();
 
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(17, 64, Math.toRadians(-90));
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, Math.toRadians(0));
         myOtos.setPosition(currentPosition);
 
         // Get the hardware and firmware version
