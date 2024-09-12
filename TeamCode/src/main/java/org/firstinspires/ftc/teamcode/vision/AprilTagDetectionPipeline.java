@@ -32,6 +32,7 @@ public class AprilTagDetectionPipeline {
      */
     public static AprilTagProcessor createAprilTagProcessor() {
         AprilTagLibrary myLibrary = new AprilTagLibrary.Builder()
+                .setAllowOverwrite(true)
                 .addTags(AprilTagGameDatabase.getCurrentGameTagLibrary())
                 .addTag(11, "SharedAllianceLeft",
                         2, new VectorF(60.25f, 41.41f, 4f), DistanceUnit.INCH,

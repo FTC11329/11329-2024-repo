@@ -26,7 +26,7 @@ public class LocalizationTest extends LinearOpMode {
 
         double speed;
         waitForStart();
-        if (gamepad1.left_bumper) {
+        if (gamepad1.right_bumper) {
             speed = 0.8;
         } else {
             speed = 0.5;

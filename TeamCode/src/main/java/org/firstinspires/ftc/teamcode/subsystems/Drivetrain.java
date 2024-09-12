@@ -124,22 +124,11 @@ public class Drivetrain extends MecanumDrive {
 
 
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
-        /*
-        myOtos.setLinearUnit(DistanceUnit.INCH);
-        myOtos.setAngularUnit(AngleUnit.RADIANS);
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, Math.toRadians(90));
-        myOtos.setOffset(offset);
-        myOtos.setLinearScalar(1.00908);
-        myOtos.setAngularScalar(0.99319);
-        myOtos.calibrateImu();
 
-        // Reset the tracking algorithm - this resets the position to the origin,
-        // but can also be used to recover from some rare tracking errors
-        myOtos.resetTracking();
-         */
         configureOtos();
 
     }
+
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
@@ -320,28 +309,26 @@ public class Drivetrain extends MecanumDrive {
     }
 
     private void configureOtos() {
-//         myOtos.setLinearUnit(DistanceUnit.METER);
         myOtos.setLinearUnit(DistanceUnit.INCH);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
-//        myOtos.setAngularUnit(AngleUnit.DEGREES);
 
         myOtos.calibrateImu();
         myOtos.resetTracking();
 
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.375, -2.825, Math.toRadians(-90));
-//        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(0,0, Math.toRadians(-90));
+        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.09705, 3.1539, Math.toRadians(-90)); //x = -8.1941 y = -6.3078
         myOtos.setOffset(offset);
 
         myOtos.setLinearScalar(1.00908);
         myOtos.setAngularScalar(0.99319);
 
-
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(0, 0, Math.toRadians(0));
-        myOtos.setPosition(currentPosition);
-
         // Get the hardware and firmware version
         SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
         SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
         myOtos.getVersionInfo(hwVersion, fwVersion);
+    }
+
+    public void setOtosPosition(double x, double y, double h) {
+        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(x, y, h);
+        myOtos.setPosition(currentPosition);
     }
 }

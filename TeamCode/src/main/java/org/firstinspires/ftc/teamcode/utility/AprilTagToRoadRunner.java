@@ -77,6 +77,7 @@ public class AprilTagToRoadRunner {
             } case 10:{
                 runnerPose = Constants.Vision.tag10Pose.plus(runnerPose);
                 break;
+                /*
             } case 11:{
                 runnerPose = Constants.Vision.tag11Pose.plus(runnerPose);
                 break;
@@ -86,6 +87,8 @@ public class AprilTagToRoadRunner {
             } case 13:{
                 runnerPose = Constants.Vision.tag13Pose.plus(runnerPose);
                 break;
+                
+                 */
             }
         }
         //to account for line 14
