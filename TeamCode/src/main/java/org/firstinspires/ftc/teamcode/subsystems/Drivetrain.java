@@ -291,7 +291,7 @@ public class Drivetrain extends MecanumDrive {
     public SparkFunOTOS.Pose2D getPoseEstimateOptical(){
         return myOtos.getPosition();
     }
-    public void setPoseEstimateOptical(Pose2d newPose){
+    public void setPoseEstimateOptical(com.arcrobotics.ftclib.geometry.Pose2d newPose){
         SparkFunOTOS.Pose2D fancyPose = new SparkFunOTOS.Pose2D(newPose.getX(), newPose.getY(), newPose.getHeading());
         myOtos.setPosition(fancyPose);
     }
@@ -342,9 +342,5 @@ public class Drivetrain extends MecanumDrive {
         Motor bL = new Motor(hardwareMapLocal, leftRearHardwareMapName);
         Motor bR = new Motor(hardwareMapLocal, rightRearHardwareMapName);
         return new com.arcrobotics.ftclib.drivebase.MecanumDrive(fL, fR, bL, bR);
-    }
-
-    public Odometry ArcOdometery() {
-        
     }
 }

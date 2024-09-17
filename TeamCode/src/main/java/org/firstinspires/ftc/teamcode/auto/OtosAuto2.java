@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.arcrobotics.ftclib.geometry.Pose2d;
 import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.geometry.Translation2d;
 import com.arcrobotics.ftclib.purepursuit.waypoints.EndWaypoint;
@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.utility.BarcodePosition;
 @Autonomous(name = "Auto test", group = " test")
 @Config
 public class OtosAuto2 extends OpMode {
-    static Pose2d startingPose = new Pose2d(17, -64, Math.toRadians(90));
+    static Pose2d startingPose = new Pose2d(17, -64, new Rotation2d());
     TrajectorySequence testPath = null;
 
 
@@ -67,11 +67,12 @@ public class OtosAuto2 extends OpMode {
 
         drivetrain.setPoseEstimateOptical(startingPose);
 
-        Waypoint p1 = new StartWaypoint(new com.arcrobotics.ftclib.geometry.Pose2d(startingPose.getX(), startingPose.getY(), new Rotation2d(0)));
+        Waypoint p1 = new StartWaypoint(startingPose);
         Waypoint p2 = new GeneralWaypoint(10, 10);
+        Waypoint p3 = new EndWaypoint();
         Path myPath = new Path(p1, p2);
         myPath.init();
-        myPath.followPath()
+        myPath.followPath();
     }
 
     @Override
