@@ -31,6 +31,8 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.arcrobotics.ftclib.hardware.motors.Motor;
+import com.arcrobotics.ftclib.kinematics.Odometry;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -39,6 +41,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.arcrobotics.ftclib.purepursuit.*;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -83,10 +86,11 @@ public class Drivetrain extends MecanumDrive {
     private final List<Integer> lastEncoderVelocities = new ArrayList<>();
 
     private Telemetry telemetry;
+    private HardwareMap hardwareMapLocal;
 
     public Drivetrain(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
-
+        hardwareMapLocal = hardwareMap;
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
@@ -330,5 +334,17 @@ public class Drivetrain extends MecanumDrive {
     public void setOtosPosition(double x, double y, double h) {
         SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(x, y, h);
         myOtos.setPosition(currentPosition);
+    }
+
+    public com.arcrobotics.ftclib.drivebase.MecanumDrive ArcMeccanumDrive() {
+        Motor fL = new Motor(hardwareMapLocal, leftFrontHardwareMapName);
+        Motor fR = new Motor(hardwareMapLocal, rightFrontHardwareMapName);
+        Motor bL = new Motor(hardwareMapLocal, leftRearHardwareMapName);
+        Motor bR = new Motor(hardwareMapLocal, rightRearHardwareMapName);
+        return new com.arcrobotics.ftclib.drivebase.MecanumDrive(fL, fR, bL, bR);
+    }
+
+    public Odometry ArcOdometery() {
+        
     }
 }
