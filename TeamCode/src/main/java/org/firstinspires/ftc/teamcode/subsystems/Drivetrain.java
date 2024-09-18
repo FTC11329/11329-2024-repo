@@ -31,6 +31,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
+import com.arcrobotics.ftclib.geometry.Rotation2d;
 import com.arcrobotics.ftclib.hardware.motors.Motor;
 import com.arcrobotics.ftclib.kinematics.Odometry;
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
@@ -73,7 +74,6 @@ public class Drivetrain extends MecanumDrive {
     public static double OMEGA_WEIGHT = 1;
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
-    SparkFunOTOS myOtos;
     public final DcMotorEx leftFront;
     public final DcMotorEx leftRear;
     public final DcMotorEx rightRear;
@@ -87,10 +87,12 @@ public class Drivetrain extends MecanumDrive {
 
     private Telemetry telemetry;
     private HardwareMap hardwareMapLocal;
+    private OpticalOdometry opticalOdometry;
 
     public Drivetrain(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
         hardwareMapLocal = hardwareMap;
+        opticalOdometry = new OpticalOdometry(hardwareMap);
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
@@ -127,9 +129,7 @@ public class Drivetrain extends MecanumDrive {
         );
 
 
-        myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
 
-        configureOtos();
 
     }
 
@@ -182,7 +182,7 @@ public class Drivetrain extends MecanumDrive {
 
     public void turnAsync(double angle) {
         trajectorySequenceRunner.followTrajectorySequenceAsync(
-                trajectorySequenceBuilder(getPoseEstimateOpticalRegular())
+                trajectorySequenceBuilder(opticalOdometry.getPoseEstimateOpticalRegular())
                         .turn(angle)
                         .build()
         );
@@ -221,7 +221,7 @@ public class Drivetrain extends MecanumDrive {
 
     public void update() {
         updatePoseEstimate();
-        DriveSignal signal = trajectorySequenceRunner.update(getPoseEstimateOpticalRegular(), getPoseVelocity());
+        DriveSignal signal = trajectorySequenceRunner.update(opticalOdometry.getPoseEstimateOpticalRegular(), getPoseVelocity());
         if (signal != null) setDriveSignal(signal);
     }
 
@@ -284,17 +284,6 @@ public class Drivetrain extends MecanumDrive {
         rightRear.setPower(v2);
         rightFront.setPower(v3);
     }
-
-    public Pose2d getPoseEstimateOpticalRegular() {
-        return new Pose2d(myOtos.getPosition().x, myOtos.getPosition().y, myOtos.getPosition().h);
-    }
-    public SparkFunOTOS.Pose2D getPoseEstimateOptical(){
-        return myOtos.getPosition();
-    }
-    public void setPoseEstimateOptical(com.arcrobotics.ftclib.geometry.Pose2d newPose){
-        SparkFunOTOS.Pose2D fancyPose = new SparkFunOTOS.Pose2D(newPose.getX(), newPose.getY(), newPose.getHeading());
-        myOtos.setPosition(fancyPose);
-    }
     //  This is an artifact that we don't use due to 3 wheel odometry
     @Override
     protected double getRawExternalHeading() {
@@ -312,30 +301,6 @@ public class Drivetrain extends MecanumDrive {
         return null;
     }
 
-    private void configureOtos() {
-        myOtos.setLinearUnit(DistanceUnit.INCH);
-        myOtos.setAngularUnit(AngleUnit.RADIANS);
-
-        myOtos.calibrateImu();
-        myOtos.resetTracking();
-
-        SparkFunOTOS.Pose2D offset = new SparkFunOTOS.Pose2D(4.09705, 3.1539, Math.toRadians(-90)); //x = -8.1941 y = -6.3078
-        myOtos.setOffset(offset);
-
-        myOtos.setLinearScalar(1.00908);
-        myOtos.setAngularScalar(0.99319);
-
-        // Get the hardware and firmware version
-        SparkFunOTOS.Version hwVersion = new SparkFunOTOS.Version();
-        SparkFunOTOS.Version fwVersion = new SparkFunOTOS.Version();
-        myOtos.getVersionInfo(hwVersion, fwVersion);
-    }
-
-    public void setOtosPosition(double x, double y, double h) {
-        SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(x, y, h);
-        myOtos.setPosition(currentPosition);
-    }
-
     public com.arcrobotics.ftclib.drivebase.MecanumDrive ArcMeccanumDrive() {
         Motor fL = new Motor(hardwareMapLocal, leftFrontHardwareMapName);
         Motor fR = new Motor(hardwareMapLocal, rightFrontHardwareMapName);
@@ -343,4 +308,20 @@ public class Drivetrain extends MecanumDrive {
         Motor bR = new Motor(hardwareMapLocal, rightRearHardwareMapName);
         return new com.arcrobotics.ftclib.drivebase.MecanumDrive(fL, fR, bL, bR);
     }
+
+    //Pass through functions
+
+    public Pose2d getPoseEstimateOpticalRegular() {
+        return opticalOdometry.getPoseEstimateOpticalRegular();
+    }
+    public SparkFunOTOS.Pose2D getPoseEstimateOptical(){
+        return opticalOdometry.getPoseEstimateOptical();
+    }
+    public void setPoseEstimateOptical(com.arcrobotics.ftclib.geometry.Pose2d newPose){
+        opticalOdometry.setPoseEstimateOptical(newPose);
+    }
+    public void setPoseEstimateOptical(Pose2d newPose) {
+        setPoseEstimateOptical(new com.arcrobotics.ftclib.geometry.Pose2d(newPose.getX(), newPose.getY(), new Rotation2d(newPose.getHeading())));
+    }
+
 }
