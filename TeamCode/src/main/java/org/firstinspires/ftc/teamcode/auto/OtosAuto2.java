@@ -44,7 +44,7 @@ public class OtosAuto2 extends OpMode {
 
         Waypoint p1 = new StartWaypoint(startingPose);
         Waypoint p2 = new GeneralWaypoint(78, -81, 0.75, 0.75, 5);
-        Waypoint p3 = new EndWaypoint(new Pose2d(124, -56, new Rotation2d(Math.toRadians(90))), 0.75, 0.75, 5, 0.5, Math.toRadians(20));
+        Waypoint p3 = new EndWaypoint(new Pose2d(124, -56, new Rotation2d(Math.toRadians(0))), 0.75, 0.75, 5, 0.5, Math.toRadians(20));
 
         myPath = new Path(p1, p2, p3);
         myPath.init();

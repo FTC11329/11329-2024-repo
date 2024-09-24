@@ -115,12 +115,13 @@ public class Teleop extends OpMode {
         boolean dropBackClaw = gamepad2.left_bumper;
         boolean dropClaw = gamepad2.b || gamepad1.left_bumper;
 
-        double climberPower = gamepad2.right_stick_y;
+        double climberPower = 0; /*gamepad2.right_stick_y*/;
         boolean climberDownBool = gamepad2.dpad_left || gamepad2.a;
         boolean climberUpBool = gamepad2.left_stick_button;
         boolean climberFireBool = gamepad2.right_stick_button;
 
-        boolean planeFire = gamepad1.y || gamepad2.back;
+        boolean planeFire = /*gamepad1.y || */ gamepad2.back;
+
 
         boolean highPresetBool = gamepad2.dpad_up;
         boolean medPresetBool = gamepad2.dpad_right || gamepad1.dpad_up;
