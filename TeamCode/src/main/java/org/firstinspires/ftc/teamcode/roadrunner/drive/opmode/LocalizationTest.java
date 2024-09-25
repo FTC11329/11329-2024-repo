@@ -20,8 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.SpecialIntake;
 public class LocalizationTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
-        com.arcrobotics.ftclib.geometry.Pose2d startingPose = new com.arcrobotics.ftclib.geometry.Pose2d(17, -64, new Rotation2d());
-
+        com.arcrobotics.ftclib.geometry.Pose2d startingPose = new com.arcrobotics.ftclib.geometry.Pose2d(0, 0, new Rotation2d());
         Drivetrain drive = new Drivetrain(hardwareMap);
         SpecialIntake specialIntake = new SpecialIntake(hardwareMap);
 

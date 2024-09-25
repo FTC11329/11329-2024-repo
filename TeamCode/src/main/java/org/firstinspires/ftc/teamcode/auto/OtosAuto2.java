@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.utility.DriveSpeedEnum;
 @Autonomous(name = "Auto test 2", group = " test")
 @Config
 public class OtosAuto2 extends OpMode {
-    static Pose2d startingPose = new Pose2d(17, -64, new Rotation2d());
+    static Pose2d startingPose = new Pose2d(0, 0, new Rotation2d());
     SparkFunOTOS.Pose2D testPose;
     Path myPath;
 
@@ -43,10 +43,9 @@ public class OtosAuto2 extends OpMode {
         opticalOdometry = new OpticalOdometry(hardwareMap);
 
         Waypoint p1 = new StartWaypoint(startingPose);
-        Waypoint p2 = new GeneralWaypoint(78, -81, 0.75, 0.75, 5);
-        Waypoint p3 = new EndWaypoint(new Pose2d(124, -56, new Rotation2d(Math.toRadians(0))), 0.75, 0.75, 5, 0.5, Math.toRadians(20));
+        Waypoint p3 = new EndWaypoint(new Pose2d(93, -22, new Rotation2d(Math.toRadians(0))), 0.75, 0.75, 5, 0.5, Math.toRadians(20));
 
-        myPath = new Path(p1, p2, p3);
+        myPath = new Path(p1 , p3);
         myPath.init();
 
         drivetrain.setPoseEstimateOptical(startingPose);
@@ -61,14 +60,6 @@ public class OtosAuto2 extends OpMode {
     @Override
     public void start() {
 
-        telemetry.addData("done 1", true);
-        telemetry.update();
-
-        try {
-            sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         int value = 0;
 
         while (!myPath.isFinished()) {
@@ -81,7 +72,7 @@ public class OtosAuto2 extends OpMode {
             }
 
             // return the motor speeds
-            double speeds[] = myPath.loop(drivetrain.getPoseEstimateOpticalRegular().getX(), drivetrain.getPoseEstimateOpticalRegular().getY(), drivetrain.getPoseEstimateOpticalRegular().getHeading());
+            double[] speeds = myPath.loop(drivetrain.getPoseEstimateOpticalRegular().getX(), drivetrain.getPoseEstimateOpticalRegular().getY(), drivetrain.getPoseEstimateOpticalRegular().getHeading());
 
             drivetrain.drive(speeds[0], speeds[1], speeds[2], DriveSpeedEnum.Auto);
             value++;
@@ -90,24 +81,12 @@ public class OtosAuto2 extends OpMode {
         }
 
 
-        telemetry.addData("done 2", true);
         telemetry.update();
-        try {
-            sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
     }
 
     @Override
     public void loop() {
         telemetry.addData("done final", true);
-
-        try {
-            sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }
