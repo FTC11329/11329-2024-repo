@@ -12,29 +12,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 import java.util.function.DoubleSupplier;
 
-public class OpticalOdometry extends Odometry {
+public class OpticalOdometry {
     SparkFunOTOS myOtos;
 
     public OpticalOdometry(HardwareMap hardwareMap) {
-        super(new com.arcrobotics.ftclib.geometry.Pose2d());
         myOtos = hardwareMap.get(SparkFunOTOS.class, "sensor_otos");
         configureOtos();
     }
-    public Pose2d getPoseEstimateOpticalRegular() {
-        return new Pose2d(myOtos.getPosition().x, myOtos.getPosition().y, myOtos.getPosition().h);
-    }
-    public SparkFunOTOS.Pose2D getPoseEstimateOptical(){
-        return myOtos.getPosition();
-    }
-    public void setPoseEstimateOptical(com.arcrobotics.ftclib.geometry.Pose2d newPose){
-        SparkFunOTOS.Pose2D fancyPose = new SparkFunOTOS.Pose2D(newPose.getX(), newPose.getY(), newPose.getHeading());
-        myOtos.setPosition(fancyPose);
-    }
-
-    public void test(SparkFunOTOS.Pose2D newPose) {
-        myOtos.setPosition(newPose);
-    }
-
     private void configureOtos() {
         myOtos.setLinearUnit(DistanceUnit.INCH);
         myOtos.setAngularUnit(AngleUnit.RADIANS);
@@ -54,18 +38,33 @@ public class OpticalOdometry extends Odometry {
         myOtos.getVersionInfo(hwVersion, fwVersion);
     }
 
+    public Pose2d getPoseEstimateOpticalRegular() {
+        return new Pose2d(myOtos.getPosition().x, myOtos.getPosition().y, myOtos.getPosition().h);
+    }
+
+    public SparkFunOTOS.Pose2D getPoseEstimateOptical(){
+        return myOtos.getPosition();
+    }
+
+    public void setPoseEstimateOptical(com.arcrobotics.ftclib.geometry.Pose2d newPose){
+        SparkFunOTOS.Pose2D fancyPose = new SparkFunOTOS.Pose2D(newPose.getX(), newPose.getY(), newPose.getHeading());
+        myOtos.setPosition(fancyPose);
+    }
+
     public void setOtosPosition(double x, double y, double h) {
         SparkFunOTOS.Pose2D currentPosition = new SparkFunOTOS.Pose2D(x, y, h);
         myOtos.setPosition(currentPosition);
     }
 
-    @Override
-    public void updatePose(com.arcrobotics.ftclib.geometry.Pose2d newPose) {
-
+    public double getX() {
+        return getPoseEstimateOpticalRegular().getX();
     }
 
-    @Override
-    public void updatePose() {
+    public double getY() {
+        return getPoseEstimateOpticalRegular().getY();
+    }
 
+    public double getHeading() {
+        return getPoseEstimateOpticalRegular().getHeading();
     }
 }
